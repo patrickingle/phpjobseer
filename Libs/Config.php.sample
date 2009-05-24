@@ -1,0 +1,44 @@
+<?php
+/**
+ * Created on May 1, 2009 by kbenton
+ *
+ * Copy this file to Config.php but be sure to edit the file first.
+ * If you don't read the entire file, you'll find out that syntax
+ * errors will occur.
+ */
+
+/**
+ * The proper way to use the config class is to first create
+ * a new instance of the class, then utilize the $values
+ * hash to pull out what's needed.
+ *
+ * $oConfig = new Config();
+ * var_dump($oConfig->values);
+ */
+
+require_once("Libs/autoload.php");
+
+class Config {
+	/**
+     * Use the __construct() method to set values
+	 */
+    public static $values = null;
+
+    /**
+     * Constructor checks to see if $values is still null.
+     * If not, set up the configuration values.  Otherwise,
+     * use the cached values.
+     */
+    public function __construct() {
+    	if (!isset($this->values)) {
+    		$this->values['db_host']='localhost'; // Where is MySQL?
+            $this->values['db_port']='3306';      // What port?
+            $this->values['db_name']='db_name';   // Name of the DB to use?
+            $this->values['db_user']='db_user';   // User name with access?
+            $this->values['db_pass']='db_pass';   // That user's password?
+    	}
+    }
+}
+To make this work, remove these lines (this and the next two) and edit the values
+above. This is an intentional error.  Please read the file before installing!
+

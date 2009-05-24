@@ -1,0 +1,103 @@
+/*
+ * JST Style Sheet
+ */
+
+body {
+	background-color: rgb(0,192,255);
+}
+
+.pageTitle {
+    color: blue;
+    font-size: xx-large;
+    margin-bottom: 10pt;
+}
+
+.pageSubtitle {
+    color: blue;
+    font-size: x-large;
+    margin-bottom: 10pt;
+}
+
+.applicationStatusINVALID, .applicationStatusUNAVAILABLE, .applicationStatusCLOSED, .applicationStatusDUPLICATE {
+    color: white;
+    background-color: black;
+}
+
+.applicationStatusFOUND {
+	color: black;
+	background-color: cyan;
+}
+
+.applicationStatusCONTACTED {
+    color: black;
+    background-color: yellow;
+}
+
+.applicationStatusAPPLIED {
+    color: black;
+    background-color: green;
+}
+
+.applicationStatusINTERVIEWING {
+    color: white;
+    background-color: red;
+}
+
+.applicationStatusFOLLOWUP {
+    color: black;
+    background-color: lime;
+}
+
+.applicationStatusCHASING {
+    color: black;
+    background-color: yellow;
+}
+
+.applicationStatusNETWORKING {
+	color: black;
+	background-color: lime;
+}
+
+.nextActionDueFUTURE {
+	color: black;
+	background-color: lime;
+}
+
+.nextActionDueSOON {
+    color: black;
+    background-color: yellow;
+}
+
+.nextActionDueOVERDUE {
+    color: white;
+    background-color: red;
+}
+
+.urgencyLOW {
+    color: black;
+    background-color: lime;
+}
+
+.urgencyMEDIUM {
+    color: black;
+    background-color: yellow;
+}
+
+.urgencyHIGH {
+    color: white;
+    background-color: red;
+}
+
+.IHEADER {
+	text-align: center;
+}
+
+.JobListHeader {
+	background-color: gray;
+}
+
+.error {
+    color: white;
+    background-color: red;
+    font-size; x-large;
+}
