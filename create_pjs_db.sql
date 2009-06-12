@@ -6,6 +6,19 @@ create database pjs;
 use pjs;
 
 -- -----------------------------------------------------------------------------------
+-- version
+-- -----------------------------------------------------------------------------------
+create table version
+     (
+       versionValue          varchar(255) not null default ''
+     , updated               timestamp not null default current_timestamp
+                             on update current_timestamp
+     ) engine='MyISAM';
+-- This is the only DML in this file but it really needs to be here since it's the\
+-- version of the data layout.
+insert version (versionValue) value ('0.0PA1');
+
+-- -----------------------------------------------------------------------------------
 -- applicationStatus
 -- -----------------------------------------------------------------------------------
 create table applicationStatus
@@ -78,15 +91,15 @@ create table job
        jobId                 int unsigned not null auto_increment primary key
      , primaryContactId      int unsigned null default null
      , companyId             int unsigned null default null
-     , urgency               enum('high', 'medium', 'low') not null default 'low'
-     , nextActionDue         datetime not null default 0
+     , applicationStatusId   int unsigned not null
      , lastStatusChange      datetime not null default 0
+     , urgency               enum('high', 'medium', 'low') not null default 'low'
      , created               timestamp not null default 0
      , updated               timestamp not null default current_timestamp
                              on update current_timestamp
-     , positionTitle         varchar(255) not null default ''
-     , applicationStatusId   varchar(255) not null default ''
+     , nextActionDue         datetime not null default 0
      , nextAction            varchar(255) not null default ''
+     , positionTitle         varchar(255) not null default ''
      , location              varchar(255) not null default ''
      , url                   varchar(4096) not null default ''
      ) engine='MyISAM';
@@ -100,7 +113,7 @@ create table jobKeywordMap (
      , created   timestamp not null default 0
      , updated   timestamp not null default current_timestamp
                  on update current_timestamp
-     , primary key jobKeywordIdx ( jobId, keywordId )
+     , primary key jobKeywordMapIdx ( jobId, keywordId )
      ) engine='MyISAM';
 
 -- -----------------------------------------------------------------------------------
