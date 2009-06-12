@@ -48,7 +48,8 @@ class PageData {
         ?>
 <p />
 <div>
-  <a href="addJob.php">Add New Job</a>
+  <a href="index.php">Summary</a>
+| <a href="addJob.php">Add New Job</a>
 | <a href="jobList.php">All Jobs</a>
 | <a href="jobList.php?activeOnly=1">Active Jobs</a>
 | <a href="contactList.php">Contacts</a>
