@@ -249,6 +249,7 @@ class JobDisplayForm {
             $oNote = new NoteDao();
             $results = $oNote->findSome(      "appliesToTable = 'job'"
                                        . " AND appliesToId = $jobId"
+                                       . " ORDER BY created DESC"
                                        );
             foreach ($results as $result) {
                 echo "<p /><hr />"
