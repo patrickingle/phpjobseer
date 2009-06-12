@@ -14,7 +14,9 @@ class AddJobMain {
     function main() {
         PageData::pageHeader();
         echo '<div class="pageTitle">PHP Job Seeker</div>';
-        echo '<div class="pageSubtitle"><a href="jobList.php?activeOnly=1">Job Listing</a> &gt;&gt;&gt; Add New Job</div>';
+        echo '<div class="pageSubtitle">'
+           . '<a href="jobList.php?activeOnly=1">Job Listing</a>'
+           . ' &gt;&gt;&gt; Add New Job</div>';
         PageData::displayNavBar();
         $oForm = new JobDisplayForm();
         $oForm->displayForm();

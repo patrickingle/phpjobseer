@@ -101,7 +101,7 @@ class NoteDao extends DaoBase {
                         , null                  // $fieldHelp
                         , null                  // $fieldValidator
                         );
-        $_fieldDescriptions[] = $x;
+        $this->_fields[$x->getFieldName()] = $x;
 
         $x = new FieldDescription();
         $y = isset($fieldValues['appliesToTable'])
@@ -123,7 +123,7 @@ class NoteDao extends DaoBase {
                         , null                  // $fieldHelp
                         , null                  // $fieldValidator
                         );
-        $_fieldDescriptions[] = $x;
+        $this->_fields[$x->getFieldName()] = $x;
 
         $x = new FieldDescription();
         $y = isset($fieldValues['appliesToId'])
@@ -140,7 +140,7 @@ class NoteDao extends DaoBase {
                         , null                  // $fieldHelp
                         , null                  // $fieldValidator
                         );
-        $_fieldDescriptions[] = $x;
+        $this->_fields[$x->getFieldName()] = $x;
 
         $x = new FieldDescription();
         $y = isset($fieldValues['note']) ? $fieldValues['note'] : null;
@@ -155,7 +155,7 @@ class NoteDao extends DaoBase {
                         , null                  // $fieldHelp
                         , null                  // $fieldValidator
                         );
-        $_fieldDescriptions[] = $x;
+        $this->_fields[$x->getFieldName()] = $x;
 
 
         $x = new FieldDescription();
@@ -172,7 +172,7 @@ class NoteDao extends DaoBase {
                                                 // $fieldHelp
                         , null                  // $fieldValidator
                         );
-        $_fieldDescriptions[] = $x;
+        $this->_fields[$x->getFieldName()] = $x;
 
         $x = new FieldDescription();
         $y = isset($fieldValues['updated']) ? $fieldValues['updated'] : null;
@@ -188,7 +188,7 @@ class NoteDao extends DaoBase {
                                                 // $fieldHelp
                         , null                  // $fieldValidator
                         );
-        $_fieldDescriptions[] = $x;
+        $this->_fields[$x->getFieldName()] = $x;
 
     }
 

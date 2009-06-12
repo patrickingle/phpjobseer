@@ -92,7 +92,7 @@ abstract class DaoBase {
      * @return array Hash of FieldDescription objects
      */
     public function getFields() {
-        return $this->_fieldDescriptions;
+        return $this->_fields;
     }
 
     /**
@@ -111,7 +111,8 @@ abstract class DaoBase {
             $runQuery = 0;
             $changes = array();
             $fieldsByFieldName = array();
-            foreach ( $this->_fieldDescriptions as $field ) {
+            $this->populateFields($rowValues);
+            foreach ( $this->_fields as $field ) {
                 $fieldsByFieldName[$field->getFieldName()]=$field;
             }
             foreach ( $rowValues as $k => $v ) {
@@ -157,7 +158,7 @@ abstract class DaoBase {
             $runQuery = 0;
             $changes = array();
             $fieldsByFieldName = array();
-            foreach ( $this->_fieldDescriptions as $field ) {
+            foreach ( $this->_fields as $field ) {
                 $fieldsByFieldName[$field->getFieldName()]=$field;
             }
             foreach ( $rowValues as $k => $v ) {
@@ -254,6 +255,30 @@ abstract class DaoBase {
             $results[] = $row;
         }
         return $results;
+    }
+
+    /**
+     * countAll should probably be overridden.  This function returns the count
+     * of rows in the table.
+     *
+     * @return integer
+     */
+    public function countAll() {
+        return $this->countSome("1 = 1");
+    }
+
+    /**
+     * countSome should probably be overridden.  This function returns the count
+     * of rows in the table.
+     *
+     * @param String $restrictions
+     * @return integer
+     */
+    public function countSome($restrictions) {
+        $count = 0;
+        $query = "SELECT * FROM {$this->_tableName} WHERE $restrictions";
+        $this->_sth = mysql_query($query, $this->_dbh);
+        return mysql_num_rows($this->_sth);
     }
 
     /**

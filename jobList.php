@@ -20,24 +20,17 @@ function printcell($value, $style = null) {
     print "</td>\n";
 }
 
-$headerRepeatCount=20;
+$headerRepeatCount = 20;
 
 $dateNow = date('Y-m-d H:i:s');
 $dateNowPlus3Days = date('Y-m-d H:i:s', time() + (86400 * 3) ); // 3 days from now
 PageData :: pageHeader();
 
 $displayActiveOnly = ( isset($_GET['activeOnly']) && (1 == $_GET['activeOnly']) );
+echo '<div class="pageTitle">PHP Job Seeker</div>';
+PageData :: displayNavBar();
 
-?>
-
-<div class="pageTitle">PHP Job Seeker</div>
-<div>
-  <a href="addJob.php">Add New Job</a>
-| <a href="jobList.php">Full Results</a>
-| <a href="jobList.php?activeOnly=1">Active Only</a>
-</div>
-<table border="1" cellspacing="0" cellpadding="1">
-<?php
+echo '<table border="1" cellspacing="0" cellpadding="1">';
 $headerRow="<tr class=\"JobListHeader\">
   <th>Edit</th>
   <th>URL</th>

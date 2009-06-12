@@ -23,6 +23,7 @@ class PageData {
         <!-- pageHeader -->
               <head>
                 <title>PHP Job Seeker</title>
+                <script type="text/javascript" src="PHPJobSeekerAjax.js"></script>
         <?php
         self::styleSheet();
         ?>
@@ -34,6 +35,12 @@ class PageData {
     public static function pageFooter() {
         ?>
         <!-- pageFooter -->
+<div class="pageFooter">
+  Want your own copy of this tool?  PHP Job Seeker is available at
+  <a href="http://phpjobseeker.sourceforge.net/">
+    http://phpjobseeker.sourceforge.net/
+  </a>
+</div>
         <?php
     }
 
@@ -44,6 +51,10 @@ class PageData {
   <a href="addJob.php">Add New Job</a>
 | <a href="jobList.php">All Jobs</a>
 | <a href="jobList.php?activeOnly=1">Active Jobs</a>
+| <a href="contactList.php">Contacts</a>
+| <a href="companyList.php">Companies</a>
+| <a href="keywordList.php">Keywords</a>
+| <a href="help.php">Help/Documentation</a>
 </div>
 <p />
         <?php

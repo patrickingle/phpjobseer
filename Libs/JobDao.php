@@ -30,7 +30,7 @@ class JobDao extends DaoBase {
                     , 'primaryContactId' => ''
                     , 'companyId' => ''
                     , 'urgency' => 'medium'
-                    , 'nextActionDue' => date("Y-m-d H:i")
+                    , 'nextActionDue' => date("Y-m-d H:i", time() + 86400)
                     , 'lastStatusChange' => date("Y-m-d H:i")
                     , 'created' => ''
                     , 'updated' => ''
@@ -49,7 +49,7 @@ class JobDao extends DaoBase {
      * @return void
      */
     public function populateFields($fieldValues) {
-    	$this->_fieldDescriptions = array();
+    	$this->_fields = array();
 
         $x = new FieldDescription();
         $y = isset($fieldValues['jobId']) ? $fieldValues['jobId'] : null;
@@ -64,7 +64,7 @@ class JobDao extends DaoBase {
                         , null                  // $fieldHelp
                         , null                  // $fieldValidator
                         );
-        $this->_fieldDescriptions[] = $x;
+        $this->_fields[$x->getFieldName()] = $x;
 
         $x = new FieldDescription();
         $y = isset($fieldValues['primaryContactId']) ? $fieldValues['primaryContactId'] : null;
@@ -79,7 +79,7 @@ class JobDao extends DaoBase {
                         , null                  // $fieldHelp
                         , null                  // $fieldValidator
                         );
-        $this->_fieldDescriptions[] = $x;
+        $this->_fields[$x->getFieldName()] = $x;
 
         $x = new FieldDescription();
         $y = isset($fieldValues['companyId']) ? $fieldValues['companyId'] : null;
@@ -94,7 +94,7 @@ class JobDao extends DaoBase {
                         , null                  // $fieldHelp
                         , null                  // $fieldValidator
                         );
-        $this->_fieldDescriptions[] = $x;
+        $this->_fields[$x->getFieldName()] = $x;
 
         $x = new FieldDescription();
         $y = isset($fieldValues['urgency']) ? $fieldValues['urgency'] : null;
@@ -110,7 +110,7 @@ class JobDao extends DaoBase {
                         , null                  // $fieldHelp
                         , null                  // $fieldValidator
                         );
-        $this->_fieldDescriptions[] = $x;
+        $this->_fields[$x->getFieldName()] = $x;
 
         $x = new FieldDescription();
         $y = isset($fieldValues['nextActionDue']) ? $fieldValues['nextActionDue'] : null;
@@ -126,7 +126,7 @@ class JobDao extends DaoBase {
                                                 // $fieldHelp
                         , null                  // $fieldValidator
                         );
-        $this->_fieldDescriptions[] = $x;
+        $this->_fields[$x->getFieldName()] = $x;
 
         $x = new FieldDescription();
         $y = isset($fieldValues['lastStatusChange']) ? $fieldValues['lastStatusChange'] : null;
@@ -143,7 +143,7 @@ class JobDao extends DaoBase {
                                                 // $fieldHelp
                         , null                  // $fieldValidator
                         );
-        $this->_fieldDescriptions[] = $x;
+        $this->_fields[$x->getFieldName()] = $x;
 
         $x = new FieldDescription();
         $y = isset($fieldValues['created']) ? $fieldValues['created'] : null;
@@ -159,7 +159,7 @@ class JobDao extends DaoBase {
                                                 // $fieldHelp
                         , null                  // $fieldValidator
                         );
-        $this->_fieldDescriptions[] = $x;
+        $this->_fields[$x->getFieldName()] = $x;
 
         $x = new FieldDescription();
         $y = isset($fieldValues['updated']) ? $fieldValues['updated'] : null;
@@ -175,7 +175,7 @@ class JobDao extends DaoBase {
                                                 // $fieldHelp
                         , null                  // $fieldValidator
                         );
-        $this->_fieldDescriptions[] = $x;
+        $this->_fields[$x->getFieldName()] = $x;
 
         $x = new FieldDescription();
         $y = isset($fieldValues['positionTitle']) ? $fieldValues['positionTitle'] : null;
@@ -191,7 +191,7 @@ class JobDao extends DaoBase {
                                                 // $fieldHelp
                         , null                  // $fieldValidator
                         );
-        $this->_fieldDescriptions[] = $x;
+        $this->_fields[$x->getFieldName()] = $x;
 
         $x = new FieldDescription();
         $y = isset($fieldValues['applicationStatusId']) ? $fieldValues['applicationStatusId'] : null;
@@ -207,7 +207,7 @@ class JobDao extends DaoBase {
                         , null                  // $fieldHelp
                         , null                  // $fieldValidator
                         );
-        $this->_fieldDescriptions[] = $x;
+        $this->_fields[$x->getFieldName()] = $x;
 
         $x = new FieldDescription();
         $y = isset($fieldValues['nextAction']) ? $fieldValues['nextAction'] : null;
@@ -222,7 +222,7 @@ class JobDao extends DaoBase {
                         , 'What\'s next?'       // $fieldHelp
                         , null                  // $fieldValidator
                         );
-        $this->_fieldDescriptions[] = $x;
+        $this->_fields[$x->getFieldName()] = $x;
 
         $x = new FieldDescription();
         $y = isset($fieldValues['location']) ? $fieldValues['location'] : null;
@@ -237,7 +237,7 @@ class JobDao extends DaoBase {
                         , 'Where is the work'   // $fieldHelp
                         , null                  // $fieldValidator
                         );
-        $this->_fieldDescriptions[] = $x;
+        $this->_fields[$x->getFieldName()] = $x;
 
         $x = new FieldDescription();
         $y = isset($fieldValues['url']) ? $fieldValues['url'] : null;
@@ -252,13 +252,14 @@ class JobDao extends DaoBase {
                         , null                  // $fieldHelp
                         , null                  // $fieldValidator
                         );
-        $this->_fieldDescriptions[] = $x;
+        $this->_fields[$x->getFieldName()] = $x;
 
     }
 
     /**
      * validateRowForInsert checks to make sure that data being inserted is valid.
      *
+     * @todo TODO Auto-detect duplicate URL's and mark accordingly.
      * @return boolean True when validation passes, false otherwise.
      */
     public function validateRowForInsert($rowValues) {

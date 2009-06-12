@@ -96,8 +96,19 @@ body {
 	background-color: gray;
 }
 
+.pageFooter {
+	text-align: center;
+	color: blue;
+	background-color: white;
+}
+
 .error {
     color: white;
     background-color: red;
     font-size; x-large;
+}
+
+.urlDuplicate {
+    color: white;
+    background-color: black;
 }

@@ -69,7 +69,6 @@ class JobDisplayForm {
     public function displayForm() {
         $maxFieldLength = 80;
         $dateOptions = array( 'language' => 'en', 'format'   => 'YMdHi' );
-//        Tools::dump_var('this', $this);
         $sortedFields = $this->_fields;
         if ( !isset($this->_fields)) {
             return;
@@ -96,6 +95,7 @@ class JobDisplayForm {
                 continue;
             }
             $dataType = $field->getDataType();
+
             switch ($dataType) {
                 case 'DATETIME':
                 case 'TIMESTAMP':
@@ -110,18 +110,15 @@ class JobDisplayForm {
                         $d=substr($value, 8, 2);
                         $h=substr($value, 11, 2);
                         $i=substr($value, 14, 2);
-                        $value = array( 'Y'=>$y
-                                      , 'M'=>$m
-                                      , 'd'=>$d
-                                      , 'H'=>$h
-                                      , 'i'=>$i
+                        $value = array( 'Y' => $y
+                                      , 'M' => $m
+                                      , 'd' => $d
+                                      , 'H' => $h
+                                      , 'i' => $i
                                       );
                     }
-                    else {
-
-                    }
                     break;
-                case (preg_match('/^VARCHAR\(([1-9][0-9]+)\)$/', $dataType, $matches)?$dataType:!$dataType):
+                case ( preg_match('/^VARCHAR\(([1-9][0-9]+)\)$/', $dataType, $matches)? $dataType: ! $dataType ):
                     $length = ($matches[1] < $maxFieldLength) ? $matches[1] : $maxFieldLength;
                     $this->_form->addElement( 'text'
                                             , $field->getFieldName()
@@ -137,11 +134,11 @@ class JobDisplayForm {
                        ? $dataType
                        : !$dataType
                      ) :
-                    $listString = preg_replace('/^ENUM\(/', '', $dataType);
-                    $listString = preg_replace('/\)$/', '', $listString);
-                    $listString = preg_replace('/\',\\s+\'/', '\',\'', $listString);
-                    $listString = preg_replace('/^\'/', '', $listString);
-                    $listString = preg_replace('/\'$/', '', $listString);
+                    $listString = preg_replace( '/^ENUM\(/', '', $dataType );
+                    $listString = preg_replace( '/\)$/', '', $listString );
+                    $listString = preg_replace( '/\',\\s+\'/', '\',\'', $listString );
+                    $listString = preg_replace( '/^\'/', '', $listString );
+                    $listString = preg_replace( '/\'$/', '', $listString );
                     $items = split('\',\'', $listString);
                     foreach ($items as $k) { $list[$k] = $k; }
                     $this->_form->addElement( 'select'
@@ -152,6 +149,7 @@ class JobDisplayForm {
                                             );
                     break;
                 case 'REFERENCE(Contact)':
+                    // @todo AJAX this - have the client load values.
                     $oContact = new ContactDao();
                     $results = $oContact->findSome("1 = 1 order by contactName");
                     $contacts = array( '' => ''
@@ -198,6 +196,7 @@ class JobDisplayForm {
                                             );
                     break;
                 case 'REFERENCE(Company)':
+                    // @todo AJAX this - have the client load values.
                     $oCompany = new CompanyDao();
                     $results = $oCompany->findSome("1 = 1 order by companyName");
                     $companies = array( '' => ''
@@ -224,7 +223,8 @@ class JobDisplayForm {
                 default:
                     echo "<td bgcolor=\"cyan\">" . $field->getFieldValue() . " / " . $field->getDataType() . " / " . $field->getFieldHelp() . "</td>";
                     break;
-            }
+            } // END OF switch ($dataType)
+
             if ($field->getUserCanChange()) {
                 $defaults[$field->getFieldName()]=$value;
             }
