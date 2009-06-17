@@ -28,6 +28,11 @@ abstract class DaoBase {
     private $_sth = null;
 
     /**
+     * @var array Hash of configuration keys to values
+     */
+    private $_configValues = null;
+
+    /**
      * getDefaults acts like DaoBase::getRowById returning a hash of fields to
      * column values to be used by the insertRow routine to compare values with
      * for default values at row insertion time.
@@ -70,13 +75,14 @@ abstract class DaoBase {
      */
     public function __construct( $tableName ) {
         $oConfig = new Config();
-        $this->_dbh = mysql_connect( $oConfig->values['db_host']
+        $this->_configValues = $oConfig->values;
+        $this->_dbh = mysql_connect( $this->_configValues['db_host']
                                    . ':'
-                                   . $oConfig->values['db_port']
-                                   , $oConfig->values['db_user']
-                                   , $oConfig->values['db_pass']
+                                   . $this->_configValues['db_port']
+                                   , $this->_configValues['db_user']
+                                   , $this->_configValues['db_pass']
                                    );
-        mysql_select_db($oConfig->values['db_name'], $this->_dbh);
+        mysql_select_db($this->_configValues['db_name'], $this->_dbh);
         $this->_sth = null;
         $this->_tableName = $tableName;
     }
@@ -108,33 +114,34 @@ abstract class DaoBase {
         if ($this->validateRowForInsert($rowValues)) {
             $defaults = $this->getDefaults();
             $query = "INSERT {$this->_tableName} SET ";
-            // @todo Need way to stop coding $runQuery in DaoBase - need to do that in a config.
-            $runQuery = 1;
+            $runQuery = 0;
             $changes = array();
             $fieldsByFieldName = array();
             $this->populateFields($rowValues);
             foreach ( $this->_fields as $field ) {
                 $fieldsByFieldName[$field->getFieldName()]=$field;
             }
-            foreach ( $rowValues as $k => $v ) {
-                if ( ("created" === $k) || ("updated" === $k) ) {
+            foreach ( $rowValues as $key => $value ) {
+                if ( ("created" === $key) || ("updated" === $key) ) {
                     continue;
                 }
-                $dv = ( null === $defaults[$k] ? '' : $defaults[$k] );
-                if ( $v === $dv ) {
+                $defaultValue = ( null === $defaults[$key] ? '' : $defaults[$key] );
+                if ( $value === $defaultValue ) {
                     continue;
                 }
-                $quot = $fieldsByFieldName[$k]->getQuote();
-                $changes[] = "$k = '" . mysql_escape_string($v) . "'";
+                $quot = $fieldsByFieldName[$key]->getQuote();
+                $changes[] = "$key = '" . mysql_escape_string($value) . "'";
                 $runQuery = 1;
             }
             if ( $runQuery ) {
                 $changes[] = 'created = NOW()';
                 $query .= implode(', ', $changes);
-                if ( !mysql_query($query, $this->_dbh) ) {
-                    throw new Exception("Query failed: $query");
+                if ( $this->_configValues['really_update_db'] ) {
+                    if ( !mysql_query($query, $this->_dbh) ) {
+                        throw new Exception("Query failed: $query");
+                    }
+                    $insertId = mysql_insert_id($this->_dbh);
                 }
-                $insertId = mysql_insert_id($this->_dbh);
             }
         }
         else {

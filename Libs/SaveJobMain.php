@@ -34,6 +34,18 @@ class SaveJobMain {
             $result = null;
             // First, identify changes that have been made to fields and save
             // that in the $changeLog variable.  Then,
+            $rowValues = array(
+                'primaryContactId'    => $_POST['primaryContactId']
+              , 'companyId'           => $_POST['companyId']
+              , 'urgency'             => $_POST['urgency']
+              , 'nextActionDue'       => Tools::getDateFromPost('nextActionDue')
+              , 'lastStatusChange'    => Tools::getDateFromPost('lastStatusChange')
+              , 'positionTitle'       => $_POST['positionTitle']
+              , 'applicationStatusId' => $_POST['applicationStatusId']
+              , 'nextAction'          => $_POST['nextAction']
+              , 'location'            => $_POST['location']
+              , 'url'                 => $_POST['url']
+            );
             if ( ($_POST['jobId'] !== NULL) && ($_POST['jobId'] !== '') ) {
                 $jobId = $_POST['jobId'];
                 $rowValues['jobId'] = $jobId;
@@ -43,19 +55,7 @@ class SaveJobMain {
                    ) {
                     throw( new Exception('Can\'t update that way!') );
                 }
-                $rowValues = array(
-                    'jobId'               => $_POST['jobId']
-                  , 'primaryContactId'    => $_POST['primaryContactId']
-                  , 'companyId'           => $_POST['companyId']
-                  , 'urgency'             => $_POST['urgency']
-                  , 'nextActionDue'       => Tools::getDateFromPost('nextActionDue')
-                  , 'lastStatusChange'    => Tools::getDateFromPost('lastStatusChange')
-                  , 'positionTitle'       => $_POST['positionTitle']
-                  , 'applicationStatusId' => $_POST['applicationStatusId']
-                  , 'nextAction'          => $_POST['nextAction']
-                  , 'location'            => $_POST['location']
-                  , 'url'                 => $_POST['url']
-                );
+                $rowValues['jobId'] = $_POST['jobId'];
                 foreach ( $rowValues as $key => $value ) {
                     ///////////////////////////////////////////////////////////
                     // Special case - when new data is empty or null and old
@@ -103,6 +103,7 @@ class SaveJobMain {
                 }
             }
             else {
+                Tools::dump_var('rowValues', $rowValues);
                 $oJob->populateFields($rowValues);
                 $jobId = $oJob->insertRow($rowValues);
             }
