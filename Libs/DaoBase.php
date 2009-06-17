@@ -108,7 +108,8 @@ abstract class DaoBase {
         if ($this->validateRowForInsert($rowValues)) {
             $defaults = $this->getDefaults();
             $query = "INSERT {$this->_tableName} SET ";
-            $runQuery = 0;
+            // @todo Need way to stop coding $runQuery in DaoBase - need to do that in a config.
+            $runQuery = 1;
             $changes = array();
             $fieldsByFieldName = array();
             $this->populateFields($rowValues);

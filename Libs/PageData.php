@@ -8,16 +8,34 @@ require_once("Libs/autoload.php");
 
 class PageData {
 
-    public static function styleSheet() {
-        $dirName = dirname($_SERVER{'SCRIPT_NAME'});
-        ?>
-                <style type="text/css" media="all">
-                  @import url("<?php print $dirName; ?>/styles.css");
-                </style>
-        <?php
+    /**
+     * Load the Javascript files
+     *
+     * @return void
+     */
+    public static function jsLoader() {
+        echo '<script type="text/javascript" src="testAjax.js"></script>' . "\n";
     }
 
-	public static function pageHeader() {
+    /**
+     * Load the style sheet
+     *
+     * @return void
+     */
+    public static function styleSheet() {
+        $dirName = dirname($_SERVER{'SCRIPT_NAME'});
+        echo "                <style type=\"text/css\" media=\"all\">
+                  @import url(\"$dirName/styles.css\");
+                </style>
+";
+    }
+
+    /**
+     * Display the page header
+     *
+     * @return void
+     */
+    public static function pageHeader() {
 		?>
             <html>
         <!-- pageHeader -->
@@ -32,7 +50,12 @@ class PageData {
         <?php
 	}
 
-    public static function pageFooter() {
+    /**
+     * Display the page footer
+     *
+     * @return void
+     */
+	public static function pageFooter() {
         ?>
         <!-- pageFooter -->
 <div class="pageFooter">
@@ -44,6 +67,11 @@ class PageData {
         <?php
     }
 
+    /**
+     * Display the navigation bar
+     *
+     * @return void
+     */
     public static function displayNavBar() {
         ?>
 <p />

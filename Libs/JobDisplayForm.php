@@ -225,6 +225,15 @@ class JobDisplayForm {
                     break;
             } // END OF switch ($dataType)
 
+            // @todo Write AJAX code to handle duplicate detection here, in the Javascript code and in a getter API
+            if ( 'url' === $field->getFieldName() ) {
+                $this->_form->addElement( 'html',
+                                          '<tr>'
+                                        . '<td colspan="2" align="right" id="urlDuplicateBox">'
+                                        . '</td>'
+                                        . '</tr>' );
+            }
+
             if ($field->getUserCanChange()) {
                 $defaults[$field->getFieldName()]=$value;
             }
