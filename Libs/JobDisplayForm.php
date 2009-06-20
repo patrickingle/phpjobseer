@@ -1,7 +1,24 @@
 <?php
+
 /**
- * Created on May 11, 2009 by kbenton
+ * phpjobseeker
  *
+ * Copyright (C) 2009 Kevin Benton - kbenton at bentonfam dot org
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along
+ * with this program; if not, write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ * 
  */
 
 require_once('HTML/QuickForm.php');
@@ -120,14 +137,28 @@ class JobDisplayForm {
                     break;
                 case ( preg_match('/^VARCHAR\(([1-9][0-9]+)\)$/', $dataType, $matches)? $dataType: ! $dataType ):
                     $length = ($matches[1] < $maxFieldLength) ? $matches[1] : $maxFieldLength;
-                    $this->_form->addElement( 'text'
-                                            , $field->getFieldName()
-                                            , $field->getFieldLabel()
-                                            , array( 'size' => $length
-                                                   , 'maxlength' => $matches[1]
-                                                   , 'alt' => $field->getFieldHelp()
-                                                   )
-                                            );
+                    if ( ('url'===$field->getFieldName()) ) {
+                        $jobIdText = isset($jobId) && ('' <> $jobId) ? $jobId : "0";
+                        $this->_form->addElement( 'text'
+                                                , $field->getFieldName()
+                                                , $field->getFieldLabel()
+                                                , array( 'size' => $length
+                                                       , 'maxlength' => $matches[1]
+                                                       , 'alt' => $field->getFieldHelp()
+                                                       , 'onchange' => "checkForDuplicateUrl($jobIdText, this.value)"
+                                                       )
+                                                );
+                    }
+                    else {
+                        $this->_form->addElement( 'text'
+                                                , $field->getFieldName()
+                                                , $field->getFieldLabel()
+                                                , array( 'size' => $length
+                                                       , 'maxlength' => $matches[1]
+                                                       , 'alt' => $field->getFieldHelp()
+                                                       )
+                                                );
+                    }
                     break;
                 case ( preg_match( '/^ENUM\((\'[A-Za-z0-9]+\'(, |,|))+\)$/'
                                  , $dataType)
@@ -229,7 +260,14 @@ class JobDisplayForm {
             if ( 'url' === $field->getFieldName() ) {
                 $this->_form->addElement( 'html',
                                           '<tr>'
-                                        . '<td colspan="2" align="right" id="urlDuplicateBox">'
+                                        . '<td colspan="2" align="right">'
+                                        . '<div id="urlDuplicateStatusBox"></div>'
+                                        . '</td>'
+                                        . '</tr>' );
+                $this->_form->addElement( 'html',
+                                          '<tr>'
+                                        . '<td colspan="2" align="right">'
+                                        . '<div id="urlDuplicateResultBox"></div>'
                                         . '</td>'
                                         . '</tr>' );
             }
