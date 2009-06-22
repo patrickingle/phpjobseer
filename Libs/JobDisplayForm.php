@@ -180,10 +180,10 @@ class JobDisplayForm {
                                             );
                     break;
                 case 'REFERENCE(Contact)':
-                    // @todo AJAX this - have the client load values.
+                    // @todo AJAX Contacts - have the client load values.
                     $oContact = new ContactDao();
                     $results = $oContact->findSome("1 = 1 order by contactName");
-                    $contacts = array( '' => ''
+                    $contacts = array( '0' => ''
                                      , 'Add new contact'=> 'Add new contact'
                                      );
                     foreach ( $results as $result ) {
@@ -227,10 +227,10 @@ class JobDisplayForm {
                                             );
                     break;
                 case 'REFERENCE(Company)':
-                    // @todo AJAX this - have the client load values.
+                    // @todo AJAX Companies - have the client load values.
                     $oCompany = new CompanyDao();
                     $results = $oCompany->findSome("1 = 1 order by companyName");
-                    $companies = array( '' => ''
+                    $companies = array( '0' => ''
                                      , 'Add new company'=> 'Add new company'
                                      );
                     foreach ( $results as $result ) {

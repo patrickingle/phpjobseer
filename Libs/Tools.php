@@ -62,4 +62,24 @@ class Tools {
                       );
     }
 
+    /**
+     * Print a cell value with the given (optinoal) style
+     * 
+     * @param $value String The value to be displayed in the cell. If no value, &nbsp;
+     * @param $cssClass String The CSS class for this cell.
+     * @return void
+     */
+    static function printCell($value, $cssClass = null) {
+        if (isset($style)) {
+            print "  <td class=\"$cssClass\">";
+        }
+        else {
+            print "  <td>";
+        }
+        if (isset($value)) {
+            print $value;
+        }
+        print "</td>\n";
+    }
+
 }

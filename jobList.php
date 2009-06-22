@@ -22,19 +22,6 @@
 
 require_once("Libs/autoload.php");
 
-function printcell($value, $style = null) {
-    if (isset($style)) {
-        print "  <td class=\"$style\">";
-    }
-    else {
-        print "  <td>";
-    }
-    if (isset($value)) {
-        print $value;
-    }
-    print "</td>\n";
-}
-
 $headerRepeatCount = 20;
 
 $dateNow = date('Y-m-d H:i:s');
@@ -96,34 +83,35 @@ foreach ( $jobResults as $job ) {
     else {
         $nextActionStyle .= 'FUTURE';
     }
-    print "<tr>\n";
+    $rowId = $job['jobId'];
+    print "<tr id=\"Row$rowId\">\n";
     foreach ( $cells as $cell ) {
         if (isset($job[$cell]) && ("" !== $job[$cell])) {
             switch ($cell) {
                 case 'jobId':
-                    printcell( "<a href=\"editJob.php?jobId={$job[$cell]}\">{$job[$cell]}</a>" );
+                    Tools::printCell( "<a href=\"editJob.php?jobId={$job[$cell]}\">{$job[$cell]}</a>" );
                     break;
                 case 'url':
                     $link = $job[$cell];
-                    printcell( "<a href=\"$link\">Here</a> "
+                    Tools::printCell( "<a href=\"$link\">Here</a> "
                              . "<a href=\"$link\" target=\"_blank\">New</a>" );
                     break;
                 case 'urgency':
-                    printcell($job[$cell], "urgency" . strtoupper($job[$cell]) );
+                    Tools::printCell($job[$cell], "urgency" . strtoupper($job[$cell]) );
                     break;
                 case 'applicationStatusId':
                     $sval = $applicationStatus['statusValue'];
-                    printcell($sval, "applicationStatus$sval");
+                    Tools::printCell($sval, "applicationStatus$sval");
                     break;
                 case 'nextActionDue':
-                    printcell($job[$cell], $nextActionStyle);
+                    Tools::printCell($job[$cell], $nextActionStyle);
                     break;
                 default:
-                    printcell($job[$cell]);
+                    Tools::printCell($job[$cell]);
             }
         }
         else {
-            printcell("&nbsp;");
+            Tools::printCell("&nbsp;");
         }
     }
     print "</tr>\n";

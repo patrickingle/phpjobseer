@@ -184,23 +184,35 @@ abstract class DaoBase {
             $fieldsByFieldName = array();
             foreach ( $this->_fields as $field ) {
                 $fieldsByFieldName[$field->getFieldName()]=$field;
+                $fieldTypesByFieldName[$field->getFieldName()]=$field->getDataType();
             }
-            foreach ( $rowValues as $k => $v ) {
-                if ( ("created" === $k) || ("updated" === $k) ) {
+            foreach ( $rowValues as $key => $value ) {
+                // Always skip created and updated because these are maintained by the DB
+                if ( ("created" === $key) || ("updated" === $key) ) {
                     continue;
                 }
-                $ov = ( null === $oldValues[$k] ? '' : $oldValues[$k] );
-                if ( $v === $ov ) {
+                $oldValue = ( null === $oldValues[$key] ) ? '' : $oldValues[$key];
+                if ( preg_match( '/^REFERENCE\(.+\)$/'
+                               , $fieldTypesByFieldName[$key]
+                               ) 
+                   ) {
+                    if ( '' === $oldValues[$key] ) {
+                        $oldValue = '0';
+                    }
+                    if ( '' === $value ) {
+                        $value = '0';
+                    }
+                }
+                if ( $value === $oldValue ) {
                     continue;
                 }
-                $quot = $fieldsByFieldName[$k]->getQuote();
-                $changes[] = "$k = $quot" . mysql_escape_string($v) . "$quot";
+                $quot = $fieldsByFieldName[$key]->getQuote();
+                $changes[] = "$key = $quot" . mysql_escape_string($value) . "$quot";
                 $runQuery = 1;
             }
             if ($runQuery) {
                 $query .= implode(', ', $changes);
                 $query .= " WHERE {$this->_tableName}Id = " . mysql_escape_string($id);
-//                echo "<br />query=$query<br />";
                 return mysql_query($query, $this->_dbh);
             }
             else {
@@ -308,13 +320,13 @@ abstract class DaoBase {
     /**
      * validateRowId should probably be overridden. The intent is to provide a
      * method that validates a row ID against the expected format for the row of
-     * "this" table.
+     * "this" table. ID 0 is valid as a replacement for null.
      *
      * @param int $id The row ID to be validated
      * @return boolean
      */
     static public function validateRowId($id) {
-        return preg_match('/^[1-9][0-9]*$/', $id);
+        return preg_match('/^[0-9]+$/', $id);
     }
 
     /**

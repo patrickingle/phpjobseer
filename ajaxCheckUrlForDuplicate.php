@@ -40,10 +40,15 @@ if ( isset($_GET['jobId']) && (''!==$_GET['jobId']) ) {
                 . "'";
 }
 
-// @todo Make this show what jobId has this URL as a duplicate as a hyperlink
 $oJob = new JobDao();
 $queryString = "url = '" . mysql_escape_string($url) . "' $jobIdLimit";
 $cnt = $oJob->countSome( $queryString );
 if ( $cnt > 0 ) {
-    echo "Note: Duplicate URL found in system";
+    $results = $oJob->findSome( $queryString );
+    $jobs = array();
+    foreach ( $results as $row ) {
+        $jobId = $row['jobId'];
+        $jobs[] = "<a href=\"editJob.php?jobId=$jobId\">$jobId</a>";
+    }
+    echo "Note: Duplicate URL found in system in at least one job: " . join(', ', $jobs);
 }
