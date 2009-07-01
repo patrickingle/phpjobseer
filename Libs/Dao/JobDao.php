@@ -308,7 +308,6 @@ class JobDao extends DaoBase {
         return true;
     }
 
-
     /**
      * validateRowForUpdate checks to make sure that data being updated is valid.
      *

@@ -73,13 +73,13 @@ class PageData {
      */
 	public static function pageFooter() {
         ?>
-        <!-- pageFooter -->
 <div class="pageFooter">
   Want your own copy of this tool?  PHP Job Seeker is available at
   <a href="http://phpjobseeker.sourceforge.net/">
     http://phpjobseeker.sourceforge.net/
   </a>
 </div>
+        <!-- pageFooter -->
         <?php
     }
 

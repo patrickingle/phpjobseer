@@ -161,6 +161,9 @@ abstract class DaoBase {
             }
         }
         else {
+            Tools::dump_var('rowValues', $rowValues);
+            Tools::dump_var('this', $this);
+            echo "<pre>";
             throw new Exception("Row failed validation for insert!");
         }
         return $insertId;

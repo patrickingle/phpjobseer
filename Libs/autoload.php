@@ -21,5 +21,17 @@
  */
 
 function __autoload($class_name) {
-    require_once 'Libs/' . $class_name . '.php';
+    switch (true) {
+        case ( preg_match('/^DaoBase$/', $class_name)
+            || preg_match('/Dao$/', $class_name)
+             ) : 
+            require_once 'Libs/Dao/' . $class_name . '.php';
+            break;
+        case ( preg_match('/Main$/', $class_name) ):
+            require_once 'Libs/Mains/' . $class_name . '.php';
+            break;
+        default:
+            require_once 'Libs/' . $class_name . '.php';
+            break;
+    } // END OF switch (true)
 }

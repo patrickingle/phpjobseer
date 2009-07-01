@@ -36,7 +36,7 @@ class NoteDao extends DaoBase {
               && isset($rowValues['appliesToTable'])
               && preg_match(self::APPLIES_TO_TABLES, $rowValues['appliesToTable'])
               && isset($rowValues['appliesToId'])
-              && preg_match('/^[1-9][0-9]+$/', $rowValues['appliesToId'])
+              && preg_match('/^[1-9][0-9]*$/', $rowValues['appliesToId'])
               && isset($rowValues['note'])
                );
     }

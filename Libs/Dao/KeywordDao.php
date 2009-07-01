@@ -70,9 +70,9 @@ class KeywordDao extends DaoBase {
      *
      * @return void
      */
-    public function __construct() {
+    public function __construct($fieldValues = null) {
         parent::__construct('keyword');
-        $this->populateFields();
+        $this->populateFields($fieldValues);
     }
 
     /**
@@ -115,7 +115,7 @@ class KeywordDao extends DaoBase {
                         , null                  // $fieldValidator
                         );
         $_fieldDescriptions[] = $x;
-
+        
         $x = new FieldDescription();
         $y = isset($fieldValues['keywordValue']) ? $fieldValues['keywordValue'] : null;
         $x->setAllFields( 'keywordValue'        // $fieldName

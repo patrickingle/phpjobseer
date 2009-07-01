@@ -136,3 +136,11 @@ body {
     background-color: red;
     font-weight: bolder;
 }
+
+.activeJobLink {
+	font: normal;
+}
+
+.inactiveJobLink {
+	font: strikethrough;
+}

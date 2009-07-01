@@ -131,8 +131,9 @@ class SaveJobMain {
                 $oNote = new NoteDao();
                 $rowValues = array();
                 $rowValues['appliesToTable'] = 'job';
-                $rowValues['appliesToId'] = $jobId;
+                $rowValues['appliesToId'] = "$jobId";
                 $rowValues['note'] = $newNote;
+                $oNote->populateFields($rowValues);
                 $result = $oNote->insertRow($rowValues);
                 if (!$result) {
                     echo "<div class='error'>Unable to add note to this job!</div>";
