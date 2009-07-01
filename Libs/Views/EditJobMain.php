@@ -22,7 +22,7 @@
 
 require_once("Libs/autoload.php");
 
-class EditJobMain {
+class EditJobView {
     function __construct() {
         // Do nothing for now.
     }

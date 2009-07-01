@@ -22,5 +22,5 @@
 
 require_once("Libs/autoload.php");
 
-$index = new KeywordListMain();
+$index = new KeywordListView();
 $index->main();

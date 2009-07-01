@@ -22,7 +22,7 @@
 
 require_once("Libs/autoload.php");
 
-class KeywordListMain {
+class KeywordListView {
     function __construct() {
         // Do nothing for now.
     }

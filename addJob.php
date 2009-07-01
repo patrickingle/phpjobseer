@@ -22,5 +22,5 @@
 
 require_once("Libs/autoload.php");
 
-$page = new AddJobMain();
+$page = new AddJobView();
 $page->main();

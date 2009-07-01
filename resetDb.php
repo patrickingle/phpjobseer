@@ -22,5 +22,5 @@
 
 require_once("Libs/autoload.php");
 
-$cmd = new DbResetMain();
+$cmd = new DbResetView();
 $cmd->main();

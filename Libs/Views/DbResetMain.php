@@ -23,7 +23,7 @@
 
 require_once("Libs/autoload.php");
 
-class DbResetMain {
+class DbResetView {
 
     /**
      * @var mixed Configuration values from class Config

@@ -27,8 +27,8 @@ function __autoload($class_name) {
              ) : 
             require_once 'Libs/Dao/' . $class_name . '.php';
             break;
-        case ( preg_match('/Main$/', $class_name) ):
-            require_once 'Libs/Mains/' . $class_name . '.php';
+        case ( preg_match('/View$/', $class_name) ):
+            require_once 'Libs/Views/' . $class_name . '.php';
             break;
         default:
             require_once 'Libs/' . $class_name . '.php';

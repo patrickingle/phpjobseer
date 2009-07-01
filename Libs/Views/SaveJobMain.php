@@ -20,7 +20,7 @@
  * 
  */
 
-class SaveJobMain {
+class SaveJobView {
     public function __construct() {
         // do nothing for now
     }
