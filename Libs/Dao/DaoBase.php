@@ -315,9 +315,12 @@ abstract class DaoBase {
      */
     public function countSome($restrictions) {
         $count = 0;
-        $query = "SELECT * FROM {$this->_tableName} WHERE $restrictions";
+        $query = "SELECT COUNT(1) AS cnt"
+               .  " FROM {$this->_tableName}"
+               . " WHERE $restrictions";
         $this->_sth = mysql_query($query, $this->_dbh);
-        return mysql_num_rows($this->_sth);
+        $row = mysql_fetch_assoc($this->_sth) ;
+        return $rowi[ 'cnt' ] ;
     }
 
     /**
