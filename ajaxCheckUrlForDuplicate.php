@@ -23,33 +23,34 @@
 
 // @todo Write test to verify that ajaxCheckUrlForDuplicate.php works as expected.
 
-require_once('Libs/autoload.php');
+require_once('Libs/autoload.php') ;
 
 // Don't say anything if either of these fields is not set to something other
 // than an empty string.
 if ( !isset($_GET['url'])
   || (''===$_GET['url'])
    ) {
-    exit();
+    exit() ;
 }
 
-$url = $_GET['url'];
-$jobIdLimit = '';
+$url = $_GET['url'] ;
+$jobIdLimit = '' ;
 if ( isset($_GET['jobId']) && (''!==$_GET['jobId']) ) {
     $jobIdLimit = " and jobId <> '"
                 . mysql_escape_string($_GET['jobId'])
-                . "'";
+                . "'" ;
 }
 
-$oJob = new JobDao();
-$queryString = "url = '" . mysql_escape_string($url) . "' $jobIdLimit";
-$cnt = $oJob->countSome( $queryString );
+$oJob = new JobDao() ;
+$queryString = "url = '" . mysql_escape_string($url) . "' $jobIdLimit" ;
+$cnt = $oJob->countSome( $queryString ) ;
 if ( $cnt > 0 ) {
-    $results = $oJob->findSome( $queryString );
-    $jobs = array();
+    $results = $oJob->findSome( $queryString ) ;
+    $jobs = array() ;
     foreach ( $results as $row ) {
-        $jobId = $row['jobId'];
-        $jobs[] = "<a href=\"editJob.php?jobId=$jobId\">$jobId</a>";
+        $jobId = $row['jobId'] ;
+        $jobs[] = "<a href=\"editJob.php?jobId=$jobId\">$jobId</a>" ;
     }
-    echo "Note: Duplicate URL found in system in at least one job: " . join(', ', $jobs);
+    echo "Note: Duplicate URL found in system in at least one job: "
+       . join(', ', $jobs) ;
 }
