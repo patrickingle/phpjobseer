@@ -17,36 +17,36 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
- * 
+ *
  */
 
-require_once("Libs/autoload.php") ;
+require_once("Libs/autoload.php");
 
 abstract class DaoBase {
     /**
      * @var Object Database reference pointer
      */
-    protected $_dbh = null ;
+    protected $_oDbh = null;
 
     /**
      * @var String Name of table this DAO serves
      */
-    protected $_tableName = null ;
+    protected $_tableName = null;
 
     /**
      * @var array Hash of FieldDescription objects
      */
-    protected $_fields = null ;
+    protected $_fields = null;
 
     /**
      * @var unknown Session DB handle
      */
-    private $_sth = null ;
+    private $_sth = null;
 
     /**
      * @var array Hash of configuration keys to values
      */
-    private $_configValues = null ;
+    private $_configValues = null;
 
     /**
      * getDefaults acts like DaoBase::getRowById returning a hash of fields to
@@ -55,7 +55,7 @@ abstract class DaoBase {
      *
      * @return array Default values for new records
      */
-    abstract public function getDefaults() ;
+    abstract public function getDefaults();
 
     /**
      * populateFields creates an array of FieldDescription's.  This function is
@@ -64,43 +64,39 @@ abstract class DaoBase {
      * @param array $fieldValues A hash of field values by field names.
      * @return void
      */
-    abstract public function populateFields($fieldValues) ;
+    abstract public function populateFields($fieldValues);
 
     /**
      * validateRowForInsert checks to make sure that data being inserted is valid.
      *
      * @return boolean True when validation passes, false otherwise.
      */
-    abstract public function validateRowForInsert($rowValues) ;
+    abstract public function validateRowForInsert($rowValues);
 
     /**
      * validateRowForUpdate checks to make sure that data being updated is valid.
      *
      * @return boolean True when validation passes, false otherwise.
      */
-    abstract public function validateRowForUpdate($rowValues) ;
+    abstract public function validateRowForUpdate($rowValues);
 
     /**
      * Class constructor - do not set $reuse except from within this class.
      *
      * @param String  $tableName Name of the table covered
-     * @param boolean $reused When 1, do not close connection on destroy.
-     * @param unknown $_dbh to reuse
-     * @param unknown $_sth to reuse
      * @return void
      */
     public function __construct( $tableName ) {
-        $oConfig = new Config() ;
-        $this->_configValues = $oConfig->values ;
-        $this->_dbh = mysql_connect( $this->_configValues['db_host']
-                                   . ':'
-                                   . $this->_configValues['db_port']
-                                   , $this->_configValues['db_user']
-                                   , $this->_configValues['db_pass']
-                                   ) ;
-        mysql_select_db($this->_configValues['db_name'], $this->_dbh) ;
-        $this->_sth = null ;
-        $this->_tableName = $tableName ;
+        $oConfig = new Config();
+        $this->_configValues = $oConfig->values;
+        $this->_oDbh = new mysqli( $this->_configValues['db_host']
+                                 , $this->_configValues['db_user']
+                                 , $this->_configValues['db_pass']
+                                 , $this->_configValues['db_name']
+                                 , $this->_configValues['db_port']
+                                 );
+        $this->_sth = null;
+        $this->_tableName = $tableName;
     }
 
     /**
@@ -111,10 +107,46 @@ abstract class DaoBase {
     }
 
     /**
+     * Execute commit on DB
+     *
+     * @return boolean Was the commit successful?
+     */
+    public function commit() {
+        if ( ! $runQuery
+          || ! $this->_configValues['really_update_db'] ) {
+              return true;
+        }
+        return $this->_oDbh->commit();
+    }
+
+    /**
+     * Execute rollback on DB
+     *
+     * @param $savepoint string Optional name of savepoint
+     * @return boolean Was the rollback successful?
+     */
+    public function rollback($savePoint = null) {
+        if ( ! $runQuery
+          || ! $this->_configValues['really_update_db'] ) {
+              return true;
+        }
+        return $this->_oDbh->rollback();
+    }
+
+    /**
      * @return array Hash of FieldDescription objects
      */
     public function getFields() {
-        return $this->_fields ;
+        return $this->_fields;
+    }
+
+
+    /**
+     * Return an escaped string compatible for this database.
+     * @param String Value to escape
+     */
+    public function escape_string( $str ) {
+        return $this->_oDbh->real_escape_string( $str ) ;
     }
 
     /**
@@ -126,47 +158,47 @@ abstract class DaoBase {
      * @return int Last Insert ID on success - throws on failure
      */
     public function insertRow($rowValues) {
-        $insertId = null ;
+        $insertId = null;
         if ($this->validateRowForInsert($rowValues)) {
-            $defaults = $this->getDefaults() ;
-            $query = "INSERT {$this->_tableName} SET " ;
-            $runQuery = 0 ;
-            $changes = array() ;
-            $fieldsByFieldName = array() ;
-            $this->populateFields($rowValues) ;
+            $defaults = $this->getDefaults();
+            $query = "INSERT {$this->_tableName} SET ";
+            $runQuery = 0;
+            $changes = array();
+            $fieldsByFieldName = array();
+            $this->populateFields($rowValues);
             foreach ( $this->_fields as $field ) {
-                $fieldsByFieldName[$field->getFieldName()]=$field ;
+                $fieldsByFieldName[$field->getFieldName()]=$field;
             }
             foreach ( $rowValues as $key => $value ) {
                 if ( ("created" === $key) || ("updated" === $key) ) {
-                    continue ;
+                    continue;
                 }
-                $defaultValue = ( null === $defaults[$key] ? '' : $defaults[$key] ) ;
+                $defaultValue = ( null === $defaults[$key] ? '' : $defaults[$key] );
                 if ( $value === $defaultValue ) {
-                    continue ;
+                    continue;
                 }
-                $quot = $fieldsByFieldName[$key]->getQuote() ;
-                $changes[] = "$key = '" . mysql_escape_string($value) . "'" ;
-                $runQuery = 1 ;
+                $quot = $fieldsByFieldName[$key]->getQuote();
+                $changes[] = "$key = $quot" . $this->escape_string($value) . "$quot";
+                $runQuery = 1;
             }
             if ( $runQuery ) {
-                $changes[] = 'created = NOW()' ;
-                $query .= implode(', ', $changes) ;
+                $changes[] = 'created = NOW()';
+                $query .= implode(', ', $changes);
                 if ( $this->_configValues['really_update_db'] ) {
-                    if ( !mysql_query($query, $this->_dbh) ) {
-                        throw new Exception("Query failed: $query") ;
+                    if ( TRUE !== $this->_oDbh->query($query) ) {
+                        throw new Exception("Query failed: $query");
                     }
-                    $insertId = mysql_insert_id($this->_dbh) ;
+                    $insertId = $this->_oDbh->insert_id;
                 }
             }
         }
         else {
-            Tools::dump_var('rowValues', $rowValues) ;
-            Tools::dump_var('this', $this) ;
-            echo "<pre>" ;
-            throw new Exception("Row failed validation for insert!") ;
+            Tools::dump_var('rowValues', $rowValues);
+            Tools::dump_var('this', $this);
+            echo "<pre>";
+            throw new Exception("Row failed validation for insert!");
         }
-        return $insertId ;
+        return $insertId;
     }
 
     /**
@@ -180,50 +212,50 @@ abstract class DaoBase {
      */
     public function updateRowById($id, $rowValues) {
         if ($this->validateRowForUpdate($rowValues)) {
-            $oldValues = $this->getRowById($id) ;
-            $query = "UPDATE {$this->_tableName} SET " ;
-            $runQuery = 0 ;
-            $changes = array() ;
-            $fieldsByFieldName = array() ;
+            $oldValues = $this->getRowById($id);
+            $query = "UPDATE {$this->_tableName} SET ";
+            $runQuery = 0;
+            $changes = array();
+            $fieldsByFieldName = array();
             foreach ( $this->_fields as $field ) {
-                $fieldsByFieldName[$field->getFieldName()]=$field ;
-                $fieldTypesByFieldName[$field->getFieldName()]=$field->getDataType() ;
+                $fieldsByFieldName[$field->getFieldName()]=$field;
+                $fieldTypesByFieldName[$field->getFieldName()]=$field->getDataType();
             }
             foreach ( $rowValues as $key => $value ) {
                 // Always skip created and updated because these are maintained by the DB
                 if ( ("created" === $key) || ("updated" === $key) ) {
-                    continue ;
+                    continue;
                 }
-                $oldValue = ( null === $oldValues[$key] ) ? '' : $oldValues[$key] ;
+                $oldValue = ( null === $oldValues[$key] ) ? '' : $oldValues[$key];
                 if ( preg_match( '/^REFERENCE\(.+\)$/'
                                , $fieldTypesByFieldName[$key]
-                               ) 
+                               )
                    ) {
                     if ( '' === $oldValues[$key] ) {
-                        $oldValue = '0' ;
+                        $oldValue = '0';
                     }
                     if ( '' === $value ) {
-                        $value = '0' ;
+                        $value = '0';
                     }
                 }
                 if ( $value === $oldValue ) {
-                    continue ;
+                    continue;
                 }
-                $quot = $fieldsByFieldName[$key]->getQuote() ;
-                $changes[] = "$key = $quot" . mysql_escape_string($value) . "$quot" ;
-                $runQuery = 1 ;
+                $quot = $fieldsByFieldName[$key]->getQuote();
+                $changes[] = "$key = $quot" . $this->escape_string($value) . "$quot";
+                $runQuery = 1;
             }
             if ($runQuery) {
-                $query .= implode(', ', $changes) ;
-                $query .= " WHERE {$this->_tableName}Id = " . mysql_escape_string($id) ;
-                return mysql_query($query, $this->_dbh) ;
+                $query .= implode(', ', $changes);
+                $query .= " WHERE {$this->_tableName}Id = " . $this->escape_string($id);
+                return $this->_oDbh->query($query);
             }
             else {
-                echo "No changes found.<br />\n" ;
-                return true ;
+                echo "No changes found.<br />\n";
+                return true;
             }
         }
-        return false ;
+        return false;
     }
 
     /**
@@ -238,9 +270,9 @@ abstract class DaoBase {
         if (self::validateRowId($id)) {
             $query = "SELECT *" .
                       " FROM {$this->_tableName}" .
-                     " WHERE {$this->_tableName}Id = " . mysql_escape_string($id) ;
-            $sth = mysql_query($query, $this->_dbh) ;
-            return ;
+                     " WHERE {$this->_tableName}Id = " . $this->escape_string($id);
+            $result = $this->_oDbh->query($query);
+            return;
         }
     }
 
@@ -255,8 +287,8 @@ abstract class DaoBase {
      */
     public function getRowById($id) {
         if (self::validateRowId($id)) {
-            $results = $this->findSome("{$this->_tableName}Id = " . mysql_escape_string($id)) ;
-            return $results[0] ;
+            $results = $this->findSome("{$this->_tableName}Id = " . $this->escape_string($id));
+            return $results[0];
         }
     }
 
@@ -270,7 +302,7 @@ abstract class DaoBase {
      * @return array|null
      */
     public function findAll() {
-        return $this->findSome("1 = 1") ;
+        return $this->findSome("1 = 1");
     }
 
     /**
@@ -284,16 +316,16 @@ abstract class DaoBase {
      * and hasMoreData().
      */
     public function findSome($restrictions) {
-        $query = "SELECT * FROM {$this->_tableName} WHERE $restrictions" ;
-        $this->_sth = mysql_query($query, $this->_dbh) ;
-        $results = array() ;
+        $query = "SELECT * FROM {$this->_tableName} WHERE $restrictions";
+        $this->_sth = $this->_oDbh->query($query);
+        $results = array();
         if ( ! $this->_sth ) {
-            return $results ; // no data available.
+            return $results; // no data available.
         }
-        while ($row = mysql_fetch_assoc($this->_sth)) {
-            $results[] = $row ;
+        while ($row = $this->_sth->fetch_assoc()) {
+            $results[] = $row;
         }
-        return $results ;
+        return $results;
     }
 
     /**
@@ -303,7 +335,7 @@ abstract class DaoBase {
      * @return integer
      */
     public function countAll() {
-        return $this->countSome("1 = 1") ;
+        return $this->countSome("1 = 1");
     }
 
     /**
@@ -313,14 +345,23 @@ abstract class DaoBase {
      * @param String $restrictions
      * @return integer
      */
-    public function countSome($restrictions) {
+    public function countSome($restrictions = "1 = 1") {
         $count = 0 ;
-        $query = "SELECT COUNT(1) AS cnt"
-               .  " FROM {$this->_tableName}"
+        $query = "SELECT COUNT(1) AS cnt FROM {$this->_tableName}"
                . " WHERE $restrictions" ;
-        $this->_sth = mysql_query($query, $this->_dbh) ;
-        $row = mysql_fetch_assoc($this->_sth) ;
-        return $rowi[ 'cnt' ] ;
+        Tools::dump_var("query", $query) ;
+        try {
+            $this->_sth = $this->_oDbh->query($query) ;
+            $result = $this->_sth->fetch_row() ;
+        }
+        catch ( Exception $e ) {
+            Tools::quickBackTrace() ;
+            print "Uncaught exception: $e\n" ;
+            exit(1) ;
+        }
+        $cnt = $result[0] ;
+        $this->_sth->free() ;
+        return $cnt ;
     }
 
     /**
@@ -332,7 +373,7 @@ abstract class DaoBase {
      * @return boolean
      */
     static public function validateRowId($id) {
-        return preg_match('/^[0-9]+$/', $id) ;
+        return preg_match('/^[0-9]+$/', $id);
     }
 
     /**
@@ -344,8 +385,8 @@ abstract class DaoBase {
      * @return boolean
      */
     static public function validateDateTime($dt) {
-        $haystack = '/[12][0-9][0-9][0-9]-[01][0-9]-[0-3][0-9] [012][0-9]:[0-5][0-9]:[0-5][0-9]/' ;
-        return preg_match($haystack, $dt) ;
+        $haystack = '/[12][0-9][0-9][0-9]-[01][0-9]-[0-3][0-9] [012][0-9]:[0-5][0-9]:[0-5][0-9]/';
+        return preg_match($haystack, $dt);
     }
 
     /**
@@ -357,7 +398,8 @@ abstract class DaoBase {
      * @return boolean
      */
     static public function validateTimestamp($dt) {
-        return self::validateDateTime($dt) ; // The two look the same for now
+        return self::validateDateTime($dt); // The two look the same for now
     }
+
 
 }

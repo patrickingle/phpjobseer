@@ -144,3 +144,23 @@ body {
 .inactiveJobLink {
 	font: strikethrough;
 }
+
+table.navBar {
+    border: solid 1pt black;
+}
+
+tr.navBar {
+    background-color: white;
+}
+
+td.navBar {
+    text-align: left;
+}
+
+td.navBarSearch {
+    text-align: right;
+}
+
+input.searchBox {
+    background-color: white ;
+    border: solid 2pt black ;

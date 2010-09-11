@@ -22,16 +22,14 @@
 
 function __autoload($class_name) {
     switch (true) {
-        case ( preg_match('/^DaoBase$/', $class_name)
-            || preg_match('/Dao$/', $class_name)
-             ) : 
-            require_once 'Libs/Dao/' . $class_name . '.php';
-            break;
-        case ( preg_match('/View$/', $class_name) ):
-            require_once 'Libs/Views/' . $class_name . '.php';
-            break;
-        default:
-            require_once 'Libs/' . $class_name . '.php';
-            break;
+        case ( preg_match('/Dao(Base|)$/', $class_name) ) :
+            require_once 'Libs/Dao/' . $class_name . '.php' ;
+            break ;
+        case ( preg_match('/View(Base|)$/', $class_name) ) :
+            require_once 'Libs/Views/' . $class_name . '.php' ;
+            break ;
+        default :
+            require_once 'Libs/' . $class_name . '.php' ;
+            break ;
     } // END OF switch (true)
 }

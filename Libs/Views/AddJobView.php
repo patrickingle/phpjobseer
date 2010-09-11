@@ -34,7 +34,7 @@ class AddJobView {
            . '<a href="jobList.php?activeOnly=1">Job Listing</a>'
            . ' &gt;&gt;&gt; Add New Job</div>';
         PageData::displayNavBar();
-        $oForm = new JobDisplayForm();
+        $oForm = new JobFormView();
         $oForm->displayForm();
         PageData::pageFooter();
     }

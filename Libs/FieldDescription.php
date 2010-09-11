@@ -43,52 +43,52 @@ class FieldDescription {
 	/**
      * @var String Name of this field
      */
-    private $_fieldName;
+    private $_fieldName = null ;
 
     /**
      * @var unkown Value of data in this field
      */
-    private $_fieldValue;
+    private $_fieldValue = null ;
 
     /**
      * @var String data type of this field
      */
-    private $_dataType;
+    private $_dataType = null ;
 
     /**
      * @var int Sort Key
      */
-    private $_sortKey;
+    private $_sortKey = null ;
 
     /**
      * @var boolean User is allowed to change this field
      */
-    private $_userCanChange;
+    private $_userCanChange = null ;
 
     /**
      * @var boolean can the user see this field?
      */
-    private $_userCanSee;
+    private $_userCanSee = null ;
 
     /**
      * @var String Label to be displayed to user
      */
-    private $_fieldLabel;
+    private $_fieldLabel = null ;
 
     /**
      * @var String Help for this field
      */
-    private $_fieldHelp;
+    private $_fieldHelp = null ;
 
     /**
-     * @var unknown reference to field validator function
+     * @var mixed reference to field validator function
      */
-    private $_fieldValidator;
+    private $_fieldValidator = null;
 
     /**
      * @var String Field quote character
      */
-    private $_quote;
+    private $_quote = null ;
 
     public function __construct() {
         // do nothing at the moment.
@@ -300,7 +300,11 @@ class FieldDescription {
      * @return String Field quote character
      */
     public function getQuote() {
-        return $this->_quote;
+        // Just in case the quote value was not set, make it blank.
+        if ( null === $this->_quote ) {
+            $this->_quote = '' ;
+        }
+        return $this->_quote ;
     }
 
     /**
@@ -310,13 +314,13 @@ class FieldDescription {
      */
     public function setQuote($quote) {
         if ( ( null !== $quote )
-          && ( ''  !== $quote )
-          && ( '"' !== $quote )
-          && ( "'" !== $quote )
+          && ( ''   !== $quote )
+          && ( '"'  !== $quote )
+          && ( "'"  !== $quote )
            ) {
-            throw new Exception("Invalid value");
+            throw new Exception("Invalid quote value") ;
         }
-        $this->_quote = $quote;
+        $this->_quote = $quote ;
     }
 
 }

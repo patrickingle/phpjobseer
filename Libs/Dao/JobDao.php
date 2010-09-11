@@ -45,6 +45,7 @@ class JobDao extends DaoBase {
         return array( 'jobId' => ''
                     , 'primaryContactId' => ''
                     , 'companyId' => ''
+                    , 'jobKeyword' => ''
                     , 'urgency' => 'medium'
                     , 'nextActionDue' => date("Y-m-d H:i", time() + 86400)
                     , 'lastStatusChange' => date("Y-m-d H:i")
@@ -109,6 +110,21 @@ class JobDao extends DaoBase {
                         , ''                    // $quote
                         , null                  // $fieldHelp
                         , null                  // $fieldValidator
+                        );
+        $this->_fields[$x->getFieldName()] = $x;
+
+        $x = new FieldDescription();
+        $y = isset($fieldValues['jobKeyword']) ? $fieldValues['jobKeyword'] : null;
+        $x->setAllFields( 'jobKeyword'            // $fieldName
+                        , $y                      // $fieldValue
+                        , 'REFERENCE(jobKeyword)' // $dataType
+                        , 1                       // $sortKey
+                        , 1                       // $userCanChange
+                        , 1                       // $userCanSee
+                        , 'Keyword(s)'            // $fieldLabel
+                        , ''                      // $quote
+                        , null                    // $fieldHelp
+                        , null                    // $fieldValidator
                         );
         $this->_fields[$x->getFieldName()] = $x;
 
@@ -334,6 +350,31 @@ class JobDao extends DaoBase {
         {
             return true;
         }
+    }
+
+    /**
+     * findSome overrides DaoBase::findSome.  The intent is to provide a
+     * method that will return the a pointer that will allow getFirstRow(),
+     * getNextRow(), and hasMoreData() to function.
+     *
+     * @param String $restrictions will be used to create a WHERE clause. This
+     * string may not be empty.
+     * @return array Pointer that will be used by getFirstRow(), getNextRow()
+     * and hasMoreData().
+     */
+    public function findSome($restrictions) {
+        $query = "SELECT * FROM {$this->_tableName} WHERE $restrictions";
+        $this->_sth = $this->_oDbh->query($query);
+        $results = array();
+        if ( ! $this->_sth ) {
+            return $results; // no data available.
+        }
+        $oJobKeyword = new JobKeywordDao();
+        while ($row = $this->_sth->fetch_assoc()) {
+            $row['jobKeyword'] = $oJobKeyword->findKeywordValuesByJobId($row['jobId']);
+            $results[] = $row;
+        }
+        return $results;
     }
 
 }

@@ -25,55 +25,6 @@ require_once("Libs/autoload.php");
 class CompanyDao extends DaoBase {
 
     /**
-     * validateRowForInsertOrUpdate does all the "other" checks needed to verify
-     * a row is valid for insert/update besides whether or not the row ID is
-     * present or not.
-     */
-    public function validateRowForInsertOrUpdate($rowValues) {
-        return ( isset($rowValues)
-              && isset($rowValues['isAnAgency'])
-              && ( ( 1 == $rowValues['isAnAgency'] )
-                || ( 0 == $rowValues['isAnAgency'] )
-                 )
-              && ( ( ( $rowValues['isAnAgency'] == 0 )
-                  && ( ! isset($rowValues['agencyCompanyId']) )
-                   )
-                  ||
-                   ( ( $rowValues['isAnAgency'] == 1 )
-                  && ( isset($rowValues['agencyCompanyId']) )
-                   )
-                 )
-              && isset($rowValues['companyName'])
-               );
-    }
-
-    /**
-     * validateRowForInsert checks to make sure that data being inserted is valid.
-     *
-     * @param array $rowValues Hash of row keys / values to be checked
-     * @return boolean True when validation passes, false otherwise.
-     */
-    public function validateRowForInsert($rowValues) {
-        return ( (isset($rowValues))
-              && (!isset($rowValues['companyId']))
-              && self::validateRowForInsertOrUpdate($rowValues)
-               );
-    }
-
-    /**
-     * validateRowForUpdate checks to make sure that data being updated is valid.
-     *
-     * @param array $rowValues Hash of row keys / values to be checked
-     * @return boolean True when validation passes, false otherwise.
-     */
-    public function validateRowForUpdate($rowValues) {
-        return ( (isset($rowValues))
-              && (isset($rowValues['companyId']))
-              && self::validateRowForInsertOrUpdate($rowValues)
-               );
-    }
-
-    /**
      * Class constructor
      *
      * @return void
@@ -302,6 +253,79 @@ class CompanyDao extends DaoBase {
                         );
         $_fieldDescriptions[] = $x;
 
+    }
+
+    /**
+     * validateRowForInsertOrUpdate does all the "other" checks needed to verify
+     * a row is valid for insert/update besides whether or not the row ID is
+     * present or not.
+     */
+    public function validateRowForInsertOrUpdate($rowValues) {
+        return ( isset($rowValues)
+              && isset($rowValues['isAnAgency'])
+              && ( ( 1 == $rowValues['isAnAgency'] )
+                || ( 0 == $rowValues['isAnAgency'] )
+                 )
+              && ( ( ( $rowValues['isAnAgency'] == 0 )
+                  && ( ! isset($rowValues['agencyCompanyId']) )
+                   )
+                  ||
+                   ( ( $rowValues['isAnAgency'] == 1 )
+                  && ( isset($rowValues['agencyCompanyId']) )
+                   )
+                 )
+              && isset($rowValues['companyName'])
+               );
+    }
+
+    /**
+     * validateRowForInsert checks to make sure that data being inserted is valid.
+     *
+     * @param array $rowValues Hash of row keys / values to be checked
+     * @return boolean True when validation passes, false otherwise.
+     */
+    public function validateRowForInsert($rowValues) {
+        return ( (isset($rowValues))
+              && (!isset($rowValues['companyId']))
+              && self::validateRowForInsertOrUpdate($rowValues)
+               );
+    }
+
+    /**
+     * validateRowForUpdate checks to make sure that data being updated is valid.
+     *
+     * @param array $rowValues Hash of row keys / values to be checked
+     * @return boolean True when validation passes, false otherwise.
+     */
+    public function validateRowForUpdate($rowValues) {
+        return ( (isset($rowValues))
+              && (isset($rowValues['companyId']))
+              && self::validateRowForInsertOrUpdate($rowValues)
+               );
+    }
+
+    /**
+     * findSome overrides DaoBase::findSome.  The intent is to provide a
+     * method that will return the a pointer that will allow getFirstRow(),
+     * getNextRow(), and hasMoreData() to function.
+     *
+     * @param String $restrictions will be used to create a WHERE clause. This
+     * string may not be empty.
+     * @return array Pointer that will be used by getFirstRow(), getNextRow()
+     * and hasMoreData().
+     */
+    public function findSome($restrictions) {
+        $query = "SELECT * FROM {$this->_tableName} WHERE $restrictions";
+        $this->_sth = $this->_oDbh->query($query);
+        $results = array();
+        if ( ! $this->_sth ) {
+            return $results; // no data available.
+        }
+        $oCompany = new CompanyDao();
+        while ($row = $this->_sth->fetch_assoc()) {
+            $results[] = $row;
+        }
+        return $results;
     }
 
 }

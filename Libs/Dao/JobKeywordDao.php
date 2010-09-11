@@ -164,38 +164,69 @@ class JobKeywordDao extends DaoBase {
      * @param $applicationStatusList array List of Application Status ID's
      * @return array
      */
-    public function findJobsIdsByKeywordIdAndApplicationStatusId($keywordId, $applicationStatusList) {
+    public function findJobsIdsByKeywordIdAndApplicationStatusValue($keywordId, $applicationStatusList) {
         if (null === $keywordId) {
             return array();
         }
         $restrictions = "keywordId = $keywordId";
+        $optionalJoin = '';
         if ( count($applicationStatusList)>0 ) {
-            $statuses = array();
-            foreach ($applicationStatusList as $statusField) {
-                Tools::dump_var('statusField', $statusField);
-                $statuses[]=$statusField['statusId'];
-            }
-            $restrictions .= " AND applicationStatusId IN ( '"
-                          .  join("', '", $statuses)
+            $optionalJoin .= " INNER"
+                          .   " JOIN applicationStatus"
+                          .     " AS ast"
+                          .     " ON ast.applicationStatusId = job.applicationStatusId";
+            $restrictions .= " AND statusValue IN ( '"
+                          .  join("', '", $applicationStatusList)
                           .  "' )";
         }
-        $query = "SELECT jobId"
+        $query = "SELECT job.jobId"
                .  " FROM job"
                . " INNER"
                .  " JOIN jobKeywordMap"
                .    " AS jkMap"
                .    " ON jkMap.jobId = job.jobId"
+               . $optionalJoin
                . " WHERE $restrictions";
-        Tools::dump_var('query', $query);
-        $this->_sth = mysql_query($query, $this->_dbh);
+        $this->_sth = $this->_oDbh->query($query);
         $results = array();
         if ( ! $this->_sth ) {
             return $results; // no data available.
         }
-        while ($row = mysql_fetch_assoc($this->_sth)) {
+        while ($row = $this->_sth->fetch_assoc()) {
             $results[] = $row;
         }
         return $results;
     }
 
+    /**
+     * Find keyword values by job ID and return them as a string.
+     * 
+     * @param $jobId
+     * @return String
+     * @throws Exception
+     */
+    public function findKeywordValuesByJobId($jobId = '') {
+        if ( '' === $jobId ) {
+            return '';
+        }
+        if ( ! preg_match('/^[0-9]+$/', $jobId) ) {
+            throw new Exception('Invalid jobId');
+        }
+        $query = 'SELECT GROUP_CONCAT(DISTINCT keywordValue ORDER BY kewordValue SEPARATOR \', \')'
+               .  ' FROM jobKeywordMap'
+               .    ' AS jkmap'
+               . ' INNER'
+               .  ' JOIN keyword'
+               .    ' AS k'
+               .    ' ON k.keywordId = jkmap.keywordId'
+               . ' WHERE jkmap.keywordId = ' . $jobId;
+        $this->_sth = $this->_oDbh->query($query);
+        $results = '';
+        if ( ! $this->_sth ) {
+            return $results; // no data available.
+        }
+        $results = $this->_sth->fetch_field();
+        $this->_sth->free();
+        return $results;
+    }
 }

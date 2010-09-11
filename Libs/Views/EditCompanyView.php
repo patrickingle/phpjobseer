@@ -22,7 +22,7 @@
 
 require_once("Libs/autoload.php");
 
-class EditJobView {
+class EditCompanyView {
     function __construct() {
         // Do nothing for now.
     }
@@ -30,18 +30,18 @@ class EditJobView {
     function main() {
         PageData::pageHeader();
         echo '<div class="pageTitle">PHP Job Seeker</div>';
-        echo '<div class="pageSubtitle"><a href="jobList.php?activeOnly=1">Job Listing</a> &gt;&gt;&gt; Edit Job</div>';
+        echo '<div class="pageSubtitle"><a href="companyList.php">Company Listing</a> &gt;&gt;&gt; Edit Company</div>';
         PageData::displayNavBar();
-        $oJob = new JobDao();
-        if ( (!isset($_GET['jobId']))
-          || (!$oJob->validateRowId($_GET['jobId']))
+        $oCompany = new CompanyDao();
+        if ( (!isset($_GET['companyId']))
+          || (!$oCompany->validateRowId($_GET['companyId']))
            ) {
-        	echo "<div class=\"error\">Invalid Job ID</div>";
+        	echo "<div class=\"error\">Invalid Company ID</div>";
             exit;
         }
-        $oJobForm = new JobFormView($_GET['jobId']);
-        $oJobForm->displayForm();
-        $results=$oJob->getRowById($_GET['jobId']);
+        $oCompanyForm = new CompanyFormView($_GET['companyId']);
+        $oCompanyForm->displayForm();
+        $results=$oCompany->getRowById($_GET['companyId']);
         echo "<div class=\"IHEADER\">"
            . "<a href=\"{$results['url']}\" target=\"_blank\">"
            . "Open frame in new window</a>"

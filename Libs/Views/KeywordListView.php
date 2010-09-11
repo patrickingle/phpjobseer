@@ -33,6 +33,7 @@ class KeywordListView {
         PageData::displayNavBar();
         $oKeywords = new KeywordDao();
         $aKeywords = $oKeywords->findSome("1 = 1 ORDER BY sortKey");
+        echo "<a href=\"addKeyword.php\">Add Keyword</a><br />\n";
         echo "<table border=\"1\" cellspacing=\"0\" cellpadding=\"1\">\n";
         $headerRow = 0;
         echo "<tr><th rowspan=2>Keyword</th><th colspan=2>Jobs</th></tr>\n";
@@ -57,7 +58,7 @@ class KeywordListView {
             $keywordUpdated  = $row['updated'];
             $activeJobList   = array();
             $inactiveJobList = array();
-            $keywordJobs     = $oJobKeyword->findJobsIdsByKeywordIdAndApplicationStatusId($keywordId, $activeApplicationStatusList);
+            $keywordJobs     = $oJobKeyword->findJobsIdsByKeywordIdAndApplicationStatusValue($keywordId, $activeApplicationStatusList);
             foreach ( $keywordJobs as $jobRow ) {
                 $activeJobList[] = "<a"
                                  . " class=\"activeJobLink\""
@@ -65,7 +66,7 @@ class KeywordListView {
                                  . "{$jobRow['jobId']}"
                                  . "</a>";
             }
-            $keywordJobs     = $oJobKeyword->findJobsIdsByKeywordIdAndApplicationStatusId($keywordId, $inactiveApplicationStatusList);
+            $keywordJobs     = $oJobKeyword->findJobsIdsByKeywordIdAndApplicationStatusValue($keywordId, $inactiveApplicationStatusList);
             foreach ( $keywordJobs as $jobRow ) {
                 $inactiveJobList[] = "<a"
                                  . " class=\"inactiveJobLink\""
@@ -75,8 +76,11 @@ class KeywordListView {
             }
             $activeJobs = (count($activeJobList)>0) ? join(", ", $activeJobList) : 'None found';
             $inactiveJobs = (count($inactiveJobList)>0) ? join(", ", $inactiveJobList) : 'None found';
-            echo "<tr>";
-            echo "<tr><td>$keywordValue</td><td>$activeJobs</td><td>$inactiveJobs</td></tr>\n";
+            echo "  <tr>\n"
+               . "    <td><a href=\"editKeyword.php?keywordId=$keywordId\">$keywordValue</a></td>\n"
+               . "    <td>$activeJobs</td>\n"
+               . "    <td>$inactiveJobs</td>\n"
+               . "  </tr>\n";
         }
         echo "\n</table><p />\n";
         PageData::pageFooter();

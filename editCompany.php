@@ -22,5 +22,5 @@
 
 require_once("Libs/autoload.php");
 
-$index = new IndexView();
-$index->main();
+$page = new EditCompanyView();
+$page->main();

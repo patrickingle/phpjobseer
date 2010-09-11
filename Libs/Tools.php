@@ -17,7 +17,7 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
- * 
+ *
  */
 
 class Tools {
@@ -63,8 +63,8 @@ class Tools {
     }
 
     /**
-     * Print a cell value with the given (optinoal) style
-     * 
+     * Print a cell value with the given (optional) style
+     *
      * @param $value String The value to be displayed in the cell. If no value, &nbsp;
      * @param $cssClass String The CSS class for this cell.
      * @return void
@@ -82,4 +82,48 @@ class Tools {
         print "</td>\n";
     }
 
+    /**
+     * Print a quick/easy backtrace.
+     *
+     * @return void
+     */
+    static function quickBackTrace() {
+        print "----<br />\n" ;
+        $x = debug_backtrace() ;
+        foreach ( $x as $v ) {
+            print "file: "
+                . $v{'file'}
+                . ", line: "
+                . $v{'line'}
+                . ", func: "
+                . $v{'function'}
+                . "<br />\n"
+                ;
+        }
+        print "----<br />\n" ;
+    }
+
+    /**
+     *
+     * Is the character an EOL character?
+     *
+     * @param character $char
+     * @return boolean
+     */
+    static function isEol( $char ) {
+        return ( ( "\n" === $char ) || ( "\r" === $char ) ) ;
+    }
+
+    /**
+     *  Remove trailing \r or \n
+     *
+     * @param String to clean
+     * @return String
+     */
+    static function chomp( $str ) {
+        $subject = '/[\r\n]$/' ;
+        while ( preg_match( $subject, $str ) ) {
+            $str = preg_replace( $subject, '', $str ) ;
+        }
+    }
 }

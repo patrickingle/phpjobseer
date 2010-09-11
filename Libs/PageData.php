@@ -17,7 +17,7 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
- * 
+ *
  */
 
 require_once("Libs/autoload.php");
@@ -52,6 +52,9 @@ class PageData {
      * @return void
      */
     public static function pageHeader() {
+        if ( isset( $_SERVER{'nowrapper'} ) ) {
+            return ;
+        }
 		?>
             <html>
         <!-- pageHeader -->
@@ -72,6 +75,9 @@ class PageData {
      * @return void
      */
 	public static function pageFooter() {
+        if ( isset( $_SERVER{'nowrapper'} ) ) {
+            return ;
+        }
         ?>
 <div class="pageFooter">
   Want your own copy of this tool?  PHP Job Seeker is available at
@@ -89,18 +95,33 @@ class PageData {
      * @return void
      */
     public static function displayNavBar() {
+        if ( isset( $_SERVER{'nowrapper'} ) ) {
+            return ;
+        }
         ?>
 <p />
-<div>
-  <a href="index.php">Summary</a>
-| <a href="addJob.php">Add New Job</a>
-| <a href="jobList.php">All Jobs</a>
-| <a href="jobList.php?activeOnly=1">Active Jobs</a>
-| <a href="contactList.php">Contacts</a>
-| <a href="companyList.php">Companies</a>
-| <a href="keywordList.php">Keywords</a>
-| <a href="help.php">Help/Documentation</a>
-</div>
+<form method="POST" action="jobList.php">
+<table width="100%" cellpadding="2" cellspacing="0" class="navBar">
+  <tr class="navBar">
+    <td class="navBar">
+        <a href="index.php">Summary</a>
+      | <a href="addJob.php">Add New Job</a>
+      | <a href="jobList.php">All Jobs</a>
+      | <a href="jobList.php?activeOnly=1">Active Jobs</a>
+      | <a href="contactList.php">Contacts</a>
+      | <a href="companyList.php">Companies</a>
+      | <a href="keywordList.php">Keywords</a>
+      | <a href="help.php">Help/Documentation</a>
+    </td>
+    <td class="navBarSearch">
+        <nobr>
+            <input type="text" name="search" value="" class="searchBox" />
+            <input type="submit" name="action" value="Search" />
+        </nobr>
+    </td>
+  </tr>
+</table>
+</form>
 <p />
         <?php
     }
