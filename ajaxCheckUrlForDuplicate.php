@@ -25,7 +25,8 @@
 
 require_once('Libs/autoload.php');
 
-// Don't say anything if either of these fields is not set to something other than an empty string.
+// Don't say anything if either of these fields is not set to something other
+// than an empty string.
 if ( !isset($_GET['url'])
   || (''===$_GET['url'])
    ) {
