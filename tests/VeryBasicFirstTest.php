@@ -50,18 +50,18 @@ class VeryBasicFirstTest extends PHPUnit_Extensions_SeleniumTestCase
 
     private function checkHeaderIsLoaded(  $label = '' ) {
         try {
-            $this->assertFalse( $this->isTextPresent( 'PHP Stack Trace' ) ) ;
+            $this->assertTextNotPresent( 'PHP Stack Trace' ) ;
         } catch ( PHPUnit_Framework_AssertionFailedError $e ) {
             $this->verificationErrors[] = "Checking header ($label): " . $e->toString() ;
         }
         try {
-            $this->assertTrue( $this->isTextPresent( $this->_pageTitle ) ) ;
+            $this->assertTextPresent( $this->_pageTitle ) ;
         } catch ( PHPUnit_Framework_AssertionFailedError $e ) {
             $this->verificationErrors[] = "Checking header ($label): " . $e->toString() ;
         }
         foreach ( $this->_headerLabels as $label ) {
             try {
-                $this->assertTrue( $this->isTextPresent( $label ) ) ;
+                $this->assertTextPresent( $label ) ;
             } catch ( PHPUnit_Framework_AssertionFailedError $e ) {
                 $this->verificationErrors[] = "Checking header ($label): " . $e->toString() ;
             }
@@ -71,7 +71,7 @@ class VeryBasicFirstTest extends PHPUnit_Extensions_SeleniumTestCase
 
    private function checkFooterIsLoaded( $label = '' ) {
        try {
-       	   $this->assertTrue( $this->isTextPresent( 'Want your own copy of this tool?' ) ) ;
+       	   $this->assertTextPresent( 'Want your own copy of this tool?' ) ;
         } catch ( PHPUnit_Framework_AssertionFailedError $e ) {
             $this->verificationErrors[] = "Checking footer ($label): " . $e->toString() ;
        }
