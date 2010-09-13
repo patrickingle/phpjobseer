@@ -4,12 +4,33 @@ require_once('HTML/QuickForm.php');
 
 abstract class FormViewBase {
 
-    protected $_formValues = null;
+	protected $_form = null;
 
-    protected $_fields = null;
-
-    protected $_form = null;
-
+	/**
+	 * 
+	 * Class constructor
+	 * @param String $formname
+	 * @param String $method
+	 * @param String $action
+	 * @param String $target
+	 * @param mixed $attributes
+	 * @param bool $trackSubmit
+	 */
+	public function __construct( $formname
+	                           , $method = 'post'
+	                           , $action = ''
+	                           , $target = ''
+	                           , $attributes = null
+	                           , $trackSubmit = false
+	                           ) {
+		$this->_form = new HTML_QuickForm( $formname
+		                                 , $method
+		                                 , $action
+		                                 , $target
+		                                 , $attributes
+		                                 , $trackSubmit
+		                                 ) ;
+	}
     /**
      * Compare fields function for sorting purposes
      */

@@ -39,14 +39,14 @@ abstract class DaoBase {
     protected $_fields = null;
 
     /**
+     * @var array Hash of configuration keys to values
+     */
+    protected $_configValues = null;
+
+    /**
      * @var unknown Session DB handle
      */
     private $_sth = null;
-
-    /**
-     * @var array Hash of configuration keys to values
-     */
-    private $_configValues = null;
 
     /**
      * getDefaults acts like DaoBase::getRowById returning a hash of fields to
