@@ -32,10 +32,10 @@ class JobFormView extends FormViewBase {
      * Constructor
      */
     public function __construct( $jobId = null ) {
-        $this->_form = new HTML_QuickForm( 'JobChangeForm'
-                                         , 'post'
-                                         , 'saveJobChanges.php'
-                                         ) ;
+    	parent::__construct( 'JobChangeForm'
+                           , 'post'
+                           , 'saveJobChanges.php'
+                           ) ;
         $this->loadFormValues( $jobId ) ;
     }
 

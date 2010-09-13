@@ -32,11 +32,11 @@ class CompanyFormView extends FormViewBase {
      * Constructor
      */
     public function __construct($companyId = null) {
-        $this->_form = new HTML_QuickForm( 'CompanyChangeForm'
-                                         , 'post'
-                                         , 'saveCompanyChanges.php'
-                                         );
-        $this->loadFormValues($companyId);
+        parent::__construct( 'CompanyChangeForm'
+                           , 'post'
+                           , 'saveCompanyChanges.php'
+                           ) ;
+        $this->loadFormValues( $companyId ) ;
     }
 
     /**
