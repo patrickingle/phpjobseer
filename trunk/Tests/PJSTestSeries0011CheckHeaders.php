@@ -6,7 +6,7 @@ set_include_path( '..' . PATH_SEPARATOR . get_include_path() );
 
 require_once 'Libs/Config.php' ;
 
-class VeryBasicFirstTest extends PHPUnit_Extensions_SeleniumTestCase
+class PJSTestSeries0011CheckHeaders extends PHPUnit_Extensions_SeleniumTestCase
 {
 
     const maxWaitTime = 3000 ;
