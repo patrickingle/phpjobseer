@@ -6,7 +6,7 @@ set_include_path( '..' . PATH_SEPARATOR . get_include_path() );
 
 require_once 'Libs/Config.php' ;
 
-class Example extends PHPUnit_Extensions_SeleniumTestCase
+class VeryBasicFirstTest extends PHPUnit_Extensions_SeleniumTestCase
 {
 
     const maxWaitTime = 3000 ;
@@ -43,17 +43,18 @@ class Example extends PHPUnit_Extensions_SeleniumTestCase
             $this->click( "link=$label" ) ;
             $this->waitForPageToLoad( self::maxWaitTime ) ;
             $this->checkHeaderIsLoaded() ;
+            $this->checkFooterIsLoaded() ;
         }
     }
 
     private function checkHeaderIsLoaded() {
         try {
-	  $this->assertFalse( $this->isTextPresent( 'PHP Stack Trace' ) ) ;
+            $this->assertFalse( $this->isTextPresent( 'PHP Stack Trace' ) ) ;
         } catch ( PHPUnit_Framework_AssertionFailedError $e ) {
             $this->verificationErrors[] = $e->toString() ;
         }
         try {
-	  $this->assertTrue( $this->isTextPresent( $this->_pageTitle ) ) ;
+            $this->assertTrue( $this->isTextPresent( $this->_pageTitle ) ) ;
         } catch ( PHPUnit_Framework_AssertionFailedError $e ) {
             $this->verificationErrors[] = $e->toString() ;
         }
@@ -63,7 +64,15 @@ class Example extends PHPUnit_Extensions_SeleniumTestCase
             } catch ( PHPUnit_Framework_AssertionFailedError $e ) {
                 $this->verificationErrors[] = $e->toString() ;
             }
-	}
+        }
+        // TODO verify that the search function is available.
    }
 
+   private function checkFooterIsLoaded() {
+       try {
+       	   $this->assertTrue( $this->isTextPresent( 'Want your own copy of this tool?' ) ) ;
+        } catch ( PHPUnit_Framework_AssertionFailedError $e ) {
+            $this->verificationErrors[] = $e->toString() ;
+       }
+   }
 }
