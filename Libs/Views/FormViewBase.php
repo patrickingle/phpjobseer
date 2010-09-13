@@ -4,11 +4,11 @@ require_once('HTML/QuickForm.php');
 
 abstract class FormViewBase {
 
-    private $_formValues = null;
+    protected $_formValues = null;
 
-    private $_fields = null;
+    protected $_fields = null;
 
-    private $_form = null;
+    protected $_form = null;
 
     /**
      * Compare fields function for sorting purposes
@@ -116,7 +116,6 @@ abstract class FormViewBase {
                 foreach ( $items as $k ) {
                     $list[$k] = $k;
                 }
-                Tools::dump_var( "Hey", $this->_form ) ;
                 $this->_form->addElement( 'select'
                                         , $fieldName
                                         , $fieldLabel
