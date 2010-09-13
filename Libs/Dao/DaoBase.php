@@ -349,7 +349,9 @@ abstract class DaoBase {
         $count = 0 ;
         $query = "SELECT COUNT(1) AS cnt FROM {$this->_tableName}"
                . " WHERE $restrictions" ;
-        Tools::dump_var("query", $query) ;
+        if ( 1 === $this->_configValues['debug_mode'] ) {
+        	Tools::dump_var("query", $query) ;
+        }
         try {
             $this->_sth = $this->_oDbh->query($query) ;
             $result = $this->_sth->fetch_row() ;
@@ -357,7 +359,7 @@ abstract class DaoBase {
         catch ( Exception $e ) {
             Tools::quickBackTrace() ;
             print "Uncaught exception: $e\n" ;
-            exit(1) ;
+            throw $e ;
         }
         $cnt = $result[0] ;
         $this->_sth->free() ;

@@ -19,403 +19,412 @@
 -- 
 -- 
 
+-- Allow addition of zero default created timestamp so the DB will know
+-- to make it the current timestamp (funky hack, but works)
+SET @@sql_mode = '' ;
+
 -- -----------------------------------------------------------------------------------
 -- version
 -- -----------------------------------------------------------------------------------
-create table version
+CREATE TABLE version
      (
-       versionValue          varchar(255) not null default ''
-     , updated               timestamp not null default current_timestamp
-                             on update current_timestamp
-     ) engine='InnoDB';
+       versionValue          VARCHAR(255) NOT NULL DEFAULT ''
+     , updated               TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+                             ON UPDATE CURRENT_TIMESTAMP
+     ) ENGINE='InnoDB' ;
 -- This is nearly the only DML in this file but it really needs to be here since
 -- it's the version of the data layout.
-insert version (versionValue) value ('0.0PA2');
-commit;
+INSERT version ( versionValue ) VALUES ( '0.0PA2' ) ;
+COMMIT ;
 
 -- -----------------------------------------------------------------------------------
 -- applicationStatus
 -- -----------------------------------------------------------------------------------
-create table applicationStatus
+CREATE TABLE applicationStatus
      (
-       applicationStatusId   int unsigned not null auto_increment
-     , statusValue           varchar(50) not null
-     , isActive              boolean not null default 1
-     , sortKey               smallint(3) unsigned not null default 100
-     , style                 varchar(4096) not null default ''
-     , created               timestamp not null default 0
-     , updated               timestamp not null default current_timestamp
-                             on update current_timestamp
-     , primary key pk_applicationStatusId ( applicationStatusId )
-     ) engine='InnoDB';
+       applicationStatusId   INT UNSIGNED NOT NULL AUTO_INCREMENT
+     , statusValue           VARCHAR(50) NOT NULL
+     , isActive              BOOLEAN NOT NULL DEFAULT 1
+     , sortKey               SMALLINT(3) UNSIGNED NOT NULL DEFAULT 100
+     , style                 VARCHAR(4096) NOT NULL DEFAULT ''
+     , created               TIMESTAMP NOT NULL DEFAULT 0
+     , updated               TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+                             ON UPDATE CURRENT_TIMESTAMP
+     , PRIMARY KEY pk_applicationStatusId ( applicationStatusId )
+     ) ENGINE='InnoDB' ;
 
 -- -----------------------------------------------------------------------------------
 -- applicationStatusSummary
 -- -----------------------------------------------------------------------------------
-create table applicationStatusSummary
+CREATE TABLE applicationStatusSummary
      (
-       applicationStatusId int unsigned not null /* No auto_increment: foreign key */
-     , statusCount         int unsigned not null default 0
-     , created             timestamp not null default 0
-     , updated             timestamp not null default current_timestamp
-                           on update current_timestamp
-     , primary key pk_applicationStatusId ( applicationStatusId )
-     , foreign key fk_applicationStatusId ( applicationStatusId )
-        references applicationStatus ( applicationStatusId )
-                on delete cascade
-                on update cascade
-     ) engine='InnoDB';
+       applicationStatusId INT UNSIGNED NOT NULL /* No auto_increment: foreign key */
+     , statusCount         INT UNSIGNED NOT NULL DEFAULT 0
+     , created             TIMESTAMP NOT NULL DEFAULT 0
+     , updated             TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+                           ON UPDATE CURRENT_TIMESTAMP
+     , PRIMARY KEY pk_applicationStatusId ( applicationStatusId )
+     , FOREIGN KEY fk_applicationStatusId ( applicationStatusId )
+        REFERENCES applicationStatus ( applicationStatusId )
+                ON DELETE CASCADE
+                ON UPDATE CASCADE
+     ) ENGINE='InnoDB' ;
 
 -- -----------------------------------------------------------------------------------
 -- company
+-- TODO Agency model needs to change. It isn't consistent.
+--      Should have an agent table with an agencyCompanyId and an
+--      agencyCustomerCompanyId
+-- TODO Should allow for companies that use agencies and self-represent/hire.
 -- -----------------------------------------------------------------------------------
-create table company
+CREATE TABLE company
      (
-       companyId             int unsigned not null auto_increment
-     , isAnAgency            boolean not null default 0
-     , agencyCompanyId       int unsigned null default null comment 'When isAnAgency is false, this points to the company ID of the agency'
-     , companyName           varchar(100) not null default ''
-     , companyAddress1       varchar(255) not null default ''
-     , companyAddress2       varchar(255) not null default ''
-     , companyCity           varchar(60) not null default ''
-     , companyState          char(2) not null default 'XX'
-     , companyZip            int(5) unsigned null default null
-     , companyPhone          int unsigned null default null
-     , created               timestamp not null default 0
-     , updated               timestamp not null default current_timestamp
-                             on update current_timestamp
-     , primary key pk_companyId ( companyId )
-     , foreign key fk_agencyCompanyId ( companyId )
-        references company ( companyId )
-                on delete cascade
-                on update cascade
-     ) engine='InnoDB';
+       companyId             INT UNSIGNED NOT NULL AUTO_INCREMENT
+     , isAnAgency            BOOLEAN NOT NULL DEFAULT 0
+     , agencyCompanyId       INT UNSIGNED NULL DEFAULT NULL
+                             COMMENT 'When isAnAgency is false, point to agency company ID'
+     , companyName           VARCHAR(100) NOT NULL DEFAULT ''
+     , companyAddress1       VARCHAR(255) NOT NULL DEFAULT ''
+     , companyAddress2       VARCHAR(255) NOT NULL DEFAULT ''
+     , companyCity           VARCHAR(60) NOT NULL DEFAULT ''
+     , companyState          CHAR(2) NOT NULL DEFAULT 'XX'
+     , companyZip            INT(5) UNSIGNED NULL DEFAULT NULL
+     , companyPhone          INT UNSIGNED NULL DEFAULT NULL
+     , created               TIMESTAMP NOT NULL DEFAULT '0000-00-00 00:00:00'
+     , updated               TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+                             ON UPDATE CURRENT_TIMESTAMP
+     , PRIMARY KEY pk_companyId ( companyId )
+     , FOREIGN KEY fk_agencyCompanyId ( companyId )
+        REFERENCES company ( companyId )
+                ON DELETE CASCADE
+                ON UPDATE CASCADE
+     ) ENGINE='InnoDB' ;
 
 -- -----------------------------------------------------------------------------------
 -- contact
 -- -----------------------------------------------------------------------------------
-create table contact
+CREATE TABLE contact
      (
-       contactId             int unsigned not null auto_increment
-     , contactCompanyId      int unsigned not null default 0
-     , contactName           varchar(255)
-     , contactEmail          varchar(255)
-     , contactPhone          int unsigned not null
-     , contactAlternatePhone int unsigned null default null
-     , created               timestamp not null default 0
-     , updated               timestamp not null default current_timestamp
-                             on update current_timestamp
-     , primary key pk_contactId ( contactId )
-     , foreign key fk_contactCompanyId ( contactCompanyId )
-        references company ( companyId )
-                on delete cascade
-                on update cascade
-     ) engine='InnoDB';
-commit;
+       contactId             INT UNSIGNED NOT NULL AUTO_INCREMENT
+     , contactCompanyId      INT UNSIGNED NOT NULL DEFAULT 0
+     , contactName           VARCHAR(255)
+     , contactEmail          VARCHAR(255)
+     , contactPhone          INT UNSIGNED NOT NULL
+     , contactAlternatePhone INT UNSIGNED NULL DEFAULT NULL
+     , created               TIMESTAMP NOT NULL DEFAULT '0000-00-00 00:00:00'
+     , updated               TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+                             ON UPDATE CURRENT_TIMESTAMP
+     , PRIMARY KEY pk_contactId ( contactId )
+     , FOREIGN KEY fk_contactCompanyId ( contactCompanyId )
+        REFERENCES company ( companyId )
+                ON DELETE CASCADE
+                ON UPDATE CASCADE
+     ) ENGINE='InnoDB' ;
+COMMIT ;
 
 -- -----------------------------------------------------------------------------------
 -- job
 -- -----------------------------------------------------------------------------------
-create table job
+CREATE TABLE job
      (
-       jobId                 int unsigned not null auto_increment
-     , primaryContactId      int unsigned null default null
-     , companyId             int unsigned null default null
-     , applicationStatusId   int unsigned not null
-     , lastStatusChange      datetime not null default 0
-     , urgency               enum('high', 'medium', 'low') not null default 'low'
-     , created               timestamp not null default 0
-     , updated               timestamp not null default current_timestamp
-                             on update current_timestamp
-     , nextActionDue         datetime not null default 0
-     , nextAction            varchar(255) not null default ''
-     , positionTitle         varchar(255) not null default ''
-     , location              varchar(255) not null default ''
-     , url                   varchar(4096) not null default ''
-     , primary key pk_jobId ( jobId )
-     , foreign key fk_primaryContactId ( primaryContactId )
-        references contact ( contactId )
-                on delete cascade
-                on update cascade
-     , foreign key fk_companyId ( companyId )
-        references company ( companyId )
-                on delete cascade
-                on update cascade
-     , foreign key fk_applicationStatusId ( applicationStatusId )
-        references applicationStatus ( applicationStatusId )
-                on delete cascade
-                on update cascade
-     ) engine='InnoDB';
+       jobId                 INT UNSIGNED NOT NULL AUTO_INCREMENT
+     , primaryContactId      INT UNSIGNED NULL DEFAULT NULL
+     , companyId             INT UNSIGNED NULL DEFAULT NULL
+     , applicationStatusId   INT UNSIGNED NOT NULL
+     , lastStatusChange      DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00'
+     , urgency               ENUM( 'high', 'medium', 'low' ) NOT NULL DEFAULT 'low'
+     , created               TIMESTAMP NOT NULL DEFAULT '0000-00-00 00:00:00'
+     , updated               TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+                             ON UPDATE CURRENT_TIMESTAMP
+     , nextActionDue         DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00'
+     , nextAction            VARCHAR(255) NOT NULL DEFAULT ''
+     , positionTitle         VARCHAR(255) NOT NULL DEFAULT ''
+     , location              VARCHAR(255) NOT NULL DEFAULT ''
+     , url                   VARCHAR(4096) NOT NULL DEFAULT ''
+     , PRIMARY KEY pk_jobId ( jobId )
+     , FOREIGN KEY fk_primaryContactId ( primaryContactId )
+        REFERENCES contact ( contactId )
+                ON DELETE CASCADE
+                ON UPDATE CASCADE
+     , FOREIGN KEY fk_companyId ( companyId )
+        REFERENCES company ( companyId )
+                ON DELETE CASCADE
+                ON UPDATE CASCADE
+     , FOREIGN KEY fk_applicationStatusId ( applicationStatusId )
+        REFERENCES applicationStatus ( applicationStatusId )
+                ON DELETE CASCADE
+                ON UPDATE CASCADE
+     ) ENGINE='InnoDB' ;
 
 -- -----------------------------------------------------------------------------------
 -- keyword
 -- -----------------------------------------------------------------------------------
-create table keyword
+CREATE TABLE keyword
      (
-       keywordId             int unsigned not null auto_increment
-     , keywordValue          varchar(255) not null
-     , sortKey               smallint(3) not null default 0
-     , created               timestamp not null default 0
-     , updated               timestamp not null default current_timestamp
-                             on update current_timestamp
-     , primary key pk_keywordId ( keywordId )
-     , unique index valueIdx (keywordValue)
-     ) engine='InnoDB';
+       keywordId             INT UNSIGNED NOT NULL AUTO_INCREMENT
+     , keywordValue          VARCHAR(255) NOT NULL
+     , sortKey               SMALLINT(3) NOT NULL DEFAULT 0
+     , created               TIMESTAMP NOT NULL DEFAULT '0000-00-00 00:00:00'
+     , updated               TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+                             ON UPDATE CURRENT_TIMESTAMP
+     , PRIMARY KEY pk_keywordId ( keywordId )
+     , UNIQUE index valueIdx ( keywordValue )
+     ) ENGINE='InnoDB' ;
 
 -- -----------------------------------------------------------------------------------
 -- note
 -- -----------------------------------------------------------------------------------
-create table note
+CREATE TABLE note
      (
-       noteId                int unsigned not null auto_increment
-     , appliesToTable        enum('job', 'company', 'contact', 'keyword', 'search')
-     , appliesToId           int unsigned not null
-     , created               timestamp not null default 0
-     , updated               timestamp not null default current_timestamp
-                             on update current_timestamp
-     , note                  text not null
-     , primary key pk_noteId ( noteId )
-     , index appliesTo (appliesToTable, appliesToId, created)
-     ) engine='InnoDB';
+       noteId                INT UNSIGNED NOT NULL AUTO_INCREMENT
+     , appliesToTable        ENUM( 'job', 'company', 'contact', 'keyword', 'search' ) NOT NULL
+     , appliesToId           INT UNSIGNED NOT NULL
+     , created               TIMESTAMP NOT NULL DEFAULT 0
+     , updated               TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+                             ON UPDATE CURRENT_TIMESTAMP
+     , note                  TEXT NOT NULL
+     , PRIMARY KEY pk_noteId ( noteId )
+     , INDEX appliesTo ( appliesToTable, appliesToId, created )
+     ) ENGINE='InnoDB' ;
 
 -- -----------------------------------------------------------------------------------
 -- search
 -- -----------------------------------------------------------------------------------
-create table search
+CREATE TABLE search
      (
-       searchId              int unsigned not null auto_increment
-     , engineName            varchar(255) not null default ''
-     , searchName            varchar(255) not null default ''
-     , url                   varchar(4096) not null default ''
-     , created               timestamp not null default 0
-     , updated               timestamp not null default current_timestamp
-                             on update current_timestamp
-     , primary key pk_searchId ( searchId )
-     ) engine='InnoDB';
+       searchId              INT UNSIGNED NOT NULL AUTO_INCREMENT
+     , engineName            VARCHAR(255) NOT NULL DEFAULT ''
+     , searchName            VARCHAR(255) NOT NULL DEFAULT ''
+     , url                   VARCHAR(4096) NOT NULL DEFAULT ''
+     , created               TIMESTAMP NOT NULL DEFAULT '0000-00-00 00:00:00'
+     , updated               TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+                             ON UPDATE CURRENT_TIMESTAMP
+     , PRIMARY KEY pk_searchId ( searchId )
+     ) ENGINE='InnoDB' ;
 
 -- -----------------------------------------------------------------------------------
 -- jobKeywordMap (constraints require job and keyword to exist first.
 -- -----------------------------------------------------------------------------------
-create table jobKeywordMap (
-       jobId     int unsigned not null
-     , keywordId int unsigned not null
-     , created   timestamp not null default 0
-     , updated   timestamp not null default current_timestamp
-                 on update current_timestamp
-     , primary key jobKeywordMapIdx ( jobId, keywordId )
-     , foreign key fk_jobId ( jobId )
-        references job ( jobId )
-                on delete cascade
-                on update cascade
-     , foreign key fk_keywordId ( keywordId )
-        references keyword ( keywordId )
-                on delete cascade
-                on update cascade
-     ) engine='InnoDB';
+CREATE TABLE jobKeywordMap (
+       jobId     INT UNSIGNED NOT NULL
+     , keywordId INT UNSIGNED NOT NULL
+     , created   TIMESTAMP NOT NULL DEFAULT '0000-00-00 00:00:00'
+     , updated   TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+                 ON UPDATE CURRENT_TIMESTAMP
+     , PRIMARY KEY jobKeywordMapIdx ( jobId, keywordId )
+     , FOREIGN KEY fk_jobId ( jobId )
+        REFERENCES job ( jobId )
+                ON DELETE CASCADE
+                ON UPDATE CASCADE
+     , FOREIGN KEY fk_keywordId ( keywordId )
+        REFERENCES keyword ( keywordId )
+                ON DELETE CASCADE
+                ON UPDATE CASCADE
+     ) ENGINE='InnoDB' ;
 
 -- -----------------------------------------------------------------------------------
 -- Triggers
 -- -----------------------------------------------------------------------------------
-delimiter $$
-create trigger applicationStatusAfterInsertTrigger
- after insert
-    on applicationStatus
-   for each row
- begin
-       insert applicationStatusSummary
+DELIMITER ;;
+
+CREATE TRIGGER applicationStatusAfterInsertTrigger
+ AFTER INSERT
+    ON applicationStatus
+   FOR EACH ROW
+ BEGIN
+       INSERT applicationStatusSummary
             ( applicationStatusId
             , statusCount
             , created
             , updated
             )
-       values
+       VALUES
             ( NEW.applicationStatusId
             , 0
-            , NOW()
-            , NOW()
-            );
-   end $$
+            , NULL
+            , NULL
+            ) ;
+   END ;;
 
-create trigger jobAfterInsertTrigger
- after insert
-    on job
-   for each row
- begin
-       update applicationStatusSummary
-           as jss
-          set jss.statusCount = jss.statusCount + 1
-        where jss.applicationStatusId = NEW.applicationStatusId;
-   end $$
+CREATE TRIGGER jobAfterInsertTrigger
+ AFTER INSERT
+    ON job
+   FOR EACH ROW
+ BEGIN
+       UPDATE applicationStatusSummary
+           AS jss
+          SET jss.statusCount = jss.statusCount + 1
+        WHERE jss.applicationStatusId = NEW.applicationStatusId ;
+   END ;;
 
-create trigger jobAfterUpdateTrigger
- after update
-    on job
-   for each row
- begin
-	     if OLD.applicationStatusId <> NEW.applicationStatusId
-	   then
-            update applicationStatusSummary
-                as jss
-               set jss.statusCount = jss.statusCount + 1
-             where jss.applicationStatusId = NEW.applicationStatusId;
-            update applicationStatusSummary
-                as jss
-               set jss.statusCount = jss.statusCount + 1
-             where jss.applicationStatusId = OLD.applicationStatusId;
-        end if;
-	     if OLD.jobId <> NEW.jobId
-	   then
-            update note
-               set note.appliesToId = NEW.jobId
-             where note.appliesToId = OLD.jobId
-               and note.appliestoTable = 'job'
+CREATE TRIGGER jobAfterUpdateTrigger
+ AFTER UPDATE
+    ON job
+   FOR EACH ROW
+ BEGIN
+             IF OLD.applicationStatusId <> NEW.applicationStatusId
+           THEN
+            UPDATE applicationStatusSummary
+                AS jss
+               SET jss.statusCount = jss.statusCount + 1
+             WHERE jss.applicationStatusId = NEW.applicationStatusId ;
+            UPDATE applicationStatusSummary
+                AS jss
+               SET jss.statusCount = jss.statusCount + 1
+             WHERE jss.applicationStatusId = OLD.applicationStatusId ;
+        END IF ;
+             IF OLD.jobId <> NEW.jobId
+           THEN
+            UPDATE note
+               SET note.appliesToId = NEW.jobId
+             WHERE note.appliesToId = OLD.jobId
+               AND note.appliestoTable = 'job'
                  ;
-      end if;
-   end $$
+      END IF ;
+   END ;;
 
-create trigger jobAfterDeleteTrigger
- after delete
-    on job
-   for each row
- begin
-       update applicationStatusSummary
-           as jss
-          set jss.statusCount = jss.statusCount - 1
-        where jss.applicationStatusId = OLD.applicationStatusId;
+CREATE TRIGGER jobAfterDeleteTrigger
+ AFTER DELETE
+    ON job
+   FOR EACH ROW
+ BEGIN
+       UPDATE applicationStatusSummary
+           AS jss
+          SET jss.statusCount = jss.statusCount - 1
+        WHERE jss.applicationStatusId = OLD.applicationStatusId ;
 
-       delete
-         from note
-        where note.appliesToTable = 'job'
-          and note.appliesToId = OLD.jobId;
-   end $$
+       DELETE
+         FROM note
+        WHERE note.appliesToTable = 'job'
+          AND note.appliesToId = OLD.jobId ;
+   END ;;
 
-create trigger companyAfterDeleteTrigger
- after delete
-    on company
-   for each row
- begin
-       delete
-         from note
-        where appliesToTable = 'company'
-          and appliesToId = OLD.companyId;
-   end $$
+CREATE TRIGGER companyAfterDeleteTrigger
+ AFTER DELETE
+    ON company
+   FOR EACH ROW
+ BEGIN
+       DELETE
+         FROM note
+        WHERE appliesToTable = 'company'
+          AND appliesToId = OLD.companyId ;
+   END ;;
 
-create trigger companyAfterUpdateTrigger
- after update
-    on company
-   for each row
- begin
-	     if OLD.companyId <> NEW.companyId
-	   then
-            update note
-               set note.appliesToId = NEW.companyId
-             where note.appliesToId = OLD.companyId
-               and note.appliestoTable = 'company'
+CREATE TRIGGER companyAfterUpdateTrigger
+ AFTER UPDATE
+    ON company
+   FOR EACH ROW
+ BEGIN
+             IF OLD.companyId <> NEW.companyId
+           THEN
+            UPDATE note
+               SET note.appliesToId = NEW.companyId
+             WHERE note.appliesToId = OLD.companyId
+               AND note.appliestoTable = 'company'
                  ;
-      end if;
-   end $$
+      END IF ;
+   END ;;
 
-create trigger contactAfterDeleteTrigger
- after delete
-    on contact
-   for each row
- begin
-       delete
-         from note
-        where appliesToTable = 'contact'
-          and appliesToId = OLD.contactId;
-   end $$
+CREATE TRIGGER contactAfterDeleteTrigger
+ AFTER DELETE
+    ON contact
+   FOR EACH ROW
+ BEGIN
+       DELETE
+         FROM note
+        WHERE appliesToTable = 'contact'
+          AND appliesToId = OLD.contactId ;
+   END ;;
 
-create trigger contactAfterUpdateTrigger
- after update
-    on contact
-   for each row
- begin
-	     if OLD.contactId <> NEW.contactId
-	   then
-            update note
-               set note.appliesToId = NEW.contactId
-             where note.appliesToId = OLD.contactId
-               and note.appliestoTable = 'contact'
+CREATE TRIGGER contactAfterUpdateTrigger
+ AFTER UPDATE
+    ON contact
+   FOR EACH ROW
+ BEGIN
+             IF OLD.contactId <> NEW.contactId
+           THEN
+            UPDATE note
+               SET note.appliesToId = NEW.contactId
+             WHERE note.appliesToId = OLD.contactId
+               AND note.appliestoTable = 'contact'
                  ;
-      end if;
-   end $$
+      END IF ;
+   END ;;
 
-create trigger keywordAfterDeleteTrigger
- after delete
-    on keyword
-   for each row
- begin
-       delete
-         from note
-        where appliesToTable = 'keyword'
-          and appliesToId = OLD.keywordId;
-   end $$
+CREATE TRIGGER keywordAfterDeleteTrigger
+ AFTER DELETE
+    ON keyword
+   FOR EACH ROW
+ BEGIN
+       DELETE
+         FROM note
+        WHERE appliesToTable = 'keyword'
+          AND appliesToId = OLD.keywordId ;
+   END ;;
 
-create trigger keywordAfterUpdateTrigger
- after update
-    on keyword
-   for each row
- begin
-	     if OLD.keywordId <> NEW.keywordId
-	   then
-            update note
-               set note.appliesToId = NEW.keywordId
-             where note.appliesToId = OLD.keywordId
-               and note.appliestoTable = 'keyword'
+CREATE TRIGGER keywordAfterUpdateTrigger
+ AFTER UPDATE
+    ON keyword
+   FOR EACH ROW
+ BEGIN
+             IF OLD.keywordId <> NEW.keywordId
+           THEN
+            UPDATE note
+               SET note.appliesToId = NEW.keywordId
+             WHERE note.appliesToId = OLD.keywordId
+               AND note.appliestoTable = 'keyword'
                  ;
-      end if;
-   end $$
+      END IF ;
+   END ;;
 
-create trigger searchAfterDeleteTrigger
- after delete
-    on search
-   for each row
- begin
-       delete
-         from note
-        where appliesToTable = 'search'
-          and appliesToId = OLD.searchId;
-   end $$
+CREATE TRIGGER searchAfterDeleteTrigger
+ AFTER DELETE
+    ON search
+   FOR EACH ROW
+ BEGIN
+       DELETE
+         FROM note
+        WHERE appliesToTable = 'search'
+          AND appliesToId = OLD.searchId ;
+   END ;;
 
-create trigger searchAfterUpdateTrigger
- after update
-    on search
-   for each row
- begin
-	     if OLD.searchId <> NEW.searchId
-	   then
-            update note
-               set note.appliesToId = NEW.searchId
-             where note.appliesToId = OLD.searchId
-               and note.appliestoTable = 'search'
+CREATE TRIGGER searchAfterUpdateTrigger
+ AFTER UPDATE
+    ON search
+   FOR EACH ROW
+ BEGIN
+             IF OLD.searchId <> NEW.searchId
+           THEN
+            UPDATE note
+               SET note.appliesToId = NEW.searchId
+             WHERE note.appliesToId = OLD.searchId
+               AND note.appliestoTable = 'search'
                  ;
-      end if;
-   end $$
+      END IF ;
+   END ;;
 
-
-delimiter ;
+DELIMITER ;
 
 -- -----------------------------------------------------------------------------------
 -- Pre-Fill Data
 -- -----------------------------------------------------------------------------------
-insert applicationStatus
+INSERT applicationStatus
      ( applicationStatusId
      , isActive
      , statusValue
      , sortKey
      )
-values ( 1, 1, 'FOUND'        , 10)
-     , ( 2, 1, 'CONTACTED'    , 20)
-     , ( 3, 1, 'APPLIED'      , 30)
-     , ( 4, 1, 'INTERVIEWING' , 40)
-     , ( 5, 1, 'FOLLOWUP'     , 50)
-     , ( 6, 1, 'CHASING'      , 60)
-     , ( 7, 1, 'NETWORKING'   , 70)
-     , ( 8, 0, 'UNAVAILABLE'  , 999)
-     , ( 9, 0, 'INVALID'      , 999)
-     , (10, 0, 'DUPLICATE'    , 999)
-     , (11, 0, 'CLOSED'       , 999)
+VALUES (  1, 1, 'FOUND'        , 10  )
+     , (  2, 1, 'CONTACTED'    , 20  )
+     , (  3, 1, 'APPLIED'      , 30  )
+     , (  4, 1, 'INTERVIEWING' , 40  )
+     , (  5, 1, 'FOLLOWUP'     , 50  )
+     , (  6, 1, 'CHASING'      , 60  )
+     , (  7, 1, 'NETWORKING'   , 70  )
+     , (  8, 0, 'UNAVAILABLE'  , 999 )
+     , (  9, 0, 'INVALID'      , 999 )
+     , ( 10, 0, 'DUPLICATE'    , 999 )
+     , ( 11, 0, 'CLOSED'       , 999 )
      ;
-update applicationStatus set created = updated;
-commit;
+UPDATE applicationStatus SET created = updated ;
+COMMIT ;

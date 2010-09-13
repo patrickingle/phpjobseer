@@ -43,11 +43,11 @@ class DbResetView {
         $oConfig = new Config();
         $this->_configValues = $oConfig->values;
         $this->_oDbh = new mysqli( $this->_configValues['db_host']
-        , $this->_configValues['db_user']
-        , $this->_configValues['db_pass']
-        , $this->_configValues['db_name']
-        , $this->_configValues['db_port']
-        );
+                                 , $this->_configValues['db_user']
+                                 , $this->_configValues['db_pass']
+                                 , $this->_configValues['db_name']
+                                 , $this->_configValues['db_port']
+                                 );
         $this->_sth = null;
     }
 
@@ -119,6 +119,24 @@ class DbResetView {
     }
 
     /**
+     * This is a delimiter?
+     * 
+     * @param String $str
+     * @return boolean
+     */
+    private function matchesDelimiter( $str ) {
+    	if ( preg_match( '/^delimiter\s+(.+)$/i'
+                       , trim( $str )
+                       , $matches
+                       ) ) {
+            return $matches[1] ;
+        }
+        else {
+        	return "" ;
+        }
+        
+    }
+    /**
      * Execute statements within an SQL file.  Rudimentary ability to find ;'s - could be improved.
      *
      * @param $filename String Name of file to be processed
@@ -147,6 +165,9 @@ class DbResetView {
         $contentLen     = strlen( $fileContents ) ;
         for ( $i = 0 ; $i < $contentLen ; $i++ ) {
             $char = $fileContents[ $i ] ;
+            if ( 1 === $this->_configValues[ 'debug_mode' ] ) {
+                echo "Processing \"$char\"\n" ;
+            }
             if ( ( '' === $quote ) && ! $ignoreNextChar ) {
                 if ( '\\' === $char ) {
                     $ignoreNextChar = TRUE ;
@@ -156,35 +177,49 @@ class DbResetView {
                 }
             }
             // IGNORE DELIMITER CHANGE LINES
+            $match = self::matchesDelimiter( $currentLine ) ;
             if (    Tools::isEol($char)
                  && ( ! $ignoreNextChar )
                  && ( '' === $quote )
-                 && preg_match( '/^\s*delimiter\s+(.+)$/i'
-                              , $currentLine
-                              , $matches
-                              )
+                 && ( "" != $match )
                ) {
-                $delim = trim( $matches[ 1 ] ) ;
+                $delim = $match ;
                 $delimLen = strlen( $delim ) ;
+                if ( 1 === $this->_configValues[ 'debug_mode' ] ) {
+                    echo "Changed delimiter to \"$delim\"\n" ;
+                }
                 $currentLine = '' ;
                 if ( $stdDelim === $delim ) {
                     // Don't add delimeter changes to outgoing SQL
                     // $sqlToExecute[] = $delimLongLine ;
                     $delimLongLine = '' ;
                 }
+                while ( ! Tools::isEol( $fileContents[ $i ] ) ) {
+                	$i++ ;
+                }
+                while ( Tools::isEol( $fileContents[ $i ] ) ) {
+                	$i++ ;
+                }
+                $i-- ;
                 continue ;
             }
             else {
                 $currentLine .= $char ;
                 if ( ! $ignoreNextChar ) {
-                    if ( ( strlen( $currentLine ) > $delimLen )
+                    $delimLongLine .= $char ;
+                	if ( ( strlen( $currentLine ) > $delimLen )
                       && ( $delim === substr( $currentLine, 0 - $delimLen ) )
                       && ( '' === $quote )
+                      && ( ! self::matchesDelimiter( $currentLine ) ) 
                        ) {
+                       	$currentLine = trim( $currentLine ) ;
                         $toPush = substr( $currentLine
                                         , 0
                                         , strlen( $currentLine ) - $delimLen
                                         ) ;
+                        if ( 1 === $this->_configValues[ 'debug_mode' ] ) {
+                            echo "Pushing $toPush\n" ;
+                        }
                         $sqlToExecute[] = $toPush ;
                         $currentLine = '' ;
                     } else if ( '\\' === $char ) {
@@ -209,10 +244,11 @@ class DbResetView {
 
         // Extra check to handle EOF without newline before it.
         /* @todo Put this into a function and strip trailing \r, \n */
-        if ( $stdDelim === $delim ) {
-            $sqlToExecute[] = $delimLongLine ;
-            $delimLongLine = '' ;
-        }
+        /* FIXME - This should be against currentLine, not dll */
+//        if ( ( $stdDelim !== $delim ) && ( $delimLongLine !== '' ) ) {
+//            $sqlToExecute[] = $delimLongLine ;
+//            $delimLongLine = '' ;
+//        }
 
         if ( '' !== $quote ) {
             echo "<h2>Last quoted string began with $quote</h2><br />" ;
@@ -222,7 +258,9 @@ class DbResetView {
         foreach ( $sqlToExecute as $query ) {
             $query = trim( $query ) ;
             if ( ! empty( $query ) ) {
-//                print "Executing *" . htmlentities($query) . "*\n" ;
+            	if ( 1 === $this->_configValues[ 'debug_mode' ] ) {
+                    print "Executing *" . htmlentities($query) . "*\n" ;
+            	}
                 $result = $this->_oDbh->query($query);
                 if ( ! $result ) {
                     throw new Exception( "Unable to execute query due to "
@@ -245,12 +283,17 @@ class DbResetView {
         PageData::pageHeader();
         echo '<div class="pageTitle">PHP Job Seeker</div>';
         PageData::displayNavBar();
-        echo '<div>Resetting database to known state.</div>';
-        $this->_oDbh->query('DROP DATABASE IF EXISTS ' . $this->_configValues['db_name']);
-        $this->_oDbh->query('CREATE DATABASE ' . $this->_configValues['db_name']);
-        $this->_oDbh->select_db($this->_configValues['db_name']);
-        $this->processSqlFile('create_pjs_db.sql');
-        echo '<div>A clean database should be loaded.</div>';
+        if ( $this->_configValues['test_mode'] === 1 ) {
+            echo '<div>Resetting database to known state.</div>';
+            $this->_oDbh->query('DROP DATABASE IF EXISTS ' . $this->_configValues['db_name']);
+            $this->_oDbh->query('CREATE DATABASE ' . $this->_configValues['db_name']);
+            $this->_oDbh->select_db($this->_configValues['db_name']);
+            $this->processSqlFile('create_pjs_db.sql');
+            echo '<div>A clean database should be loaded.</div>';
+        }
+        else {
+        	echo "Not authorized. Check Libs/Config.php\n" ;
+        }
         PageData::pageFooter();
     }
 }

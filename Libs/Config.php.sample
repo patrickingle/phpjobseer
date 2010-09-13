@@ -58,8 +58,11 @@ class Config {
             $this->values['really_update_db'] = 1;           // Set this to zero if you don't
                                                              // really want to update the db and
                                                              // you're willing to put up with errors.
+            $this->values['debug_mode']       = 0;           // When having problems, set to 1
             $this->values['test_mode']        = 0;           // Dangerous to set to 1 - allows db to get
                                                              // reset completely using resetDb.php
+            $this->values['browserRoot']      = 'http://localhost' ; // Used to test the system.
+            $this->values['browserDir']       = '/test_dir/' ; // Used to test the system.
     	}
     }
 }
