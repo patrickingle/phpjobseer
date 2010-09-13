@@ -1,0 +1,166 @@
+/**
+ * phpjobseeker
+ *
+ * Copyright (C) 2009 Kevin Benton - kbenton at bentonfam dot org
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along
+ * with this program; if not, write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ * 
+ */
+
+body {
+	background-color: rgb(0,192,255);
+}
+
+.pageTitle {
+    color: blue;
+    font-size: xx-large;
+    margin-bottom: 10pt;
+}
+
+.pageSubtitle {
+    color: blue;
+    font-size: x-large;
+    margin-bottom: 10pt;
+}
+
+.applicationStatusINVALID, .applicationStatusUNAVAILABLE, .applicationStatusCLOSED, .applicationStatusDUPLICATE {
+    color: white;
+    background-color: black;
+}
+
+.applicationStatusFOUND {
+	color: black;
+	background-color: cyan;
+}
+
+.applicationStatusCONTACTED {
+    color: black;
+    background-color: yellow;
+}
+
+.applicationStatusAPPLIED {
+    color: black;
+    background-color: green;
+}
+
+.applicationStatusINTERVIEWING {
+    color: white;
+    background-color: red;
+}
+
+.applicationStatusFOLLOWUP {
+    color: black;
+    background-color: lime;
+}
+
+.applicationStatusCHASING {
+    color: black;
+    background-color: yellow;
+}
+
+.applicationStatusNETWORKING {
+	color: black;
+	background-color: lime;
+}
+
+.nextActionDueFUTURE {
+	color: black;
+	background-color: lime;
+}
+
+.nextActionDueSOON {
+    color: black;
+    background-color: yellow;
+}
+
+.nextActionDueOVERDUE {
+    color: white;
+    background-color: red;
+}
+
+.urgencyLOW {
+    color: black;
+    background-color: lime;
+}
+
+.urgencyMEDIUM {
+    color: black;
+    background-color: yellow;
+}
+
+.urgencyHIGH {
+    color: white;
+    background-color: red;
+}
+
+.IHEADER {
+	text-align: center;
+}
+
+.JobListHeader {
+	background-color: gray;
+}
+
+.pageFooter {
+	text-align: center;
+	color: blue;
+	background-color: white;
+}
+
+.error {
+    color: white;
+    background-color: red;
+    font-size: x-large;
+}
+
+#urlDuplicateStatusBox {
+    color: black;
+    background-color: yellow;
+    font-weight: bolder;
+}
+
+#urlDuplicateResultBox {
+    color: white;
+    background-color: red;
+    font-weight: bolder;
+}
+
+.activeJobLink {
+	font: normal;
+}
+
+.inactiveJobLink {
+	font: strikethrough;
+}
+
+table.navBar {
+    border: solid 1pt black;
+}
+
+tr.navBar {
+    background-color: white;
+}
+
+td.navBar {
+    text-align: left;
+}
+
+td.navBarSearch {
+    text-align: right;
+}
+
+input.searchBox {
+    background-color: white ;
+    border: solid 2pt black ;
