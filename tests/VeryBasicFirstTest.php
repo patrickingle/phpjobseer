@@ -51,18 +51,18 @@ class VeryBasicFirstTest extends PHPUnit_Extensions_SeleniumTestCase
         try {
             $this->assertFalse( $this->isTextPresent( 'PHP Stack Trace' ) ) ;
         } catch ( PHPUnit_Framework_AssertionFailedError $e ) {
-            $this->verificationErrors[] = $e->toString() . " checking header" ;
+            $this->verificationErrors[] = "Checking header: " . $e->toString() ;
         }
         try {
             $this->assertTrue( $this->isTextPresent( $this->_pageTitle ) ) ;
         } catch ( PHPUnit_Framework_AssertionFailedError $e ) {
-            $this->verificationErrors[] = $e->toString() . " checking header" ;
+            $this->verificationErrors[] = "Checking header: " . $e->toString() ;
         }
         foreach ( $this->_headerLabels as $label ) {
             try {
                 $this->assertTrue( $this->isTextPresent( $label ) ) ;
             } catch ( PHPUnit_Framework_AssertionFailedError $e ) {
-                $this->verificationErrors[] = $e->toString() . " checking header" ;
+                $this->verificationErrors[] = "Checking header: " . $e->toString() ;
             }
         }
         // TODO verify that the search function is available.
@@ -72,7 +72,7 @@ class VeryBasicFirstTest extends PHPUnit_Extensions_SeleniumTestCase
        try {
        	   $this->assertTrue( $this->isTextPresent( 'Want your own copy of this tool?' ) ) ;
         } catch ( PHPUnit_Framework_AssertionFailedError $e ) {
-            $this->verificationErrors[] = $e->toString() . " checking footer" ;
+            $this->verificationErrors[] = "Checking footer: " . $e->toString() ;
        }
    }
 }
