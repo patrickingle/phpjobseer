@@ -20,16 +20,18 @@ class Example extends PHPUnit_Extensions_SeleniumTestCase
                                   , "Keywords"
                                   , "Help/Documentation"
                                   ) ;
+    private $_config ;
+
     function setUp()
     {
-        $config = new Config() ;
+        $this->_config = new Config() ;
         $this->setBrowser( "*firefox" ) ;
-        $this->setBrowserUrl( $config->values['browserRoot'] ) ;
+        $this->setBrowserUrl( $this->_config->values['browserRoot'] ) ;
     }
 
     function testHeaderLoads()
     {
-        $this->open( $config->values['browserDir'] ) ;
+        $this->open( $this->_config->values['browserDir'] ) ;
         $this->waitForPageToLoad( self::maxWaitTime ) ;
         $this->checkHeaderIsLoaded() ;
     }
