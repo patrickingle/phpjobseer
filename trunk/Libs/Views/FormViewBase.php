@@ -116,6 +116,7 @@ abstract class FormViewBase {
                 foreach ( $items as $k ) {
                     $list[$k] = $k;
                 }
+                Tools::dump_var( "Hey", $this->_form ) ;
                 $this->_form->addElement( 'select'
                                         , $fieldName
                                         , $fieldLabel

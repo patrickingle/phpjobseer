@@ -33,46 +33,47 @@ class VeryBasicFirstTest extends PHPUnit_Extensions_SeleniumTestCase
     {
         $this->open( $this->_config->values['browserDir'] ) ;
         $this->waitForPageToLoad( self::maxWaitTime ) ;
-        $this->checkHeaderIsLoaded() ;
+        $this->checkHeaderIsLoaded( 'index' ) ;
+        $this->checkFooterIsLoaded( 'index' ) ;
     }
 
-    function testAddNewJobLinkFromHeaderWorks()
+    function testHeaderLinksWork()
     {
         self::testHeaderLoads() ;
         foreach ( $this->_headerLabels as $label ) {
             $this->click( "link=$label" ) ;
             $this->waitForPageToLoad( self::maxWaitTime ) ;
-            $this->checkHeaderIsLoaded() ;
-            $this->checkFooterIsLoaded() ;
+            $this->checkHeaderIsLoaded( $label ) ;
+            $this->checkFooterIsLoaded( $label ) ;
         }
     }
 
-    private function checkHeaderIsLoaded() {
+    private function checkHeaderIsLoaded(  $label = '' ) {
         try {
             $this->assertFalse( $this->isTextPresent( 'PHP Stack Trace' ) ) ;
         } catch ( PHPUnit_Framework_AssertionFailedError $e ) {
-            $this->verificationErrors[] = "Checking header: " . $e->toString() ;
+            $this->verificationErrors[] = "Checking header ($label): " . $e->toString() ;
         }
         try {
             $this->assertTrue( $this->isTextPresent( $this->_pageTitle ) ) ;
         } catch ( PHPUnit_Framework_AssertionFailedError $e ) {
-            $this->verificationErrors[] = "Checking header: " . $e->toString() ;
+            $this->verificationErrors[] = "Checking header ($label): " . $e->toString() ;
         }
         foreach ( $this->_headerLabels as $label ) {
             try {
                 $this->assertTrue( $this->isTextPresent( $label ) ) ;
             } catch ( PHPUnit_Framework_AssertionFailedError $e ) {
-                $this->verificationErrors[] = "Checking header: " . $e->toString() ;
+                $this->verificationErrors[] = "Checking header ($label): " . $e->toString() ;
             }
         }
         // TODO verify that the search function is available.
    }
 
-   private function checkFooterIsLoaded() {
+   private function checkFooterIsLoaded( $label = '' ) {
        try {
        	   $this->assertTrue( $this->isTextPresent( 'Want your own copy of this tool?' ) ) ;
         } catch ( PHPUnit_Framework_AssertionFailedError $e ) {
-            $this->verificationErrors[] = "Checking footer: " . $e->toString() ;
+            $this->verificationErrors[] = "Checking footer ($label): " . $e->toString() ;
        }
    }
 }
