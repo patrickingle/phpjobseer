@@ -1,12 +1,9 @@
 <?php
 
 require_once 'PHPUnit/Extensions/SeleniumTestCase.php' ;
+require_once 'Libs/autoload.php' ;
 
-set_include_path( '..' . PATH_SEPARATOR . get_include_path() );
-
-require_once 'Libs/Config.php' ;
-
-class PJSTestSeries0000Init extends PHPUnit_Extensions_SeleniumTestCase
+class Framework_PJSTestSeries0000Init extends PHPUnit_Extensions_SeleniumTestCase
 {
 
     const maxWaitTime = 6000 ;
