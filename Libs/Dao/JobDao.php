@@ -291,7 +291,7 @@ class JobDao extends DaoBase {
     /**
      * validateRowForInsert checks to make sure that data being inserted is valid.
      *
-     * @todo TODO Auto-detect duplicate URL's and mark accordingly.
+     * @todo Auto-detect duplicate URL's and mark accordingly.
      * @return boolean True when validation passes, false otherwise.
      */
     public function validateRowForInsert($rowValues) {
