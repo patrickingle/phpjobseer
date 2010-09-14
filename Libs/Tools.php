@@ -69,7 +69,7 @@ class Tools {
      * @param $cssClass String The CSS class for this cell.
      * @return void
      */
-    static function printCell($value, $cssClass = null) {
+    static public function printCell($value, $cssClass = null) {
         if (isset($style)) {
             print "  <td class=\"$cssClass\">";
         }
@@ -87,7 +87,7 @@ class Tools {
      *
      * @return void
      */
-    static function quickBackTrace() {
+    static public function quickBackTrace() {
         print "----<br />\n" ;
         $x = debug_backtrace() ;
         foreach ( $x as $v ) {
@@ -110,7 +110,7 @@ class Tools {
      * @param character $char
      * @return boolean
      */
-    static function isEol( $char ) {
+    static public function isEol( $char ) {
         return ( ( "\n" === $char ) || ( "\r" === $char ) ) ;
     }
 
@@ -120,10 +120,27 @@ class Tools {
      * @param String to clean
      * @return String
      */
-    static function chomp( $str ) {
+    static public function chomp( $str ) {
         $subject = '/[\r\n]$/' ;
         while ( preg_match( $subject, $str ) ) {
             $str = preg_replace( $subject, '', $str ) ;
         }
+    }
+
+    /**
+     * 
+     * Add a directory to the include path if it is not
+     * already in the include path.
+     * 
+     * @param String $dir
+     */
+    static public function addIncludeDir( $dir ) {
+    	$currIncPath = get_include_path() ;
+    	if ( ! strpos( $currIncPath
+    	             , PATH_SEPERATOR . $dir . PATH_SEPERATOR
+    	             )
+    	   ) {
+    	    set_include_path( $dir . PATH_SEPERATOR . $currIncPath ) ;
+    	}
     }
 }
