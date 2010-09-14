@@ -24,3 +24,5 @@ require_once("Libs/autoload.php");
 
 $index = new IndexView();
 $index->main();
+
+echo "Sorry folks, this has not yet been implemented.\n" ;

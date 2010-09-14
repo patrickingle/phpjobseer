@@ -125,6 +125,7 @@ class JobFormView extends FormViewBase {
                     break ;
                 case 'REFERENCE(Contact)':
                     // @todo AJAX Contacts - have the client load values.
+                    // @todo AJAX Display new Z-Window on Add New Contact
                     $oContact = new ContactDao();
                     $results = $oContact->findSome("1 = 1 order by contactName");
                     $contacts = array( '0' => ''
@@ -174,7 +175,8 @@ class JobFormView extends FormViewBase {
                     break;
                 case 'REFERENCE(Company)':
                     // @todo AJAX Companies - have the client load values.
-                    $oCompany = new CompanyDao();
+                    // @todo AJAX Display new Z-Window on Add New Company
+                	$oCompany = new CompanyDao();
                     $results = $oCompany->findSome("1 = 1 order by companyName");
                     $companies = array( '0' => ''
                                      , 'Add new company'=> 'Add new company'
@@ -198,6 +200,7 @@ class JobFormView extends FormViewBase {
                                             );
                     break;
                 case 'REFERENCE(jobKeyword)':
+                	// @todo Make this work because R/O keyword is nasty. Does not work after db reset.
                     $oJobKeyword = new JobKeywordDao();
                     $value = $oJobKeyword->findKeywordValuesByJobId($jobId);
                     $this->_form->addElement( 'text'
