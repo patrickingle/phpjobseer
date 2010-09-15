@@ -2,3 +2,4 @@
 .project
 .settings
 .htaccess
+ci_test.sh
