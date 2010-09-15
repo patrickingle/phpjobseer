@@ -21,7 +21,7 @@
 
 -- Allow addition of zero default created timestamp so the DB will know
 -- to make it the current timestamp (funky hack, but works)
-SET @@sql_mode = '' ;
+SET @@session.sql_mode = '' ;
 
 -- -----------------------------------------------------------------------------------
 -- version
