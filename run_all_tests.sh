@@ -1,5 +1,5 @@
 #!/bin/sh
 testfile="Tests/AllTests.php"
-phpunit --syntax-check $testfile && phpunit $testfile
+/usr/local/bin/phpunit --syntax-check $testfile && phpunit $testfile
 exit $?
 
