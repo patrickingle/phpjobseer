@@ -28,6 +28,9 @@ function __autoload( $class_name ) {
         case ( preg_match( '/View(Base|)$/', $class_name ) ) :
             $reqFile = 'Libs/Views/' . $class_name . '.php' ;
             break ;
+        case ( preg_match( '/^TL_/', $class_name ) ) :
+        	$reqFile = 'Tests/TestLibs/' . $class_name . '.php' ;
+            break ;
         case ( preg_match( '/^Framework/', $class_name ) ) :
         	$class_name = str_replace( '_', '/', $class_name . '.php' ) ;
         	$reqFile = 'Tests/' . $class_name ;

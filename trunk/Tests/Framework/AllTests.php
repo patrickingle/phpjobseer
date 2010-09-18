@@ -8,6 +8,7 @@ class Framework_AllTests {
         $suite = new PHPUnit_Framework_TestSuite( 'PHPUnit Framework' ) ;
         $suite->addTestSuite( 'Framework_PJSTestSeries0000Init' ) ;
         $suite->addTestSuite( 'Framework_PJSTestSeries0011CheckHeaders' ) ;
+        $suite->addTestSuite( 'Framework_PJSTestSeries0012CheckSummary' ) ;
         return $suite ;
     }
 }

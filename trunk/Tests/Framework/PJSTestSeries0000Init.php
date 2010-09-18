@@ -6,30 +6,24 @@ require_once 'Libs/autoload.php' ;
 class Framework_PJSTestSeries0000Init extends PHPUnit_Extensions_SeleniumTestCase
 {
 
-    const maxWaitTime = 6000 ;
-    private $_pageTitle = "PHP Job Seeker" ;
-    private $_headerLabels = array( "Summary"
-                                  , "Add New Job"
-                                  , "All Jobs"
-                                  , "Active Jobs"
-                                  , "Contacts"
-                                  , "Companies"
-                                  , "Keywords"
-                                  , "Help/Documentation"
-                                  ) ;
-    private $_config ;
+
+    /** @var TL_PageWrapperChecks */
+	private $_PWC ;
+	/** @var TL_Config */
+	private $_TLC ;
 
     function setUp()
     {
-        $this->_config = new Config() ;
-        $this->setBrowser( "*firefox" ) ;
-        $this->setBrowserUrl( $this->_config->values['browserRoot'] ) ;
+    	$this->_PWC = new TL_PageWrapperChecks( $this ) ;
+    	$this->_TLC = new TL_Config() ;
+        $this->setBrowser( $this->_TLC->browser ) ;
+        $this->setBrowserUrl( $this->_TLC->browserRoot ) ;
     }
 
     function testDatabaseResetOutputOk()
     {
-        $this->open( $this->_config->values['browserDir'] . 'resetDb.php' ) ;
-        $this->waitForPageToLoad( self::maxWaitTime ) ;
+        $this->open( $this->_TLC->browserDir . 'resetDb.php' ) ;
+        $this->waitForPageToLoad( $this->_TLC->maxWaitTime ) ;
     	try {
             $this->assertTextNotPresent( 'PHP Stack Trace' ) ;
         } catch ( PHPUnit_Framework_AssertionFailedError $e ) {
