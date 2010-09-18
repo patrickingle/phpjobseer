@@ -3,7 +3,7 @@
 require_once 'PHPUnit/Extensions/SeleniumTestCase.php' ;
 require_once 'Libs/autoload.php' ;
 
-class Framework_PJSTestSeries0011CheckHeaders extends PHPUnit_Extensions_SeleniumTestCase
+class Framework_PJSTestSeries0012CheckSummary extends PHPUnit_Extensions_SeleniumTestCase
 {
 
     /** @var TL_PageWrapperChecks */
@@ -19,23 +19,16 @@ class Framework_PJSTestSeries0011CheckHeaders extends PHPUnit_Extensions_Seleniu
         $this->setBrowserUrl( $this->_TLC->browserRoot ) ;
     }
 
-    function testHeaderLoads()
+    /**
+     * @todo Finish this
+     * Enter description here ...
+     */
+    function testSummaryLinks()
     {
         $this->open( $this->_TLC->browserDir ) ;
         $this->waitForPageToLoad( $this->_TLC->maxWaitTime ) ;
         $this->_PWC->checkHeaderIsLoaded( $this, 'index' ) ;
         $this->_PWC->checkFooterIsLoaded( $this, 'index' ) ;
-    }
-
-    function testHeaderLinksWork()
-    {
-        self::testHeaderLoads() ;
-        foreach ( $this->_TLC->headerLabels as $label ) {
-            $this->click( "link=$label" ) ;
-            $this->waitForPageToLoad( $this->_TLC->maxWaitTime ) ;
-            $this->_PWC->checkHeaderIsLoaded( $label ) ;
-            $this->_PWC->checkFooterIsLoaded( $label ) ;
-        }
     }
 
 }
