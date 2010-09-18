@@ -12,8 +12,8 @@ class TL_Config {
                                 ) ;
     public $maxWaitTime = 6000 ;
     public $browser     = '*firefox' ;
-    public $browserRoot = 'http://www.bentonfam.org' ;
-    public $browserDir  = '/sf_pjs/' ;
+    public $browserRoot = 'http://localhost' ;
+    public $browserDir  = '/pjs/' ;
     public $pageTitle   = "PHP Job Seeker" ;
     
 }
