@@ -18,6 +18,10 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 # 
 testfile="Tests/AllTests.php"
+verbose=""
+if [ "--verbose" = "$1" ] ; then
+    verbose="$1"
+fi
 for i in `find . -name \*.php -print`
 do
     err="`php -l "$i" | grep -v \"^No syntax errors detected in $i\$\"`"
@@ -28,5 +32,5 @@ do
 done
 echo "Code appears to be free from syntax errors."
 
-/usr/local/bin/phpunit $testfile
+/usr/local/bin/phpunit $verbose $testfile
 exit $?
