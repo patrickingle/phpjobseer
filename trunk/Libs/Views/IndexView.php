@@ -43,10 +43,17 @@ class IndexView {
             $style       = $row['style'];
             $count       = $oJob->countSome("applicationStatusId = $statusId");
             echo "</tr>";
-            echo "<tr><th class=\"applicationStatus"
-               . "$statusLabel\">"
-               . "$statusLabel</th>"
-               . "<td><a href=\"jobList.php?action=statusList&status=$statusId\">$count<a></td></tr>\n";
+            echo "<tr>"
+               .   "<th class=\"applicationStatus$statusLabel\">"
+               .     "$statusLabel"
+               .   "</th>"
+               .   "<td>"
+               .     "<a id=\"applicationStatusLink$statusId\""
+               .       " href=\"jobList.php?action=statusList&status=$statusId\">"
+               .       $count
+               .     "<a>"
+               .   "</td>"
+               . "</tr>\n";
         }
         $count = $oJob->countAll();
         echo "<tr><th>Total</th><td>$count</td>\n";
