@@ -65,5 +65,7 @@ class TL_PageWrapperChecks {
 				$this->_selTC->verificationErrors[] = "Checking header ($label): " . $e->toString() ;
 			}
 		}
+                $buttons = $this->_selTC->getAllButtons() ;
+                var_dump( $buttons ) ;
 	}
 }
