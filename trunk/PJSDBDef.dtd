@@ -1,0 +1,55 @@
+<!ELEMENT database (tables*,procedures*,functions*)>
+<!ELEMENT tables (table*)>
+
+<!ELEMENT table (columns+,keys*,triggers*,rows*)>
+<!ATTLIST table name CDATA #REQUIRED
+                charset CDATA "latin1"
+                collation CDATA "latin1_swedish_ci"
+                engine CDATA #IMPLIED>
+
+<!ELEMENT columns (column+)>
+
+<!ELEMENT column EMPTY>
+<!ATTLIST column name CDATA #REQUIRED
+                 type CDATA #REQUIRED
+                 nullable (FALSE|TRUE) #REQUIRED
+                 default CDATA #IMPLIED
+                 extra CDATA #IMPLIED>
+
+<!ELEMENT keys (key*)>
+
+<!ELEMENT key (memberColumn*,reference*,memberColumn*)>
+<!ATTLIST key name CDATA #REQUIRED
+              type CDATA #REQUIRED
+              onDelete (CASCADE|NOACTION) #IMPLIED
+              onUpdate (CASCADE|NOACTION) #IMPLIED>
+
+<!ELEMENT memberColumn EMPTY>
+<!ATTLIST memberColumn name CDATA #REQUIRED>
+
+<!ELEMENT reference (#PCDATA)>
+<!ATTLIST reference table CDATA #REQUIRED>
+
+<!ELEMENT triggers (trigger*)>
+
+<!ELEMENT trigger (#PCDATA)>
+<!ATTLIST trigger name CDATA #REQUIRED
+                  when (BEFORE|AFTER) #REQUIRED
+                  event (INSERT|UPDATE|DELETE) #REQUIRED>
+
+<!ELEMENT rows (row*)>
+
+<!ELEMENT row (field*)>
+
+<!ELEMENT field (#PCDATA)>
+<!ATTLIST field name CDATA #REQUIRED>
+
+<!ELEMENT procedures (procedure*)>
+
+<!ELEMENT procedure (#PCDATA)>
+<!ATTLIST procedure name CDATA #REQUIRED>
+
+<!ELEMENT functions (function*)>
+
+<!ELEMENT function (#PCDATA)>
+<!ATTLIST function name CDATA #REQUIRED>
