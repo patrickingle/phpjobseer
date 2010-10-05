@@ -32,5 +32,5 @@ do
 done
 echo "Code appears to be free from syntax errors."
 
-/usr/local/bin/phpunit $verbose $testfile
+phpunit $verbose $testfile
 exit $?
