@@ -17,7 +17,7 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
- * 
+ *
  */
 
 require_once("Libs/autoload.php");
@@ -71,6 +71,72 @@ class SearchDao extends DaoBase {
     public function __construct() {
         parent::__construct('search');
          $this->populateFields();
+    }
+
+    /**
+     * static function that creates a new DDInfo record and returns it set up
+     * for the concrete class.
+     * @param $dbName Name of the table
+     * @param $dbStyle Style of database to create
+     * @return DDInfo
+     */
+    static public function getDDInfo($tableName, $dbStyle) {
+        $info = new DDInfo($tableName, $dbStyle) ;
+        $info->addColumn( 'searchId'
+                        , 'SERIAL'
+                        , false
+                        ) ;
+        $info->addColumn( 'engineName'
+                        , 'VARCHAR(255)'
+                        , false
+                        , ''
+                        ) ;
+        $info->addColumn( 'searchName'
+                        , 'VARCHAR(255)'
+                        , false
+                        , ''
+                        ) ;
+        $info->addColumn( 'url'
+                        , 'SMALLTEXT'
+                        , false
+                        ) ;
+        $info->addColumn( 'created'
+                        , 'TIMESTAMP'
+                        , false
+                        , '0000-00-00 00:00:00'
+                        ) ;
+        $info->addColumn( 'updated'
+                        , 'TIMESTAMP'
+                        , false
+                        , 'CURENT_TIMESTAMP'
+                        , 'ON UPDATE CURRENT_TIMESTAMP'
+                        ) ;
+        $info->addKey( 'PRIMARY'
+                     , 'searchPk'
+                     , array( 'searchId' )
+                     ) ;
+        $info->addTrigger( 'searchAfterUpdateTrigger'
+                         , 'AFTER'
+                         , 'UPDATE'
+                         . "  IF OLD.searchId <> NEW.searchId\n"
+                         . "THEN\n"
+                         . "     UPDATE note\n"
+                         . "        SET note.appliesToId = NEW.searchId\n"
+                         . "      WHERE note.appliesToId = OLD.searchId\n"
+                         . "        AND note.appliestoTable = 'search'\n"
+                         . "          ;\n"
+                         . " END IF ;\n"
+                         ) ;
+        $info->addTrigger( 'searchAfterDeleteTrigger'
+                         , 'AFTER'
+                         , 'DELETE'
+                         . "DELETE\n"
+                         . "  FROM note\n"
+                         . " WHERE note.appliesToId = OLD.searchId\n"
+                         . "   AND note.appliestoTable = 'search'\n"
+                         . "     ;\n"
+                         ) ;
+        return $info() ;
     }
 
     /**

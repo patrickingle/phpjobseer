@@ -17,7 +17,7 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
- * 
+ *
  */
 
 require_once("Libs/autoload.php");
@@ -76,6 +76,72 @@ class KeywordDao extends DaoBase {
     }
 
     /**
+     * static function that creates a new DDInfo record and returns it set up
+     * for the concrete class.
+     * @param $dbName Name of the table
+     * @param $dbStyle Style of database to create
+     * @return DDInfo
+     */
+    static public function getDDInfo($tableName, $dbStyle) {
+        $info = new DDInfo($tableName, $dbStyle) ;
+        $info->addColumn( 'keywordId'
+                        , 'SERIAL'
+                        , false
+                        ) ;
+        $info->addColumn( 'keywordValue'
+                        , 'VARCHAR(255)'
+                        , false
+                        , null
+                        ) ;
+        $info->addColumn( 'sortKey'
+                        , 'SMALLINT(3)'
+                        , false
+                        , 0
+                        ) ;
+        $info->addColumn( 'created'
+                        , 'TIMESTAMP'
+                        , false
+                        , '0000-00-00 00:00:00'
+                        ) ;
+        $info->addColumn( 'updated'
+                        , 'TIMESTAMP'
+                        , false
+                        , 'CURENT_TIMESTAMP'
+                        , 'ON UPDATE CURRENT_TIMESTAMP'
+                        ) ;
+        $info->addKey( 'PRIMARY'
+                     , 'keywordPk'
+                     , array( 'keywordId' )
+                     ) ;
+        $info->addKey( 'UNIQUE'
+                     , 'valueUx'
+                     , array( 'keywordValue' )
+                     ) ;
+        $info->addTrigger( 'keywordAfterUpdateTrigger'
+                         , 'AFTER'
+                         , 'UPDATE'
+                         . "  IF OLD.keywordId <> NEW.keywordId\n"
+                         . "THEN\n"
+                         . "     UPDATE note\n"
+                         . "        SET note.appliesToId = NEW.keywordId\n"
+                         . "      WHERE note.appliesToId = OLD.keywordId\n"
+                         . "        AND note.appliestoTable = 'keyword'\n"
+                         . "          ;\n"
+                         . " END IF ;\n"
+                         ) ;
+        $info->addTrigger( 'keywordAfterDeleteTrigger'
+                         , 'AFTER'
+                         , 'DELETE'
+                         . "DELETE\n"
+                         . "  FROM note\n"
+                         . " WHERE note.appliesToId = OLD.keywordId\n"
+                         . "   AND note.appliestoTable = 'keyword'\n"
+                         . "     ;\n"
+                         ) ;
+        return $info() ;
+    }
+
+    /**
      * getDefaults acts like DaoBase::getRowById returning a hash of fields to
      * column values to be used by the insertRow routine to compare values with
      * for default values at row insertion time.
@@ -115,7 +181,7 @@ class KeywordDao extends DaoBase {
                         , null                  // $fieldValidator
                         );
         $_fieldDescriptions[] = $x;
-        
+
         $x = new FieldDescription();
         $y = isset($fieldValues['keywordValue']) ? $fieldValues['keywordValue'] : null;
         $x->setAllFields( 'keywordValue'        // $fieldName

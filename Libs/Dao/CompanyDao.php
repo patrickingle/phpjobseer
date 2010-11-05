@@ -17,7 +17,7 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
- * 
+ *
  */
 
 require_once("Libs/autoload.php");
@@ -32,6 +32,70 @@ class CompanyDao extends DaoBase {
     public function __construct() {
         parent::__construct('company');
         $this->populateFields(null);
+    }
+
+    /**
+     * static function that creates a new DDInfo record and returns it set up
+     * for the concrete class.
+     * @param $dbName Name of the table
+     * @param $dbStyle Style of database to create
+     * @return DDInfo
+     */
+    static public function getDDInfo($tableName, $dbStyle) {
+        $info = new DDInfo($tableName, $dbStyle) ;
+        $info->addColumn( 'companyId'      , 'SERIAL'      , false    ) ;
+        $info->addColumn( 'isAnAgency'     , 'BOOLEAN'     , false, 0 ) ;
+        $info->addColumn( 'agencyCompanyId', 'INT'         , true , 1
+                        , array( 'unsigned' => true )
+                        ) ;
+        $info->addColumn( 'companyName'    , 'VARCHAR(100)', false, '' ) ;
+        $info->addColumn( 'companyAddress1', 'TINYTEXT'    , false     ) ;
+        $info->addColumn( 'companyAddress2', 'TINYTEXT'    , false     ) ;
+        $info->addColumn( 'companyCity'    , 'VARCHAR(60)' , false, '' ) ;
+        $info->addColumn( 'companyState'   , 'CHAR(2)'     , false, '' ) ;
+        $info->addColumn( 'companyZip'     , 'MEDIUMINT(5)', true      ) ;
+        $info->addColumn( 'companyPhone'   , 'INT(10)'     , true      ) ;
+        $info->addColumn( 'created'        , 'TIMESTAMP'   , false , '0000-00-00 00:00:00' ) ;
+        $info->addColumn( 'updated'
+                        , 'TIMESTAMP'
+                        , false
+                        , 'CURENT_TIMESTAMP'
+                        , 'ON UPDATE CURRENT_TIMESTAMP'
+                        ) ;
+        $info->addKey( 'PRIMARY'
+                     , 'companyPk'
+                     , array( 'companyId' )
+                     ) ;
+        $info->addKey( 'FOREIGN'
+                     , 'agencyCompanyFk'
+                     , array( 'agencyCompanyId' )
+                     , array( 'references' => 'company(companyId)'
+                            , 'onDelete' => 'NO ACTION'
+                            , 'onUpdate' => 'NO ACTION'
+                            )
+                     ) ;
+        $info->addTrigger( 'companyAfterUpdateTrigger'
+                         , 'AFTER'
+                         , 'UPDATE'
+                         , "IF OLD.companyId <> NEW.companyId\n"
+                         . "THEN\n"
+                         . "  UPDATE note\n"
+                         . "     SET note.appliesToId = NEW.companyId\n"
+                         . "   WHERE note.appliesToId = OLD.companyId\n"
+                         . "     AND note.appliestoTable = 'company'\n"
+                         . "       ;\n"
+                         . "END IF ;\n"
+                         ) ;
+        $info->addTrigger( 'companyAfterDeleteTrigger'
+                         , 'AFTER'
+                         , 'DELETE'
+                         , "DELETE\n"
+                         . "  FROM note\n"
+                         . " WHERE note.appliesToId = OLD.companyId\n"
+                         . "   AND note.appliestoTable = 'company'\n"
+                         . "     ;\n"
+                         ) ;
+        return $info() ;
     }
 
     /**

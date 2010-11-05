@@ -17,12 +17,87 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
- * 
+ *
  */
 
 require_once("Libs/autoload.php");
 
 class ApplicationStatusDao extends DaoBase {
+
+    /**
+     * static function that creates a new DDInfo record and returns it set up
+     * for the concrete class.
+     * @param $dbName Name of the table
+     * @param $dbStyle Style of database to create
+     * @return DDInfo
+     */
+    static public function getDDInfo($tableName, $dbStyle) {
+        $info = new DDInfo($tableName, $dbStyle) ;
+        $info->addColumn( 'applicationStatusId'
+                        , 'SERIAL'
+                        , false
+                        ) ;
+        $info->addColumn( 'statusValue'
+                        , 'VARCHAR(50)'
+                        , false
+                        ) ;
+        $info->addColumn( 'isActive'
+                        , 'BOOLEAN'
+                        , false
+                        , 1
+                        ) ;
+        $info->addColumn( 'sortKey'
+                        , 'SMALLINT(3)'
+                        , false
+                        , 100
+                        ) ;
+        $info->addColumn( 'style'
+                        , 'SMALLTEXT'
+                        , false
+                        ) ;
+        $info->addColumn( 'created'
+                        , 'TIMESTAMP'
+                        , false
+                        , '0000-00-00 00:00:00'
+                        ) ;
+        $info->addColumn( 'updated'
+                        , 'TIMESTAMP'
+                        , false
+                        , 'CURENT_TIMESTAMP'
+                        , 'ON UPDATE CURRENT_TIMESTAMP'
+                        ) ;
+        $info->addKey( 'PRIMARY'
+                     , 'applicationStatusPk'
+                     , array( 'applicationStatusId' )
+                     ) ;
+        $info->addKey( 'UNIQUE'
+                     , 'applicationStatusValueUx'
+                     , array( 'statusValue' )
+                     ) ;
+        $info->addTrigger( 'applicationStatusAfterInsertTrigger'
+                         , 'AFTER'
+                         , 'INSERT'
+                         , "INSERT applicationStatusSummary\n"
+                         . "     ( applicationStatusId\n"
+                         . "     , statusCount\n"
+                         . "     , created\n"
+                         . "     , updated\n"
+                         . "     )\n"
+                         . "VALUES\n"
+                         . "     ( NEW.applicationStatusId\n"
+                         . "     , 0\n"
+                         . "     , NULL\n"
+                         . "     , NULL\n"
+                         . "     ) ;"
+                         ) ;
+        $info->addTrigger( 'applicationStatusAfterDeleteTrigger'
+                         , 'AFTER'
+                         , 'INSERT'
+                         , "DELETE FROM applicationStatusSummary\n"
+                         . " WHERE OLD.applicationStatusId = applicationStatusSummary.applicationStatusId ;\n"
+                         ) ;
+        return $info() ;
+    }
 
     /**
      * validateRowForInsertOrUpdate does all the "other" checks needed to verify

@@ -17,7 +17,7 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
- * 
+ *
  */
 
 require_once("Libs/autoload.php");
@@ -32,6 +32,161 @@ class JobDao extends DaoBase {
     public function __construct() {
         parent::__construct('job');
         $this->populateFields(null);
+    }
+
+    /**
+     * static function that creates a new DDInfo record and returns it set up
+     * for the concrete class.
+     * @param $dbName Name of the table
+     * @param $dbStyle Style of database to create
+     * @return DDInfo
+     */
+    static public function getDDInfo($tableName, $dbStyle) {
+        $info = new DDInfo($tableName, $dbStyle) ;
+        $info->addColumn( 'jobId'
+                        , 'SERIAL'
+                        , false
+                        ) ;
+        $info->addColumn( 'primaryContactId'
+                        , 'INT'
+                        , true
+                        , null
+                        , array( 'unsigned' => true )
+                        ) ;
+        $info->addColumn( 'companyId'
+                        , 'INT'
+                        , true
+                        , null
+                        , array( 'unsigned' => true )
+                        ) ;
+        $info->addColumn( 'applicationStatusId'
+                        , 'INT'
+                        , false
+                        , null
+                        , array( 'unsigned' => true )
+                        ) ;
+        $info->addColumn( 'lastStatusChange'
+                        , 'DATETIME'
+                        , false
+                        , '0000-00-00 00:00:00'
+                        ) ;
+        $info->addColumn( 'urgency'
+                        , "ENUM('high', 'medium', 'low')"
+                        , false
+                        , 'low'
+                        ) ;
+        $info->addColumn( 'nextActionDue'
+                        , 'DATETIME'
+                        , false
+                        , '0000-00-00 00:00:00'
+                        ) ;
+        $info->addColumn( 'nextAction'
+                        , 'VARCHAR(255)'
+                        , false
+                        , ''
+                        ) ;
+        $info->addColumn( 'positionTitle'
+                        , 'VARCHAR(255)'
+                        , false
+                        , ''
+                        ) ;
+        $info->addColumn( 'location'
+                        , 'VARCHAR(255)'
+                        , false
+                        , ''
+                        ) ;
+        $info->addColumn( 'url'
+                        , 'SMALLTEXT'
+                        , false
+                        , null
+                        ) ;
+        $info->addColumn( 'created'
+                        , 'TIMESTAMP'
+                        , false
+                        , '0000-00-00 00:00:00'
+                        ) ;
+        $info->addColumn( 'updated'
+                        , 'TIMESTAMP'
+                        , false
+                        , 'CURENT_TIMESTAMP'
+                        , 'ON UPDATE CURRENT_TIMESTAMP'
+                        ) ;
+        $info->addKey( 'PRIMARY'
+                     , 'jobPk'
+                     , array( 'jobId' )
+                     ) ;
+        $info->addKey( 'FOREIGN'
+                     , 'primaryContactFk'
+                     , array( 'primaryContactId' )
+                     , array( 'references' => 'contact(contactId)'
+                            , 'onDelete' => 'RESTRICT'
+                            , 'onUpdate' => 'RESTRICT'
+                            )
+                     ) ;
+        $info->addKey( 'FOREIGN'
+                     , 'companyFk'
+                     , array( 'companyId' )
+                     , array( 'references' => 'company(companyId)'
+                            , 'onDelete' => 'CASCADE'
+                            , 'onUpdate' => 'CASCADE'
+                            )
+                     ) ;
+        $info->addKey( 'FOREIGN'
+                     , 'applicationStatusFk'
+                     , array( 'applicationStatusId' )
+                     , array( 'references' => 'applicationStatus(applicationStatusId)'
+                            , 'onDelete' => 'RESTRICT'
+                            , 'onUpdate' => 'RESTRICT'
+                            )
+                     ) ;
+        $info->addTrigger( 'jobAfterInsertTrigger'
+                         , 'AFTER'
+                         , 'INSERT'
+                         , "UPDATE applicationStatusSummary\n"
+                         . "    AS jss\n"
+                         . "   SET jss.statusCount = jss.statusCount + 1\n"
+                         . " WHERE jss.applicationStatusId = NEW.applicationStatusId ;\n"
+                         ) ;
+        $info->addTrigger( 'jobAfterUpdateTrigger'
+                         , 'AFTER'
+                         , 'UPDATE'
+                         , "  IF OLD.applicationStatusId <> NEW.applicationStatusId\n"
+                         . "THEN\n"
+                         . "     UPDATE applicationStatusSummary\n"
+                         . "         AS jss\n"
+                         . "        SET jss.statusCount = jss.statusCount + 1\n"
+                         . "      WHERE jss.applicationStatusId = NEW.applicationStatusId ;\n"
+                         . "          ;\n"
+                         . "     UPDATE applicationStatusSummary\n"
+                         . "         AS jss\n"
+                         . "        SET jss.statusCount = jss.statusCount + 1\n"
+                         . "      WHERE jss.applicationStatusId = OLD.applicationStatusId ;\n"
+                         . "          ;\n"
+                         . " END IF ;\n"
+                         . "  IF OLD.jobId <> NEW.jobId\n"
+                         . "THEN\n"
+                         . "     UPDATE note\n"
+                         . "        SET note.appliesToId = NEW.jobId\n"
+                         . "      WHERE note.appliesToId = OLD.jobId\n"
+                         . "        AND note.appliestoTable = 'job'\n"
+                         . "          ;\n"
+                         . " END IF ;\n"
+                         ) ;
+        $info->addTrigger( 'jobAfterDeleteTrigger'
+                         , 'AFTER'
+                         , 'DELETE'
+                         , "UPDATE applicationStatusSummary\n"
+                         . "    AS jss\n"
+                         . "   SET jss.statusCount = jss.statusCount - 1\n"
+                         . " WHERE jss.applicationStatusId = OLD.applicationStatusId\n"
+                         . "     ;\n"
+                         . "DELETE\n"
+                         . "  FROM note\n"
+                         . " WHERE note.appliesToId = OLD.jobId\n"
+                         . "   AND note.appliestoTable = 'job'\n"
+                         . "     ;\n"
+                         ) ;
+        return $info() ;
     }
 
     /**

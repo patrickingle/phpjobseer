@@ -17,7 +17,7 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
- * 
+ *
  */
 
 require_once("Libs/autoload.php");
@@ -32,6 +32,74 @@ class ContactDao extends DaoBase {
     public function __construct() {
         parent::__construct('contact');
         $this->populateFields(null);
+    }
+
+    /**
+     * static function that creates a new DDInfo record and returns it set up
+     * for the concrete class.
+     * @param $dbName Name of the table
+     * @param $dbStyle Style of database to create
+     * @return DDInfo
+     */
+    static public function getDDInfo($tableName, $dbStyle) {
+        $info = new DDInfo($tableName, $dbStyle) ;
+        $info->addColumn( 'contactId'            , 'SERIAL'      , false       ) ;
+        $info->addColumn( 'contactCompanyId'     , 'INT'         , false, 1
+                        , array( 'unsigned' => true )
+                        ) ;
+        $info->addColumn( 'contactName'          , 'VARCHAR(255)', false, ''   ) ;
+        $info->addColumn( 'contactEmail'         , 'TINYTEXT'    , false       ) ;
+        $info->addColumn( 'contactPhone'         , 'INT'         , false, null
+                        , array( 'unsigned' => true )
+                        ) ;
+        $info->addColumn( 'contactAlternatePhone', 'INT'         , false, null
+                        , array( 'unsigned' => true )
+                        ) ;
+        $info->addColumn( 'created'
+                        , 'TIMESTAMP'
+                        , false
+                        , '0000-00-00 00:00:00'
+                        ) ;
+        $info->addColumn( 'updated'
+                        , 'TIMESTAMP'
+                        , false
+                        , 'CURENT_TIMESTAMP'
+                        , 'ON UPDATE CURRENT_TIMESTAMP'
+                        ) ;
+        $info->addKey( 'PRIMARY'
+                     , 'contactPk'
+                     , array( 'contactId' )
+                     ) ;
+        $info->addKey( 'FOREIGN'
+                     , 'contactCompanyFk'
+                     , array( 'contactCompanyId' )
+                     , array( 'references' => 'company(companyId)'
+                            , 'onDelete' => 'CASCADE'
+                            , 'onUpdate' => 'CASCADE'
+                            )
+                     ) ;
+        $info->addTrigger( 'contactAfterUpdateTrigger'
+                         , 'AFTER'
+                         , 'UPDATE'
+                         , "IF OLD.contactId <> NEW.contactId\n"
+                         . "THEN\n"
+                         . "  UPDATE note\n"
+                         . "     SET note.appliesToId = NEW.contactId\n"
+                         . "   WHERE note.appliesToId = OLD.contactId\n"
+                         . "     AND note.appliestoTable = 'contact'\n"
+                         . "       ;\n"
+                         . "END IF ;\n"
+                         ) ;
+        $info->addTrigger( 'contactAfterDeleteTrigger'
+                         , 'AFTER'
+                         , 'DELETE'
+                         , "DELETE\n"
+                         . "  FROM note\n"
+                         . " WHERE note.appliesToId = OLD.contactId\n"
+                         . "   AND note.appliestoTable = 'contact'\n"
+                         . "     ;\n"
+                         ) ;
+        return $info() ;
     }
 
     /**
