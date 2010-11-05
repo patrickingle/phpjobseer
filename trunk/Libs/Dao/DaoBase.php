@@ -58,6 +58,15 @@ abstract class DaoBase {
     abstract public function getDefaults();
 
     /**
+     * static function that creates a new DDInfo record and returns it set up
+     * for the concrete class.
+     * @param $dbName Name of the table
+     * @param $dbStyle Style of database to create
+     * @return DDInfo
+     */
+    abstract static public function getDDInfo($tableName, $dbStyle) ;
+
+    /**
      * populateFields creates an array of FieldDescription's.  This function is
      * called by getRowById to fulfill data requests.
      *
@@ -158,47 +167,47 @@ abstract class DaoBase {
      * @return int Last Insert ID on success - throws on failure
      */
     public function insertRow($rowValues) {
-        $insertId = null;
-        if ($this->validateRowForInsert($rowValues)) {
-            $defaults = $this->getDefaults();
-            $query = "INSERT {$this->_tableName} SET ";
-            $runQuery = 0;
-            $changes = array();
-            $fieldsByFieldName = array();
-            $this->populateFields($rowValues);
+        $insertId = null ;
+        if ( $this->validateRowForInsert( $rowValues ) ) {
+            $defaults = $this->getDefaults() ;
+            $query = "INSERT {$this->_tableName} SET " ;
+            $runQuery = 0 ;
+            $changes = array() ;
+            $fieldsByFieldName = array() ;
+            $this->populateFields( $rowValues ) ;
             foreach ( $this->_fields as $field ) {
-                $fieldsByFieldName[$field->getFieldName()]=$field;
+                $fieldsByFieldName[$field->getFieldName()]=$field ;
             }
             foreach ( $rowValues as $key => $value ) {
-                if ( ("created" === $key) || ("updated" === $key) ) {
-                    continue;
+                if ( ( "created" === $key ) || ( "updated" === $key ) ) {
+                    continue ;
                 }
-                $defaultValue = ( null === $defaults[$key] ? '' : $defaults[$key] );
+                $defaultValue = ( null === $defaults[$key] ? '' : $defaults[$key] ) ;
                 if ( $value === $defaultValue ) {
-                    continue;
+                    continue ;
                 }
-                $quot = $fieldsByFieldName[$key]->getQuote();
-                $changes[] = "$key = $quot" . $this->escape_string($value) . "$quot";
-                $runQuery = 1;
+                $quot = $fieldsByFieldName[ $key ]->getQuote() ;
+                $changes[] = "$key = $quot" . $this->escape_string( $value ) . "$quot" ;
+                $runQuery = 1 ;
             }
             if ( $runQuery ) {
-                $changes[] = 'created = NOW()';
-                $query .= implode(', ', $changes);
-                if ( $this->_configValues['really_update_db'] ) {
-                    if ( TRUE !== $this->_oDbh->query($query) ) {
-                        throw new Exception("Query failed: $query");
+                $changes[] = 'created = NOW()' ;
+                $query .= implode( ', ', $changes ) ;
+                if ( $this->_configValues[ 'really_update_db' ] ) {
+                    if ( TRUE !== $this->_oDbh->query( $query ) ) {
+                        throw new Exception( "Query failed: $query" ) ;
                     }
-                    $insertId = $this->_oDbh->insert_id;
+                    $insertId = $this->_oDbh->insert_id ;
                 }
             }
         }
         else {
-            Tools::dump_var('rowValues', $rowValues);
-            Tools::dump_var('this', $this);
-            echo "<pre>";
-            throw new Exception("Row failed validation for insert!");
+            Tools::dump_var( 'rowValues', $rowValues ) ;
+            Tools::dump_var( 'this', $this ) ;
+            echo "<pre>" ;
+            throw new Exception( "Row failed validation for insert!" ) ;
         }
-        return $insertId;
+        return $insertId ;
     }
 
     /**

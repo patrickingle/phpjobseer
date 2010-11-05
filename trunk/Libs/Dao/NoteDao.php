@@ -17,7 +17,7 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
- * 
+ *
  */
 
 require_once("Libs/autoload.php");
@@ -75,6 +75,52 @@ class NoteDao extends DaoBase {
     public function __construct() {
         parent::__construct('note');
         $this->populateFields(null);
+    }
+
+    /**
+     * static function that creates a new DDInfo record and returns it set up
+     * for the concrete class.
+     * @param $dbName Name of the table
+     * @param $dbStyle Style of database to create
+     * @return DDInfo
+     */
+    static public function getDDInfo($tableName, $dbStyle) {
+        $info = new DDInfo($tableName, $dbStyle) ;
+        $info->addColumn( 'noteId'
+                        , 'SERIAL'
+                        , false
+                        ) ;
+        $info->addColumn( 'appliesToTable'
+                        , "ENUM('job','company','contact','keyword','search')"
+                        , false
+                        , null
+                        ) ;
+        $info->addColumn( 'appliesToId'
+                        , 'INT'
+                        , false
+                        , null
+                        , array( 'unsigned' => true )
+                        ) ;
+        $info->addColumn( 'created'
+                        , 'TIMESTAMP'
+                        , false
+                        , '0000-00-00 00:00:00'
+                        ) ;
+        $info->addColumn( 'updated'
+                        , 'TIMESTAMP'
+                        , false
+                        , 'CURENT_TIMESTAMP'
+                        , 'ON UPDATE CURRENT_TIMESTAMP'
+                        ) ;
+        $info->addKey( 'PRIMARY'
+                     , 'notePk'
+                     , array( 'jobId' )
+                     ) ;
+        $info->addKey( 'INDEX'
+                     , 'appliesToIx'
+                     , array( 'appliesToTable', 'appliesToId', 'created' )
+                     ) ;
+        return $info() ;
     }
 
     /**

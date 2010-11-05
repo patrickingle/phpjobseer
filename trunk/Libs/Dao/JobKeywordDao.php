@@ -17,7 +17,7 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
- * 
+ *
  */
 
 require_once("Libs/autoload.php");
@@ -66,6 +66,50 @@ class JobKeywordDao extends DaoBase {
     public function __construct($fieldValues = null) {
         parent::__construct('jobKeywordMap');
         $this->populateFields($fieldValues);
+    }
+
+    /**
+     * static function that creates a new DDInfo record and returns it set up
+     * for the concrete class.
+     * @param $dbName Name of the table
+     * @param $dbStyle Style of database to create
+     * @return DDInfo
+     */
+    static public function getDDInfo($tableName, $dbStyle) {
+        $info = new DDInfo($tableName, $dbStyle) ;
+        $info->addColumn( 'jobId'
+                        , 'INT'
+                        , false
+                        , null
+                        , array( 'unsigned' => true )
+                        ) ;
+        $info->addColumn( 'kewordId'
+                        , 'INT'
+                        , false
+                        , null
+                        , array( 'unsigned' => true )
+                        ) ;
+        $info->addKey( 'PRIMARY'
+                     , 'jobPk'
+                     , array( 'jobId', 'kewordId' )
+                     ) ;
+        $info->addKey( 'FOREIGN'
+                     , 'jobKeywordPk'
+                     , array( 'jobId' )
+                     , array( 'references' => 'job(jobId)'
+                            , 'onDelete' => 'CASCADE'
+                            , 'onUpdate' => 'CASCADE'
+                            )
+                     ) ;
+        $info->addKey( 'FOREIGN'
+                     , 'keywordFk'
+                     , array( 'keywordId' )
+                     , array( 'references' => 'keyword(keywordId)'
+                            , 'onDelete' => 'CASCADET'
+                            , 'onUpdate' => 'CASCADE'
+                            )
+                     ) ;
+        return $info() ;
     }
 
     /**
@@ -159,7 +203,7 @@ class JobKeywordDao extends DaoBase {
 
     /**
      * Find a listing of Job ID's by keyword ID and Job ApplicationStatusId
-     * 
+     *
      * @param $keywordId int
      * @param $applicationStatusList array List of Application Status ID's
      * @return array
@@ -200,7 +244,7 @@ class JobKeywordDao extends DaoBase {
 
     /**
      * Find keyword values by job ID and return them as a string.
-     * 
+     *
      * @param $jobId
      * @return String
      * @throws Exception
