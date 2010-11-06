@@ -17,11 +17,14 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
- * 
+ *
  */
 
 function __autoload( $class_name ) {
     switch (true) {
+        case ( preg_match( '/Controller(Base|)$/', $class_name ) ) :
+            $reqFile = 'Libs/Controllers/' . $class_name . '.php' ;
+            break ;
         case ( preg_match( '/Dao(Base|)$/', $class_name ) ) :
             $reqFile = 'Libs/Dao/' . $class_name . '.php' ;
             break ;
