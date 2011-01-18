@@ -41,19 +41,70 @@ class PJSDBModel {
      *
      */
     public function __construct() {
-        parent::__construct() ;
-        $config = new Config() ;
-        $this->_configValues = $config->values ;
+        $oConfig = new Config() ;
+        $this->_configValues = $oConfig->values ;
         $this->_dbName = $this->_configValues[ 'db_name'  ] ;
         $this->_dbStyle = $this->_configValues[ 'db_style' ] ;
         $this->_model = new DDModel( $this->_dbName
                                    , $this->_dbStyle
                                    ) ;
-        $this->_model->addInfo(
-                ApplicationStatusDao::getDDInfo( 'applicationStatus'
+        $this->_model->addInfo( ApplicationStatusDao::getDDInfo( 'applicationStatus'
                                                , $this->_dbStyle
                                                )
                               ) ;
+        $this->_model->addInfo(
+                ApplicationStatusSummaryDao::getDDInfo( 'applicationStatusSummary'
+                                                      , $this->_dbStyle
+                                                      )
+                              ) ;
+        $this->_model->addInfo(
+                CompanyDao::getDDInfo( 'company'
+                                     , $this->_dbStyle
+                                     )
+                              ) ;
+        $this->_model->addInfo(
+                ContactDao::getDDInfo( 'contact'
+                                     , $this->_dbStyle
+                                     )
+                              ) ;
+        $this->_model->addInfo(
+                JobDao::getDDInfo( 'job'
+                                 , $this->_dbStyle
+                                 )
+                              ) ;
+
+//        var_dump( 'info', $this->_model ) ;
+        echo "Hey me!\n" ; exit ;
+
+        $this->_model->addInfo(
+                JobKeywordDao::getDDInfo( 'jobKeyword'
+                                        , $this->_dbStyle
+                                        )
+                              ) ;
+        $this->_model->addInfo(
+                KeywordDao::getDDInfo( 'keyword'
+                                     , $this->_dbStyle
+                                     )
+                              ) ;
+        $this->_model->addInfo(
+                NoteDao::getDDInfo( 'note'
+                                  , $this->_dbStyle
+                                  )
+                              ) ;
+        $this->_model->addInfo(
+                SearchDao::getDDInfo( 'search'
+                                    , $this->_dbStyle
+                                    )
+                              ) ;
+
+    }
+
+    /**
+     *
+     * List of DDModel structures
+     */
+    public function getModels() {
+        return $this->_model ;
     }
 
     /**

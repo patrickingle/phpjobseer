@@ -99,7 +99,7 @@ class ContactDao extends DaoBase {
                          . "   AND note.appliestoTable = 'contact'\n"
                          . "     ;\n"
                          ) ;
-        return $info() ;
+        return $info ;
     }
 
     /**

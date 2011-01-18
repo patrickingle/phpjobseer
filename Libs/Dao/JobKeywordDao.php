@@ -25,6 +25,61 @@ require_once("Libs/autoload.php");
 class JobKeywordDao extends DaoBase {
 
     /**
+     * static function that creates a new DDInfo record and returns it set up
+     * for the concrete class.
+     * @param $dbName Name of the table
+     * @param $dbStyle Style of database to create
+     * @return DDInfo
+     */
+    static public function getDDInfo( $tableName, $dbStyle ) {
+        $info = new DDInfo($tableName, $dbStyle) ;
+        $info->addColumn( 'jobId'
+                        , 'INT'
+                        , false
+                        , null
+                        , array( 'unsigned' => true )
+                        ) ;
+        $info->addColumn( 'keywordId'
+                        , 'INT'
+                        , false
+                        , null
+                        , array( 'unsigned' => true )
+                        ) ;
+        $info->addColumn( 'created'
+                        , 'TIMESTAMP'
+                        , false
+                        , '0000-00-00 00:00:00'
+                        ) ;
+        $info->addColumn( 'updated'
+                        , 'TIMESTAMP'
+                        , false
+                        , 'CURENT_TIMESTAMP'
+                        , 'ON UPDATE CURRENT_TIMESTAMP'
+                        ) ;
+        $info->addKey( 'PRIMARY'
+                     , 'jobKeywordPk'
+                     , array( 'jobId', 'keywordId' )
+                     ) ;
+        $info->addKey( 'FOREIGN'
+                     , 'jobFk'
+                     , array( 'jobId' )
+                     , array( 'references' => 'job(jobId)'
+                            , 'onDelete' => 'NO ACTION'
+                            , 'onUpdate' => 'NO ACTION'
+                            )
+                     ) ;
+        $info->addKey( 'FOREIGN'
+                     , 'keywordFk'
+                     , array( 'keywordId' )
+                     , array( 'references' => 'keyword(keywordId)'
+                            , 'onDelete' => 'NO ACTION'
+                            , 'onUpdate' => 'NO ACTION'
+                            )
+                     ) ;
+        return $info ;
+    }
+
+    /**
      * validateRowForInsertOrUpdate does all the "other" checks needed to verify
      * a row is valid for insert/update besides whether or not the row ID is
      * present or not.

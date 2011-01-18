@@ -20,7 +20,24 @@
  *
  */
 
+require_once( 'Libs/Config.php' ) ;
+
 function __autoload( $class_name ) {
+    error_reporting(-1);
+    ini_set('display_errors', 'on');
+    static $cfg = null ;
+    if ( $cfg === null ) {
+        $cfg = new Config ;
+    }
+    date_default_timezone_set( $cfg->values[ 'timeZone' ] ) ;
+    $script_tz = date_default_timezone_get();
+    if (strcmp($script_tz, ini_get( 'date.timezone' ))){
+        $errMsg = "Timezone Difference: $script_tz != " . ini_get( 'date.timezone' ) ;
+        echo "$errMsg\n" ;
+        throw Exception ( $errMsg ) ;
+//    } else {
+//        echo 'Script timezone and ini-set timezone match.';
+    }
     switch (true) {
         case ( preg_match( '/Controller(Base|)$/', $class_name ) ) :
             $reqFile = 'Libs/Controllers/' . $class_name . '.php' ;

@@ -95,7 +95,7 @@ class CompanyDao extends DaoBase {
                          . "   AND note.appliestoTable = 'company'\n"
                          . "     ;\n"
                          ) ;
-        return $info() ;
+        return $info ;
     }
 
     /**

@@ -138,7 +138,7 @@ class KeywordDao extends DaoBase {
                          . "   AND note.appliestoTable = 'keyword'\n"
                          . "     ;\n"
                          ) ;
-        return $info() ;
+        return $info ;
     }
 
     /**

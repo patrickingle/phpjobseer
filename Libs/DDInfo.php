@@ -60,6 +60,7 @@ class DDInfo {
                 $textBlobExtras        = array( 'defaultAllowed'     => false
                                               , 'sizeAllowed'        => false ) ;
                 $DecimalExtras         = array( 'sizeRequired'       => true ) ;
+                $serialExtras          = array() ;
                 $this->_addSupportedType( 'TINYINT'      , 'TINYINT'    , $intExtras ) ;
                 $this->_addSupportedType( 'SMALLINT'     , 'SMALLINT'   , $intExtras ) ;
                 $this->_addSupportedType( 'MEDIUMINT'    , 'MEDIUMINT'  , $intExtras ) ;
