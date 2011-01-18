@@ -52,6 +52,7 @@ class CompanyListView {
                       , 'created'
                       , 'updated'
                       ) ;
+        $cols = count( $cells ) ;
         $oCompany = new CompanyDao() ;
         if ( isset( $_POST[ 'action' ] )
           && ( "Search" === $_POST[ 'action' ] )
@@ -69,9 +70,10 @@ class CompanyListView {
         }
        
         $count = 1 ;
+        print $headerRow ;
         foreach ( $companyResults as $company ) {
-            if ( 1 == $count % $headerRepeatCount ) {
-                print $headerRow;
+            if ( ( 1 == $count % $headerRepeatCount ) && ( $count > 1 ) ) {
+                print $headerRow ;
             }
             $count++ ;
             $nextActionStyle = 'nextActionDue' ;
@@ -115,6 +117,15 @@ class CompanyListView {
             }
             print "</tr>\n";
         }
+        print "<tr>"
+            . "<td colspan=$cols>"
+            . "<form action=\"addCompany.php\">"
+            . "<center>"
+            . "<input type=submit value=\"Add Company\" />"
+            . "</center>"
+            . "</form>"
+            . "</td>"
+            . "</tr>\n" ;
         print "</table>\n";
         PageData :: pageFooter();
     }

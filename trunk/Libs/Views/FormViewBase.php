@@ -92,6 +92,10 @@ abstract class FormViewBase {
                 }
                 break ;
 
+            case 'PHONE NUMBER' :
+                $form->addelement( 'text', $fieldName, $fieldLabel, $options ) ;
+                break ;
+
             case ( preg_match( '/^VARCHAR\(([1-9][0-9]+)\)$/'
                              , $dataType
                              , $matches

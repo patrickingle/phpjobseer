@@ -30,7 +30,7 @@ class ContactDao extends DaoBase {
      * @return void
      */
     public function __construct() {
-        parent::__construct('contact');
+    	parent::__construct('contact');
         $this->populateFields(null);
     }
 
@@ -110,7 +110,7 @@ class ContactDao extends DaoBase {
      * @return array Default values for new records
      */
     public function getDefaults() {
-        return array( 'contactId' => ''
+    	return array( 'contactId' => ''
                     , 'contactCompanyId' => ''
                     , 'contactName' => ''
                     , 'contactEmail' => ''
@@ -162,7 +162,7 @@ class ContactDao extends DaoBase {
      * @return void
      */
     public function populateFields($fieldValues) {
-        $this->_fieldDescriptions = array();
+    	$this->_fields = array();
 
         $x = new FieldDescription();
         $y = isset($fieldValues['contactId']) ? $fieldValues['contactId'] : null;
@@ -177,23 +177,23 @@ class ContactDao extends DaoBase {
                         , null                  // $fieldHelp
                         , null                  // $fieldValidator
                         );
-        $_fieldDescriptions[] = $x;
-
+        $this->_fields[$x->getFieldName()] = $x;
+                        
         $x = new FieldDescription();
-        $y = isset($fieldValues['companyId']) ? $fieldValues['companyId'] : null;
-        $x->setAllFields( 'companyId'           // $fieldName
+        $y = isset($fieldValues['contactCompanyId']) ? $fieldValues['contactCompanyId'] : null;
+        $x->setAllFields( 'contactCompanyId'    // $fieldName
                         , $y                    // $fieldValue
                         , 'REFERENCE(Company)'  // $dataType
                         , 1                     // $sortKey
                         , 1                     // $userCanChange
                         , 1                     // $userCanSee
-                        , 'Id'                  // $fieldLabel
+                        , 'Works For'           // $fieldLabel
                         , ''                    // $quote
                         , null                  // $fieldHelp
                         , null                  // $fieldValidator
                         );
-        $_fieldDescriptions[] = $x;
-
+        $this->_fields[$x->getFieldName()] = $x;
+                        
         $x = new FieldDescription();
         $y = isset($fieldValues['contactName']) ? $fieldValues['contactName'] : null;
         $x->setAllFields( 'contactName'         // $fieldName
@@ -202,28 +202,13 @@ class ContactDao extends DaoBase {
                         , 1                     // $sortKey
                         , 1                     // $userCanChange
                         , 1                     // $userCanSee
-                        , 'Id'                  // $fieldLabel
+                        , 'Name'                // $fieldLabel
                         , '\''                  // $quote
                         , null                  // $fieldHelp
                         , null                  // $fieldValidator
                         );
-        $_fieldDescriptions[] = $x;
-
-        $x = new FieldDescription();
-        $y = isset($fieldValues['contactName']) ? $fieldValues['contactName'] : null;
-        $x->setAllFields( 'contactName'         // $fieldName
-                        , $y                    // $fieldValue
-                        , 'VARCHAR(255)'        // $dataType
-                        , 1                     // $sortKey
-                        , 1                     // $userCanChange
-                        , 1                     // $userCanSee
-                        , 'Id'                  // $fieldLabel
-                        , '\''                  // $quote
-                        , null                  // $fieldHelp
-                        , null                  // $fieldValidator
-                        );
-        $_fieldDescriptions[] = $x;
-
+        $this->_fields[$x->getFieldName()] = $x;
+                        
         $x = new FieldDescription();
         $y = isset($fieldValues['contactEmail']) ? $fieldValues['contactEmail'] : null;
         $x->setAllFields( 'contactEmail'        // $fieldName
@@ -232,28 +217,28 @@ class ContactDao extends DaoBase {
                         , 1                     // $sortKey
                         , 1                     // $userCanChange
                         , 1                     // $userCanSee
-                        , 'Id'                  // $fieldLabel
+                        , 'Email'               // $fieldLabel
                         , '\''                  // $quote
                         , null                  // $fieldHelp
                         , null                  // $fieldValidator
                         );
-        $_fieldDescriptions[] = $x;
-
+        $this->_fields[$x->getFieldName()] = $x;
+                        
         $x = new FieldDescription();
-        $y = isset($fieldValues['contactEmail']) ? $fieldValues['contactEmail'] : null;
+        $y = isset($fieldValues['contactPhone']) ? $fieldValues['contactPhone'] : null;
         $x->setAllFields( 'contactPhone'        // $fieldName
                         , $y                    // $fieldValue
                         , 'PHONE NUMBER'        // $dataType
                         , 1                     // $sortKey
                         , 1                     // $userCanChange
                         , 1                     // $userCanSee
-                        , 'Id'                  // $fieldLabel
+                        , 'Phone Number'        // $fieldLabel
                         , ''                    // $quote
                         , null                  // $fieldHelp
                         , null                  // $fieldValidator
                         );
-        $_fieldDescriptions[] = $x;
-
+        $this->_fields[$x->getFieldName()] = $x;
+                        
         $x = new FieldDescription();
         $y = isset($fieldValues['contactAlternatePhone']) ? $fieldValues['contactAlternatePhone'] : null;
         $x->setAllFields( 'contactAlternatePhone' // $fieldName
@@ -262,13 +247,13 @@ class ContactDao extends DaoBase {
                         , 1                       // $sortKey
                         , 1                       // $userCanChange
                         , 1                       // $userCanSee
-                        , 'Id'                    // $fieldLabel
+                        , 'Other Phone'           // $fieldLabel
                         , ''                      // $quote
                         , null                    // $fieldHelp
                         , null                    // $fieldValidator
                         );
-        $_fieldDescriptions[] = $x;
-
+        $this->_fields[$x->getFieldName()] = $x;
+                        
         $x = new FieldDescription();
         $y = isset($fieldValues['created']) ? $fieldValues['created'] : null;
         $x->setAllFields( 'created'             // $fieldName
@@ -283,8 +268,8 @@ class ContactDao extends DaoBase {
                                                 // $fieldHelp
                         , null                  // $fieldValidator
                         );
-        $_fieldDescriptions[] = $x;
-
+        $this->_fields[$x->getFieldName()] = $x;
+                        
         $x = new FieldDescription();
         $y = isset($fieldValues['updated']) ? $fieldValues['updated'] : null;
         $x->setAllFields( 'updated'             // $fieldName
@@ -299,8 +284,8 @@ class ContactDao extends DaoBase {
                                                 // $fieldHelp
                         , null                  // $fieldValidator
                         );
-        $_fieldDescriptions[] = $x;
-
+        $this->_fields[$x->getFieldName()] = $x;
+                        
     }
 
 }
