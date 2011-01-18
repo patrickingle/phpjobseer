@@ -24,7 +24,7 @@ if [ "--verbose" = "$1" ] ; then
 fi
 for i in `find . -name \*.php -print`
 do
-    err="`php -l "$i" | grep -v \"^No syntax errors detected in $i\$\"`"
+    err="`php -l "$i" 2>&1 | grep -v \"^No syntax errors detected in $i\$\"`"
     if [ ! -z "$err" ] ; then
         echo "Syntax error detected in $i: $err"
         exit 1
@@ -32,5 +32,5 @@ do
 done
 echo "Code appears to be free from syntax errors."
 
-phpunit $verbose $testfile
+phpunit $verbose $testfile 2>&1
 exit $?

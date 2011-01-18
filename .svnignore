@@ -3,3 +3,4 @@
 .settings
 .htaccess
 ci_test.sh
+buildStatus.html
