@@ -55,7 +55,7 @@ class DDModel {
                               break ;
         }
         $this->_dbStyle    = $dbStyle ;
-		$this->_ddInfoList = null ;
+		$this->_ddInfoList = array() ;
 	}
 
     /**
@@ -74,7 +74,7 @@ class DDModel {
      * @param DDInfo $info
      */
 	public function addInfo( $info ) {
-		if ( is_a( $info, DDInfo ) ) {
+	    if ( is_a( $info, 'DDInfo' ) ) {
 			$this->_ddInfoList[] = $info ;
 		}
 	}

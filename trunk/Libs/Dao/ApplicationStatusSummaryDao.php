@@ -31,8 +31,8 @@ class ApplicationStatusSummaryDao extends DaoBase {
      * @param $dbStyle Style of database to create
      * @return DDInfo
      */
-    static public function getDDInfo($tableName, $dbStyle) {
-        $info = new DDInfo($tableName, $dbStyle) ;
+    static public function getDDInfo( $tableName, $dbStyle ) {
+        $info = new DDInfo( $tableName, $dbStyle ) ;
         $info->addColumn( 'applicationStatusId'
                         , 'INT'
                         , false
@@ -68,7 +68,94 @@ class ApplicationStatusSummaryDao extends DaoBase {
                             )
                      ) ;
 
-        return $info() ;
+        return $info ;
+    }
+
+    /**
+     * getDefaults acts like DaoBase::getRowById returning a hash of fields to
+     * column values to be used by the insertRow routine to compare values with
+     * for default values at row insertion time.
+     *
+     * @return array Default values for new records
+     */
+    public function getDefaults() {
+        return array( 'applicationStatusId' => ''
+                    , 'statusCount' => 0
+                    , 'created' => ''
+                    , 'updated' => ''
+                    );
+    }
+
+    /**
+     * populateFields
+     *
+     * @return void
+     */
+    public function populateFields($fieldValues) {
+        $_fieldDescriptions = array();
+
+        $x = new FieldDescription();
+        $y = isset($fieldValues['applicationStatusId']) ? $fieldValues['applicationStatusId'] : null;
+        $x->setAllFields( 'applicationStatusId' // $fieldName
+                        , $y                    // $fieldValue
+                        , 'INTEGER UNSIGNED'    // $dataType
+                        , 1                     // $sortKey
+                        , 0                     // $userCanChange
+                        , 1                     // $userCanSee
+                        , 'Id'                  // $fieldLabel
+                        , ''                    // $quote
+                        , null                  // $fieldHelp
+                        , null                  // $fieldValidator
+                        );
+        $_fieldDescriptions[] = $x;
+
+        $x = new FieldDescription();
+        $y = isset($fieldValues['statusCount']) ? $fieldValues['statusCount'] : null;
+        $x->setAllFields( 'statusCount'         // $fieldName
+                        , $y                    // $fieldValue
+                        , 'INTEGER UNSIGNED'    // $dataType
+                        , 1                     // $sortKey
+                        , 0                     // $userCanChange
+                        , 1                     // $userCanSee
+                        , 'Count'               // $fieldLabel
+                        , ''                    // $quote
+                        , null                  // $fieldHelp
+                        , null                  // $fieldValidator
+                        );
+        $_fieldDescriptions[] = $x;
+
+        $x = new FieldDescription();
+        $y = isset($fieldValues['created']) ? $fieldValues['created'] : null;
+        $x->setAllFields( 'created'             // $fieldName
+                        , $y                    // $fieldValue
+                        , 'TIMESTAMP'           // $dataType
+                        , 999                   // $sortKey
+                        , 0                     // $userCanChange
+                        , 1                     // $userCanSee
+                        , 'Created'             // $fieldLabel
+                        , '\''                  // $quote
+                        , 'When was this record created?'
+                                                // $fieldHelp
+                        , null                  // $fieldValidator
+                        );
+        $_fieldDescriptions[] = $x;
+
+        $x = new FieldDescription();
+        $y = isset($fieldValues['updated']) ? $fieldValues['updated'] : null;
+        $x->setAllFields( 'updated'             // $fieldName
+                        , $y                    // $fieldValue
+                        , 'TIMESTAMP'           // $dataType
+                        , 999                   // $sortKey
+                        , 0                     // $userCanChange
+                        , 1                     // $userCanSee
+                        , 'Updated'             // $fieldLabel
+                        , '\''                  // $quote
+                        , 'When was this record last updated?'
+                                                // $fieldHelp
+                        , null                  // $fieldValidator
+                        );
+        $_fieldDescriptions[] = $x;
+
     }
 
     /**

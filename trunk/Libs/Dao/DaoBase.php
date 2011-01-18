@@ -22,6 +22,21 @@
 
 require_once("Libs/autoload.php");
 
+/**
+ *
+ * DAO Base Class
+ *
+ * In order to use this base class, you must implement the following methods:
+ *
+ *     abstract public function getDefaults() ;
+ *     abstract static public function getDDInfo( $tableName, $dbStyle ) ;
+ *     abstract public function populateFields( $fieldValues ) ;
+ *     abstract public function validateRowForInsert( $rowValues ) ;
+ *     abstract public function validateRowForUpdate( $rowValues ) ;
+ *
+ * @author kbenton
+ *
+ */
 abstract class DaoBase {
     /**
      * @var Object Database reference pointer
@@ -64,7 +79,7 @@ abstract class DaoBase {
      * @param $dbStyle Style of database to create
      * @return DDInfo
      */
-    abstract static public function getDDInfo($tableName, $dbStyle) ;
+    abstract static public function getDDInfo( $tableName, $dbStyle ) ;
 
     /**
      * populateFields creates an array of FieldDescription's.  This function is

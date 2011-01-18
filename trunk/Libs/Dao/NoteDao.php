@@ -120,7 +120,7 @@ class NoteDao extends DaoBase {
                      , 'appliesToIx'
                      , array( 'appliesToTable', 'appliesToId', 'created' )
                      ) ;
-        return $info() ;
+        return $info ;
     }
 
     /**

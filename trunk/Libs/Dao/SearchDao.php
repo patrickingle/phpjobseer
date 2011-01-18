@@ -23,6 +23,21 @@
 require_once("Libs/autoload.php");
 
 class SearchDao extends DaoBase {
+/**
+ *
+ * DAO Base Class
+ *
+ * In order to use this base class, you must implement the following methods:
+ *
+ *     abstract public function getDefaults() ;
+ *     abstract static public function getDDInfo( $tableName, $dbStyle ) ;
+ *     abstract public function populateFields( $fieldValues ) ;
+ *     abstract public function validateRowForInsert( $rowValues ) ;
+ *     abstract public function validateRowForUpdate( $rowValues ) ;
+ *
+ * @author kbenton
+ *
+ */
 
     /**
      * validateRowForInsertOrUpdate does all the "other" checks needed to verify
@@ -69,8 +84,8 @@ class SearchDao extends DaoBase {
      * @return void
      */
     public function __construct() {
-        parent::__construct('search');
-         $this->populateFields();
+        parent::__construct( 'search' );
+        $this->populateFields();
     }
 
     /**
@@ -80,8 +95,8 @@ class SearchDao extends DaoBase {
      * @param $dbStyle Style of database to create
      * @return DDInfo
      */
-    static public function getDDInfo($tableName, $dbStyle) {
-        $info = new DDInfo($tableName, $dbStyle) ;
+    static public function getDDInfo( $tableName, $dbStyle ) {
+        $info = new DDInfo( $tableName, $dbStyle ) ;
         $info->addColumn( 'searchId'
                         , 'SERIAL'
                         , false
@@ -136,7 +151,7 @@ class SearchDao extends DaoBase {
                          . "   AND note.appliestoTable = 'search'\n"
                          . "     ;\n"
                          ) ;
-        return $info() ;
+        return $info ;
     }
 
     /**

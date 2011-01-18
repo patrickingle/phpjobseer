@@ -64,6 +64,7 @@ class Config {
                                                               // reset completely using resetDb.php
             $this->values['browserRoot']      = 'http://localhost' ; // Used to test the system.
             $this->values['browserDir']       = '/test_dir/' ; // Used to test the system.
+            $this->values['timeZone']         = 'America/Chicago' ;  // Time Zone
     	}
     }
 }

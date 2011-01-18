@@ -186,7 +186,7 @@ class JobDao extends DaoBase {
                          . "   AND note.appliestoTable = 'job'\n"
                          . "     ;\n"
                          ) ;
-        return $info() ;
+        return $info ;
     }
 
     /**
