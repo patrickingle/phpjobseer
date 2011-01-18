@@ -52,6 +52,7 @@ class ContactListView {
                       , 'created'
                       , 'updated'
                       ) ;
+        $cols = count( $cells ) ;
         $oContact = new ContactDao() ;
         if ( isset( $_POST[ 'action' ] )
           && ( "Search" === $_POST[ 'action' ] )
@@ -69,9 +70,10 @@ class ContactListView {
         }
        
         $count = 1 ;
+        print $headerRow  ;
         foreach ( $contactResults as $contact ) {
-            if ( 1 == $count % $headerRepeatCount ) {
-                print $headerRow;
+            if ( ( 1 == $count % $headerRepeatCount ) && ( $count > 1 ) ) {
+                print $headerRow ;
             }
             $count++ ;
             $nextActionStyle = 'nextActionDue' ;
@@ -105,6 +107,15 @@ class ContactListView {
             }
             print "</tr>\n";
         }
+        print "<tr>"
+            . "<td colspan=$cols>"
+            . "<form action=\"addContact.php\">"
+            . "<center>"
+            . "<input type=submit value=\"Add Contact\" />"
+            . "</center>"
+            . "</form>"
+            . "</td>"
+            . "</tr>\n" ;
         print "</table>\n";
         PageData :: pageFooter();
     }

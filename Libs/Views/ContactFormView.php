@@ -23,20 +23,22 @@
 
 require_once('HTML/QuickForm.php') ;
 
-class CompanyFormView extends FormViewBase {
+class ContactFormView extends FormViewBase {
 
-    private $_oCompany = null ;
-    private $_companyId = null ;
+    private $_oContact = null ;
+    private $_contactId = null ;
+    private $_fields = null ;
+    private $_formValues = null ;
 
     /**
      * Constructor
      */
-    public function __construct( $companyId = null ) {
-        parent::__construct( 'CompanyChangeForm'
+    public function __construct( $contactId = null ) {
+        parent::__construct( 'ContactChangeForm'
                            , 'post'
-                           , 'saveCompanyChanges.php'
+                           , 'saveContactChanges.php'
                            ) ;
-        $this->loadFormValues( $companyId ) ;
+        $this->loadFormValues( $contactId ) ;
     }
 
     /**
@@ -48,29 +50,29 @@ class CompanyFormView extends FormViewBase {
     }
 
     /**
-     * Get the form values for display by company ID
+     * Get the form values for display by contact ID
      *
-     * @param  int $companyId
+     * @param  int $contactId
      * @return boolean True when values loaded successfully, false otherwise
      */
-    public function loadFormValues( $companyId ) {
-        $this->_companyId = null ;
-    	$oCompany = new CompanyDao() ;
-        if ( null === $companyId ) {
-            $this->_companyId = $companyId ;
-            $this->_formValues = $oCompany->getDefaults() ;
+    public function loadFormValues( $contactId ) {
+    	$this->_contactId = null ;
+    	$oContact = new ContactDao() ;
+        if ( null === $contactId ) {
+        	$this->_contactId = $contactId ;
+            $this->_formValues = $oContact->getDefaults() ;
         }
         else {
-            if ( ! $oCompany->validateRowId( $companyId ) ) {
-                echo "<p class=\"error\">Invalid Company ID</p>" ;
+            if ( ! $oContact->validateRowId( $contactId ) ) {
+                echo "<p class=\"error\">Invalid Contact ID</p>" ;
                 return false ;
             }
-            $this->_companyId = $companyId ;
-            $this->_formValues = $oCompany->getRowById( $companyId ) ;
+            $this->_contactId = $contactId ;
+            $this->_formValues = $oContact->getRowById( $contactId ) ;
         }
-        $oCompany->populateFields($this->_formValues) ;
-        $this->_fields = $oCompany->getFields() ;
-        $this->_oCompany = $oCompany ;
+        $oContact->populateFields( $this->_formValues ) ;
+        $this->_fields = $oContact->getFields() ;
+        $this->_oContact = $oContact ;
     }
 
     /**
@@ -82,23 +84,23 @@ class CompanyFormView extends FormViewBase {
         $maxFieldLength = 80 ;
         $dateOptions = array( 'language' => 'en', 'format'   => 'YMdHi' ) ;
         $sortedFields = $this->_fields ;
-        if ( !isset($this->_fields)) {
+        if ( !isset( $this->_fields ) ) {
             return ;
         }
-        usort($sortedFields, 'CompanyFormView::cmpFields') ;
+        usort($sortedFields, 'ContactFormView::cmpFields') ;
         $constants=array() ;
         $defaults=array() ;
 
-        $companyId = $this->_formValues['companyId'] ;
-        $this->_form->addElement( 'hidden', 'companyId', $companyId ) ;
-        $constants['companyId'] = $companyId ;
-        $companyIdText = isset( $companyId ) && ( '' <> $companyId ) ? $companyId : "0" ;
+        $contactId = $this->_formValues[ 'contactId' ] ;
+        $this->_form->addElement( 'hidden', 'contactId', $contactId ) ;
+        $constants[ 'contactId' ] = $contactId ;
+        $contactIdText = isset( $contactId ) && ( '' <> $contactId ) ? $contactId : "0" ;
         
         foreach ( $this->_fields as $field ) {
             if ( ! $field->getUserCanSee() ) {
                 continue ;
             }
-            $value = $this->_formValues[$field->getFieldName()] ;
+            $value = $this->_formValues[ $field->getFieldName() ] ;
             if ( ! $field->getUserCanChange() ) {
                 $this->_form->addElement( 'static'
                                         , $field->getFieldName()
@@ -109,7 +111,7 @@ class CompanyFormView extends FormViewBase {
             }
             $dataType = $field->getDataType() ;
 
-            switch ( $dataType ) {
+            switch ($dataType) {
                 case ( $this->prepFormElement( $dataType
                                              , $this->_form
                                              , $value
@@ -123,19 +125,19 @@ class CompanyFormView extends FormViewBase {
                      ? $dataType : ! $dataType ) :
                     // Do nothing here because prepFormElement did it for me.
                     break ;
-                case 'REFERENCE(Contact)' :
-                    // @todo AJAX Contacts - have the client load values.
-                    $oContact = new ContactDao() ;
-                    $results = $oContact->findSome( "1 = 1 order by contactName" ) ;
+                case 'REFERENCE(Company)' :
+                    // @todo AJAX Companies - have the client load values.
+                    $oCompany = new CompanyDao() ;
+                    $results = $oCompany->findSome( "1 = 1 order by companyName" ) ;
                     $contacts = array( '0' => ''
-                                     , 'Add new contact'=> 'Add new contact'
+                                     , 'Add new company'=> 'Add new company'
                                      ) ;
                     foreach ( $results as $result ) {
-                        if ( $result[ 'contactId' ] > 0 ) {
-                            $name = $result[ 'contactName' ] ;
-                            $contacts[ $result[ 'contactId' ] ] = $name ;
-                            if ( $this->_formValues[ 'primaryContactId' ]
-                                 === $result[ 'contactId' ]
+                        if ( $result[ 'companyId' ] > 0 ) {
+                            $name = $result[ 'companyName' ] ;
+                            $contacts[ $result[ 'companyId' ] ] = $name ;
+                            if ( $this->_formValues[ 'companyId' ]
+                                 === $result[ 'companyId' ]
                                ) {
                                 $value = $name ;
                             }
@@ -146,30 +148,8 @@ class CompanyFormView extends FormViewBase {
                                             , $field->getFieldLabel()
                                             , $contacts
                                             , array( 'alt' => $field->getFieldHelp()
-                                                   , 'onchange' => "checkForAddNewContact($companyIdText, this.value)"
+                                                   , 'onchange' => "checkForAddNewContact($contactIdText, this.value)"
                                                    )
-                                            ) ;
-                    break ;
-                case 'REFERENCE(ApplicationStatus)':
-                    $oApplicationStatus = new ApplicationStatusDao() ;
-                    $results = $oApplicationStatus->findAll() ;
-                    $statuses = array() ;
-                    foreach ( $results as $result ) {
-                        if ( $result[ 'applicationStatusId' ] > 0 ) {
-                            $name = $result[ 'statusValue' ] ;
-                            $statuses[ $result[ 'applicationStatusId' ] ] = $name ;
-                            if ( $this->_formValues[ 'applicationStatusId' ]
-                                 === $result[ 'applicationStatusId' ]
-                               ) {
-                                $value = $result[ 'applicationStatusId' ] ;
-                            }
-                        }
-                    }
-                    $this->_form->addElement( 'select'
-                                            , $field->getFieldName()
-                                            , $field->getFieldLabel()
-                                            , $statuses
-                                            , array( 'alt' => $field->getFieldHelp() )
                                             ) ;
                     break ;
                 default:
@@ -208,11 +188,11 @@ class CompanyFormView extends FormViewBase {
                                         ) ;
             }
 
-            if ( $field->getUserCanChange() ) {
-                $defaults[ $field->getFieldName() ]=$value ;
+            if ($field->getUserCanChange()) {
+                $defaults[$field->getFieldName()]=$value ;
             }
             else {
-                $constants[ $field->getFieldName() ]=$value ;
+                $constants[$field->getFieldName()]=$value ;
             }
         }
         $options = array( "rows"=>"5"
@@ -224,21 +204,21 @@ class CompanyFormView extends FormViewBase {
                                 , $options
                                 ) ;
 
-        $this->_form->addElement( 'submit', null, 'Save Changes' ) ;
-        $this->_form->setConstants( $constants ) ;
-        $this->_form->setDefaults( $defaults ) ;
+        $this->_form->addElement('submit', null, 'Save Changes') ;
+        $this->_form->setConstants($constants) ;
+        $this->_form->setDefaults($defaults) ;
         $this->_form->display() ;
-        if ( null !== $companyId ) {
+        if ( null !== $contactId ) {
             $oNote = new NoteDao() ;
-            $results = $oNote->findSome(      "appliesToTable = 'company'"
-                                       . " AND appliesToId = $companyId"
+            $results = $oNote->findSome(      "appliesToTable = 'contact'"
+                                       . " AND appliesToId = $contactId"
                                        . " ORDER BY created DESC"
                                        ) ;
-            foreach ( $results as $result ) {
+            foreach ($results as $result) {
                 echo "<p /><hr />"
-                   . $result[ 'updated' ]
+                   . $result['updated']
                    . "<br /><pre>"
-                   . $result[ 'note' ]
+                   . $result['note']
                    . "</pre>" ;
             }
         }
