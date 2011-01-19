@@ -31,8 +31,8 @@ class JobKeywordDao extends DaoBase {
      * @param $dbStyle Style of database to create
      * @return DDInfo
      */
-    static public function getDDInfo( $tableName, $dbStyle ) {
-        $info = new DDInfo($tableName, $dbStyle) ;
+    static public function getDDInfo($tableName, $dbStyle) {
+        $info = new DDInfo( $tableName, $dbStyle ) ;
         $info->addColumn( 'jobId'
                         , 'INT'
                         , false
@@ -64,16 +64,16 @@ class JobKeywordDao extends DaoBase {
                      , 'jobFk'
                      , array( 'jobId' )
                      , array( 'references' => 'job(jobId)'
-                            , 'onDelete' => 'NO ACTION'
-                            , 'onUpdate' => 'NO ACTION'
+                            , 'onDelete' => 'CASCADE'
+                            , 'onUpdate' => 'CASCADE'
                             )
                      ) ;
         $info->addKey( 'FOREIGN'
                      , 'keywordFk'
                      , array( 'keywordId' )
                      , array( 'references' => 'keyword(keywordId)'
-                            , 'onDelete' => 'NO ACTION'
-                            , 'onUpdate' => 'NO ACTION'
+                            , 'onDelete' => 'CASCADET'
+                            , 'onUpdate' => 'CASCADE'
                             )
                      ) ;
         return $info ;
@@ -121,50 +121,6 @@ class JobKeywordDao extends DaoBase {
     public function __construct($fieldValues = null) {
         parent::__construct('jobKeywordMap');
         $this->populateFields($fieldValues);
-    }
-
-    /**
-     * static function that creates a new DDInfo record and returns it set up
-     * for the concrete class.
-     * @param $dbName Name of the table
-     * @param $dbStyle Style of database to create
-     * @return DDInfo
-     */
-    static public function getDDInfo($tableName, $dbStyle) {
-        $info = new DDInfo($tableName, $dbStyle) ;
-        $info->addColumn( 'jobId'
-                        , 'INT'
-                        , false
-                        , null
-                        , array( 'unsigned' => true )
-                        ) ;
-        $info->addColumn( 'kewordId'
-                        , 'INT'
-                        , false
-                        , null
-                        , array( 'unsigned' => true )
-                        ) ;
-        $info->addKey( 'PRIMARY'
-                     , 'jobPk'
-                     , array( 'jobId', 'kewordId' )
-                     ) ;
-        $info->addKey( 'FOREIGN'
-                     , 'jobKeywordPk'
-                     , array( 'jobId' )
-                     , array( 'references' => 'job(jobId)'
-                            , 'onDelete' => 'CASCADE'
-                            , 'onUpdate' => 'CASCADE'
-                            )
-                     ) ;
-        $info->addKey( 'FOREIGN'
-                     , 'keywordFk'
-                     , array( 'keywordId' )
-                     , array( 'references' => 'keyword(keywordId)'
-                            , 'onDelete' => 'CASCADET'
-                            , 'onUpdate' => 'CASCADE'
-                            )
-                     ) ;
-        return $info() ;
     }
 
     /**
