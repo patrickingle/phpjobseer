@@ -25,16 +25,12 @@ require_once( 'Libs/Config.php' ) ;
 function __autoload( $class_name ) {
     error_reporting(-1);
     ini_set('display_errors', 'on');
-    static $cfg = null ;
-    if ( $cfg === null ) {
-        $cfg = new Config ;
-    }
-    date_default_timezone_set( $cfg->values[ 'timeZone' ] ) ;
+    date_default_timezone_set( Config::timeZone ) ;
     $script_tz = date_default_timezone_get();
-    if (strcmp($script_tz, ini_get( 'date.timezone' ))){
+    if ( strcmp( $script_tz, ini_get( 'date.timezone' ) ) ) {
         $errMsg = "Timezone Difference: $script_tz != " . ini_get( 'date.timezone' ) ;
         echo "$errMsg\n" ;
-        throw Exception ( $errMsg ) ;
+        throw new Exception ( $errMsg ) ;
 //    } else {
 //        echo 'Script timezone and ini-set timezone match.';
     }
