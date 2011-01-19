@@ -15,7 +15,7 @@ class TL_PageWrapperChecks {
 	 */
 	public function __construct( $selTC = null ) {
 		if  ( ( ! isset( $selTC ) )
-		   || ( ! is_a( $selTC, "PHPUnit_Extensions_SeleniumTestCase" ) )
+		   || ( ! $selTC instanceof PHPUnit_Extensions_SeleniumTestCase )
 		    ) {
 			throw new Exception( "Improper construct." ) ;
 		}

@@ -74,7 +74,7 @@ class DDModel {
      * @param DDInfo $info
      */
 	public function addInfo( $info ) {
-	    if ( is_a( $info, 'DDInfo' ) ) {
+	    if ( $info instanceof DDInfo ) {
 			$this->_ddInfoList[] = $info ;
 		}
 	}
