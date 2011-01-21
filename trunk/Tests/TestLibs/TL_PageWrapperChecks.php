@@ -3,9 +3,9 @@
 class TL_PageWrapperChecks {
 
 	/** @var TL_Config */
-	private static $_TLC = null ;
+	private static $_TLC ;
 	/** @var PHPUnit_Extensions_SeleniumTestCase */
-	private $_selTC = null ;
+	private $_selTC ;
 
 	/**
 	 * 
