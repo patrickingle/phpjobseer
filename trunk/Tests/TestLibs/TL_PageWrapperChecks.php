@@ -54,11 +54,11 @@ class TL_PageWrapperChecks {
 			$this->_selTC->verificationErrors[] = "Checking header ($label): " . $e->toString() ;
 		}
 		try {
-			$this->_selTC->assertTextPresent( $this->_TLC->pageTitle ) ;
+			$this->_selTC->assertTextPresent( self::$_TLC->pageTitle ) ;
 		} catch ( PHPUnit_Framework_AssertionFailedError $e ) {
 			$this->_selTC->verificationErrors[] = "Checking header ($label): " . $e->toString() ;
 		}
-		foreach ( $this->_TLC->headerLabels as $label ) {
+		foreach ( self::$_TLC->headerLabels as $label ) {
 			try {
 				$this->_selTC->assertTextPresent( $label ) ;
 			} catch ( PHPUnit_Framework_AssertionFailedError $e ) {
