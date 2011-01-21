@@ -3,9 +3,9 @@
 class TL_PageWrapperChecks {
 
 	/** @var TL_Config */
-	private static $_TLC ;
+	private static $_TLC = null ;
 	/** @var PHPUnit_Extensions_SeleniumTestCase */
-	private $_selTC ;
+	private $_selTC = null ;
 
 	/**
 	 * 
@@ -21,8 +21,8 @@ class TL_PageWrapperChecks {
 		}
 		$this->_selTC = $selTC ;
 		// Use cached TL_Config since it doesn't change.
-		if ( ! isset( $this->_TLC ) ) {
-			$this->_TLC = new TL_Config() ;
+		if ( ! isset( self::$_TLC ) ) {
+			self::$_TLC = new TL_Config() ;
 		}
 	}
 
