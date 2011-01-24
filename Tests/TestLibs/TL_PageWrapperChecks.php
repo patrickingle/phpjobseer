@@ -28,6 +28,20 @@ class TL_PageWrapperChecks {
 
 	/**
 	 *
+	 * Check that a stack trace is not present.
+	 * @param PHPUnit_Extensions_SeleniumTestCase $selTC
+	 * @param String $label
+	 */
+	public function checkForStackTrace( $label = '' ) {
+	    try {
+	        $this->_selTC->assertTextNotPresent( 'Call Stack' ) ;
+		} catch ( PHPUnit_Framework_AssertionFailedError $e ) {
+			$this->_selTC->verificationErrors[] = "Stack traces ($label): " . $e->toString() ;
+	    }
+	}
+
+	/**
+	 *
 	 * Check that the page footer is loaded.
 	 * @param PHPUnit_Extensions_SeleniumTestCase $selTC
 	 * @param String $label

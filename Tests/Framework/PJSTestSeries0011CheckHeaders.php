@@ -25,6 +25,7 @@ class Framework_PJSTestSeries0011CheckHeaders extends PHPUnit_Extensions_Seleniu
         $this->waitForPageToLoad( $this->_TLC->maxWaitTime ) ;
         $this->_PWC->checkHeaderIsLoaded( $this, 'index' ) ;
         $this->_PWC->checkFooterIsLoaded( $this, 'index' ) ;
+        $this->_PWC->checkForStackTrace( $this, 'index' ) ;
     }
 
     function testHeaderLinksWork()
