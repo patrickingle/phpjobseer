@@ -24,8 +24,8 @@ require_once("Libs/autoload.php");
 
 class PJSDBModel {
 
-    /** @var array Hash of configuration keys to values */
-    private $_configValues = null;
+    /** @var Config Configuration */
+    private $_oConfig = null;
 
     /** @var DDModel */
     private $_model = null ;
@@ -42,9 +42,9 @@ class PJSDBModel {
      */
     public function __construct() {
         $oConfig = new Config() ;
-        $this->_configValues = $oConfig->values ;
-        $this->_dbName = $this->_configValues[ 'db_name'  ] ;
-        $this->_dbStyle = $this->_configValues[ 'db_style' ] ;
+        $this->_oConfig = $oConfig ;
+        $this->_dbName = $oConfig->getValue( 'db_name' ) ;
+        $this->_dbStyle = $oConfig->getValue( 'db_style' ) ;
         $this->_model = new DDModel( $this->_dbName
                                    , $this->_dbStyle
                                    ) ;

@@ -26,9 +26,9 @@ require_once("Libs/autoload.php");
 class DbResetView {
 
     /**
-     * @var mixed Configuration values from class Config
+     * @var Config Configuration values from class Config
      */
-    private $_configValues ;
+    private $_oConfig ;
 
     /**
      * @var mixed Database Handle
@@ -36,18 +36,37 @@ class DbResetView {
     private $_oDbh ;
 
     /**
+     * @var boolean Debug mode
+     */
+    private $_debugMode ;
+
+    /**
+     * @var boolean Test Mode
+     */
+    private $_testMode ;
+
+    /**
+     * @var String Database Name
+     */
+    private $_dbName ;
+    
+    /**
      * Class constructor
      *
      */
+
     public function __construct() {
-        $oConfig = new Config();
-        $this->_configValues = $oConfig->values;
-        $this->_oDbh = new mysqli( $this->_configValues['db_host']
-                                 , $this->_configValues['db_user']
-                                 , $this->_configValues['db_pass']
-                                 , $this->_configValues['db_name']
-                                 , $this->_configValues['db_port']
-                                 );
+        $oConfig = new Config() ;
+        $this->_debugMode = $oConfig->getValue( 'debug_mode' ) ;
+        $this->_testMode = $oConfig->getValue( 'test_mode' ) ;
+        $this->_dbName = $oConfig->getValue( 'db_name' ) ;
+        $this->_oConfig = $oConfig ;
+        $this->_oDbh = new mysqli( $oConfig->getValue( 'db_host' )
+                                 , $oConfig->getValue( 'db_user' )
+                                 , $oConfig->getValue( 'db_pass' )
+                                 , $this->_dbName
+                                 , $oConfig->getValue( 'db_port' )
+                                 ) ;
         $this->_sth = null;
     }
 
@@ -165,7 +184,7 @@ class DbResetView {
         $contentLen     = strlen( $fileContents ) ;
         for ( $i = 0 ; $i < $contentLen ; $i++ ) {
             $char = $fileContents[ $i ] ;
-            if ( 1 === $this->_configValues[ 'debug_mode' ] ) {
+            if ( 1 === $this->_debugMode ) {
                 echo "Processing \"$char\"\n" ;
             }
             if ( ( '' === $quote ) && ! $ignoreNextChar ) {
@@ -185,7 +204,7 @@ class DbResetView {
                ) {
                 $delim = $match ;
                 $delimLen = strlen( $delim ) ;
-                if ( 1 === $this->_configValues[ 'debug_mode' ] ) {
+                if ( 1 === $this->_debugMode ) {
                     echo "Changed delimiter to \"$delim\"\n" ;
                 }
                 $currentLine = '' ;
@@ -217,7 +236,7 @@ class DbResetView {
                                         , 0
                                         , strlen( $currentLine ) - $delimLen
                                         ) ;
-                        if ( 1 === $this->_configValues[ 'debug_mode' ] ) {
+                        if ( 1 === $this->_debugMode ) {
                             echo "Pushing $toPush\n" ;
                         }
                         $sqlToExecute[] = $toPush ;
@@ -258,7 +277,7 @@ class DbResetView {
         foreach ( $sqlToExecute as $query ) {
             $query = trim( $query ) ;
             if ( ! empty( $query ) ) {
-            	if ( 1 === $this->_configValues[ 'debug_mode' ] ) {
+            	if ( 1 === $this->_debugMode ) {
                     print "Executing *" . htmlentities($query) . "*\n" ;
             	}
                 $result = $this->_oDbh->query($query);
@@ -283,17 +302,18 @@ class DbResetView {
         PageData::pageHeader();
         echo '<div class="pageTitle">PHP Job Seeker</div>';
         PageData::displayNavBar();
-        if ( $this->_configValues['test_mode'] === 1 ) {
+        if ( $this->_testMode === 1 ) {
+            $dbName = $this->_dbName ;
             echo '<div>Resetting database to known state.</div>';
-            $this->_oDbh->query('DROP DATABASE IF EXISTS ' . $this->_configValues['db_name']);
-            $this->_oDbh->query('CREATE DATABASE ' . $this->_configValues['db_name']);
-            $this->_oDbh->select_db($this->_configValues['db_name']);
-            $this->processSqlFile('create_pjs_db.sql');
-            echo '<div>A clean database should be loaded.</div>';
+            $this->_oDbh->query( "DROP DATABASE IF EXISTS $dbName" ) ;
+            $this->_oDbh->query( "CREATE DATABASE $dbName" ) ;
+            $this->_oDbh->select_db( $dbName ) ;
+            $this->processSqlFile( 'create_pjs_db.sql' ) ;
+            echo '<div>A clean database should be loaded.</div>' ;
         }
         else {
         	echo "Not authorized. Check Libs/Config.php\n" ;
         }
-        PageData::pageFooter();
+        PageData::pageFooter() ;
     }
 }
