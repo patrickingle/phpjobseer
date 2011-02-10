@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE database SYSTEM "PJSConfig.dtd">
+<configuration>
+    <!-- If this is your first installation of PJS, we encourage
+         you to change the values listed below with CHANGEME in them. -->
+    <value name="db_style">MySQL</value><!-- Right now, only MySQL is supported. -->
+    <value name="timezone">CHANGEME</value><!-- Example: America/Chicago -->
+    <value name="db_host">CHANGEME</value><!-- Example: 127.0.0.1 -->
+    <value name="db_port">CHANGEME</value><!-- Example: 3306 -->
+    <value name="db_name">CHANGEME</value><!-- Example: pjs_db -->
+    <value name="db_user">CHANGEME</value><!-- Example: pjs_user -->
+    <value name="db_pass">CHANGEME</value><!-- Example: s0m3Pa55w0rd (not very secure) -->
+    <!-- The following are for testing only. Change with caution... -->
+    <value name="really_update_db">1</value><!-- This is the default -->
+    <value name="debug_mode">0</value><!-- This is the default -->
+    <!-- CAUTION: If test_mode is set to 1, it will be
+                  possible to run resetDb.php and it will
+                  wipe all existing user data from the
+                  database. Use only in a testing
+                  environment and then only with extreme
+                  caution. -->
+    <value name="test_mode">0</value><!-- This is safe the default -->
+    <value name="browserRoot">http://localhost</value>
+    <value name="browserDir">/test_dir/</value>
+</configuration>
