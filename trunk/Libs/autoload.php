@@ -25,7 +25,8 @@ require_once( 'Libs/Config.php' ) ;
 function __autoload( $class_name ) {
     error_reporting(-1);
     ini_set('display_errors', 'on');
-    date_default_timezone_set( Config::timeZone ) ;
+    $oConfig = new Config() ;
+    date_default_timezone_set( $oConfig->getValue( 'timeZone' ) ) ;
     $script_tz = date_default_timezone_get();
     if ( strcmp( $script_tz, ini_get( 'date.timezone' ) ) ) {
         $errMsg = "Timezone Difference: $script_tz != " . ini_get( 'date.timezone' ) ;
