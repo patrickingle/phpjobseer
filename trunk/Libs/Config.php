@@ -94,6 +94,7 @@ class Config {
         $paramList = array( 'db_style'         => 0
                           , 'timeZone'         => 0
                           , 'db_host'          => 0
+                          , 'db_port'          => 0
                           , 'db_name'          => 0
                           , 'db_user'          => 0
                           , 'db_pass'          => 0
@@ -105,7 +106,7 @@ class Config {
                           ) ;
         // verify that all the parameters are present and just once.
         foreach ( $xml as $v ) {
-            $key = $v[ 'name' ] ;
+            $key = ( string ) $v[ 'name' ] ;
             if  ( ( ! isset( $paramList[ $key ] ) )
                || ( $paramList[ $key ] > 0 ) ) {
                 $errors .= "Invalid or multiply set parameter: $key\n" ;

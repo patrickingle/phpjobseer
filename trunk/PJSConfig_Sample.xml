@@ -4,7 +4,7 @@
     <!-- If this is your first installation of PJS, we encourage
          you to change the values listed below with CHANGEME in them. -->
     <value name="db_style">MySQL</value><!-- Right now, only MySQL is supported. -->
-    <value name="timezone">CHANGEME</value><!-- Example: America/Chicago -->
+    <value name="timeZone">CHANGEME</value><!-- Example: America/Chicago -->
     <value name="db_host">CHANGEME</value><!-- Example: 127.0.0.1 -->
     <value name="db_port">CHANGEME</value><!-- Example: 3306 -->
     <value name="db_name">CHANGEME</value><!-- Example: pjs_db -->
