@@ -36,7 +36,7 @@ class TL_PageWrapperChecks {
 	    try {
 	        $this->_selTC->assertTextNotPresent( 'Call Stack' ) ;
 		} catch ( PHPUnit_Framework_AssertionFailedError $e ) {
-			$this->_selTC->verificationErrors[] = "Stack traces ($label): " . $e->toString() ;
+			$this->_selTC->reportNewError( "Stack traces ($label): " . $e->toString() ) ;
 	    }
 	}
 
@@ -50,7 +50,7 @@ class TL_PageWrapperChecks {
 		try {
 			$this->_selTC->assertTextPresent( 'Want your own copy of this tool?' ) ;
 		} catch ( PHPUnit_Framework_AssertionFailedError $e ) {
-			$this->_selTC->verificationErrors[] = "Checking footer ($label): " . $e->toString() ;
+			$this->_selTC->reportNewError( "Checking footer ($label): " . $e->toString() ) ;
 		}
 	}
 
@@ -65,21 +65,21 @@ class TL_PageWrapperChecks {
 		try {
 			$this->_selTC->assertTextNotPresent( 'PHP Stack Trace' ) ;
 		} catch ( PHPUnit_Framework_AssertionFailedError $e ) {
-			$this->_selTC->verificationErrors[] = "Checking header ($label): " . $e->toString() ;
+			$this->_selTC->reportNewError( "Checking header ($label): " . $e->toString() ) ;
 		}
 		try {
 			$this->_selTC->assertTextPresent( self::$_TLC->pageTitle ) ;
 		} catch ( PHPUnit_Framework_AssertionFailedError $e ) {
-			$this->_selTC->verificationErrors[] = "Checking header ($label): " . $e->toString() ;
+			$this->_selTC->reportNewError( "Checking header ($label): " . $e->toString() ) ;
 		}
 		foreach ( self::$_TLC->headerLabels as $label ) {
 			try {
 				$this->_selTC->assertTextPresent( $label ) ;
 			} catch ( PHPUnit_Framework_AssertionFailedError $e ) {
-				$this->_selTC->verificationErrors[] = "Checking header ($label): " . $e->toString() ;
+				$this->_selTC->reportNewError( "Checking header ($label): " . $e->toString() ) ;
 			}
 		}
-                $buttons = $this->_selTC->getAllButtons() ;
-                var_dump( $buttons ) ;
+        $buttons = $this->_selTC->getAllButtons() ;
+//                var_dump( $buttons ) ;
 	}
 }

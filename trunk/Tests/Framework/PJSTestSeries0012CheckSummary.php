@@ -31,4 +31,8 @@ class Framework_PJSTestSeries0012CheckSummary extends PHPUnit_Extensions_Seleniu
         $this->_PWC->checkFooterIsLoaded( $this, 'index' ) ;
     }
 
+    function reportNewError( $errMsg ) {
+        $this->verificationErrors[] = $errMsg ;
+    }
+
 }
