@@ -7,9 +7,9 @@ class Framework_PJSTestSeries0011CheckHeaders extends PHPUnit_Extensions_Seleniu
 {
 
     /** @var TL_PageWrapperChecks */
-	private $_PWC ;
-	/** @var TL_Config */
-	private $_TLC ;
+    private $_PWC ;
+    /** @var TL_Config */
+    private $_TLC ;
 
     function setUp()
     {
@@ -37,6 +37,10 @@ class Framework_PJSTestSeries0011CheckHeaders extends PHPUnit_Extensions_Seleniu
             $this->_PWC->checkHeaderIsLoaded( $label ) ;
             $this->_PWC->checkFooterIsLoaded( $label ) ;
         }
+    }
+
+    function reportNewError( $errMsg ) {
+        $this->verificationErrors[] = $errMsg ;
     }
 
 }
