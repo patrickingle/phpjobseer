@@ -312,7 +312,7 @@ class DbResetView {
             echo '<div>A clean database should be loaded.</div>' ;
         }
         else {
-        	echo "Not authorized. Check Libs/Config.php\n" ;
+        	echo "Not authorized. Check config.\n" ;
         }
         PageData::pageFooter() ;
     }
