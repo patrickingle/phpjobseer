@@ -91,33 +91,41 @@ class Config {
         }
         $errors = "" ;
         $cfgValues = array() ;
-        $paramList = array( 'db_style'         => 0
-                          , 'timeZone'         => 0
-                          , 'db_host'          => 0
-                          , 'db_port'          => 0
-                          , 'db_name'          => 0
-                          , 'db_user'          => 0
-                          , 'db_pass'          => 0
-                          , 'really_update_db' => 0
-                          , 'debug_mode'       => 0
-                          , 'test_mode'        => 0
-                          , 'browserRoot'      => 0
-                          , 'browserDir'       => 0
+        $paramList = array( 'db_style'         => array( 'beenSet' => 0, 'dataType' => 'string'  )
+                          , 'timeZone'         => array( 'beenSet' => 0, 'dataType' => 'string'  )
+                          , 'db_host'          => array( 'beenSet' => 0, 'dataType' => 'string'  )
+                          , 'db_port'          => array( 'beenSet' => 0, 'dataType' => 'integer' )
+                          , 'db_name'          => array( 'beenSet' => 0, 'dataType' => 'string'  )
+                          , 'db_user'          => array( 'beenSet' => 0, 'dataType' => 'string'  )
+                          , 'db_pass'          => array( 'beenSet' => 0, 'dataType' => 'string'  )
+                          , 'really_update_db' => array( 'beenSet' => 0, 'dataType' => 'integer' )
+                          , 'debug_mode'       => array( 'beenSet' => 0, 'dataType' => 'integer' )
+                          , 'test_mode'        => array( 'beenSet' => 0, 'dataType' => 'integer' )
+                          , 'browserRoot'      => array( 'beenSet' => 0, 'dataType' => 'string'  )
+                          , 'browserDir'       => array( 'beenSet' => 0, 'dataType' => 'string'  )
                           ) ;
         // verify that all the parameters are present and just once.
         foreach ( $xml as $v ) {
             $key = ( string ) $v[ 'name' ] ;
             if  ( ( ! isset( $paramList[ $key ] ) )
-               || ( $paramList[ $key ] > 0 ) ) {
+               || ( $paramList[ $key ][ 'beenSet' ] > 0 ) ) {
                 $errors .= "Invalid or multiply set parameter: $key\n" ;
             }
             else {
-                $paramList[ $key ]++ ;
-                $cfgValues[ $key ] = $v[ 0 ] ;
+                $paramList[ $key ][ 'beenSet' ]++ ;
+                switch ( $paramList[ $key ][ 'dataType' ] ) {
+                    case 'integer' :
+                                     $temp = (string) $v ;
+                                     $cfgValues[ $key ] = $temp + 0 ;
+                                     break ;
+                    case 'string' :
+                                     $cfgValues[ $key ] = (string) $v ;
+                                     break ;
+                }
             }
         }
-        foreach ( $paramList as $key=>$cnt ) {
-            if ( $cnt === 0 ) {
+        foreach ( $paramList as $key => $cnt ) {
+            if ( $cnt[ 'beenSet' ] === 0 ) {
                 $errors .= "Missing parameter: $key\n" ;
             }
         }

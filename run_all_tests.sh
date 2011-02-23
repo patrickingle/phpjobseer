@@ -32,5 +32,14 @@ do
 done
 echo "Code appears to be free from syntax errors."
 
+php index.php 2>&1 | cat > index.out
+if [ -n "`grep -i 'fatal ' index.out`" ] ; then
+    echo "Index produces fatal error(s)"
+    cat index.out
+    rm index.out
+    exit 1
+fi
+rm index.out
+
 phpunit $verbose $testfile 2>&1
 exit $?
