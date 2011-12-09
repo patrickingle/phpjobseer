@@ -91,18 +91,21 @@ class Config {
         }
         $errors = "" ;
         $cfgValues = array() ;
-        $paramList = array( 'db_style'         => array( 'beenSet' => 0, 'dataType' => 'string'  )
-                          , 'timeZone'         => array( 'beenSet' => 0, 'dataType' => 'string'  )
-                          , 'db_host'          => array( 'beenSet' => 0, 'dataType' => 'string'  )
-                          , 'db_port'          => array( 'beenSet' => 0, 'dataType' => 'integer' )
-                          , 'db_name'          => array( 'beenSet' => 0, 'dataType' => 'string'  )
-                          , 'db_user'          => array( 'beenSet' => 0, 'dataType' => 'string'  )
-                          , 'db_pass'          => array( 'beenSet' => 0, 'dataType' => 'string'  )
-                          , 'really_update_db' => array( 'beenSet' => 0, 'dataType' => 'integer' )
-                          , 'debug_mode'       => array( 'beenSet' => 0, 'dataType' => 'integer' )
-                          , 'test_mode'        => array( 'beenSet' => 0, 'dataType' => 'integer' )
-                          , 'browserRoot'      => array( 'beenSet' => 0, 'dataType' => 'string'  )
-                          , 'browserDir'       => array( 'beenSet' => 0, 'dataType' => 'string'  )
+        $paramTypes = array( 'string'  => array( 'beenSet' => 0, 'dataType' => 'string'  )
+                           , 'integer' => array( 'beenSet' => 0, 'dataType' => 'integer' )
+                           ) ;
+        $paramList = array( 'db_style'         => $paramTypes[ 'string'  ]
+                          , 'timeZone'         => $paramTypes[ 'string'  ]
+                          , 'db_host'          => $paramTypes[ 'string'  ]
+                          , 'db_port'          => $paramTypes[ 'integer' ]
+                          , 'db_name'          => $paramTypes[ 'string'  ]
+                          , 'db_user'          => $paramTypes[ 'string'  ]
+                          , 'db_pass'          => $paramTypes[ 'string'  ]
+                          , 'really_update_db' => $paramTypes[ 'integer' ]
+                          , 'debug_mode'       => $paramTypes[ 'integer' ]
+                          , 'test_mode'        => $paramTypes[ 'integer' ]
+                          , 'browserRoot'      => $paramTypes[ 'string'  ]
+                          , 'browserDir'       => $paramTypes[ 'string'  ]
                           ) ;
         // verify that all the parameters are present and just once.
         foreach ( $xml as $v ) {
