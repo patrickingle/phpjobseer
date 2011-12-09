@@ -4,7 +4,10 @@ require_once('HTML/QuickForm.php');
 
 abstract class FormViewBase {
 
-	protected $_form = null;
+    /**
+     * @var mixed
+     */
+    private $_form ;
 
 	/**
 	 * 
@@ -14,23 +17,40 @@ abstract class FormViewBase {
 	 * @param String $action
 	 * @param String $target
 	 * @param mixed $attributes
-	 * @param bool $trackSubmit
 	 */
 	public function __construct( $formname
 	                           , $method = 'post'
 	                           , $action = ''
 	                           , $target = ''
+	                           , $id = ''
 	                           , $attributes = null
-	                           , $trackSubmit = false
 	                           ) {
-		$this->_form = new HTML_QuickForm( $formname
-		                                 , $method
-		                                 , $action
-		                                 , $target
-		                                 , $attributes
-		                                 , $trackSubmit
-		                                 ) ;
+		$this->_form = array( 'method'     => $post
+		                    , 'action'     => $action
+		                    , 'target'     => $target
+		                    , 'id'         => $id
+		                    , 'attributes' => null
+		                    , 'pageData'   => ''
+		                    ) ;
 	}
+
+	/**
+	 * 
+	 * Render the form to a string
+	 * @return string
+	 */
+	public function renderForm() {
+	    $method   = $this->getPropertyValueSetString('method', $this->_form[ 'method' ] ) ;
+	    $action   = $this->getPropertyValueSetString('action', $this->_form[ 'action' ] ) ;
+	    $target   = $this->getPropertyValueSetString('target', $this->_form[ 'target' ] ) ;
+	    $id       = $this->getPropertyValueSetString('id', $this->_form[ 'id' ] ) ;
+	    $pageData = $this->_form[ 'pageData' ] ;
+	    foreach ( $this->_form[ 'attributes' ] as $key => $value ) {
+	        $attributes .= " $key=\"$value\"" ;
+	    }
+	    return "<form $id $method $action $target>$pageData</form>" ;
+	}
+
     /**
      * Compare fields function for sorting purposes
      */
@@ -39,6 +59,91 @@ abstract class FormViewBase {
             return 0 ;
         }
         return  ( $a->getSortKey() < $b->getSortKey() ) ? -1 : 1 ;
+    }
+
+    /**
+     * Add data to the form for rendering
+     * 
+     * @param string $data
+     */
+    private function addFormData( $data = '' ) {
+        $this->_form .= $data ;
+    }
+
+    /**
+     * 
+     * Add HTML Form Element
+     * 
+     * @param string $elementType
+     * @param string $name
+     * @param mixed $value string except when a select or multiselect then array of value-label pairs
+     * @param mixed $attributes
+     * @throws Exception
+     */
+    public function addElement($elementType, $name, $label, $attributes = array() ) {
+        if ( !isset($name) || ( $name === '' ) ) {
+            throw new Exception( 'addElement: $name is required' ) ;
+        }
+        $attrString = $this->getPropertyValueSetString( 'name', $name ) . ' ';
+        if ( isset( $attributes[ 'value' ] ) && ( $attributes[ 'value' ] !== '' ) ) {
+            $value = $attributes[ 'value' ] ;
+            $xValue = $attrString = $this->getPropertyValueSetString( 'value', $value ) . ' ';
+            $rValue = isset( $value ) ? htmlspecialchars( $value ) : '' ;
+        }
+        else {
+            $value = null ;
+            $xValue = '' ;
+            $rValue = '' ;
+        }
+        if ( isset( $attributes ) && is_array( $attributes ) ) {
+            $setAttrs = array() ;
+            $attrs = array( 'accept', 'accesskey', 'alt', 'checked', 'class', 'dir'
+                          , 'disabled', 'id', 'lang', 'maxlength', 'multiple', 'onblur'
+                          , 'onchange', 'onclick', 'ondblclick', 'onfocus', 'onmousedown'
+                          , 'onmousemove', 'onmouseout', 'onmouseover', 'onmouseup'
+                          , 'onkeydown', 'onkeyup', 'onselect', 'readonly', 'size'
+                          , 'style', 'tabindex', 'title', 'xml:lang'
+                          ) ;
+            foreach ( $attrs as $attr ) {
+                $result = $this->getPropertyValueSetString( $attr, $attriutes ) ;
+                if ( $result ) {
+                    $setAttrs[ $attr ] = $result ;
+                }
+            }
+            $attrString .= implode( ' ', $setAttrs ) ;
+        }
+        switch ( $elementType ) {
+            case 'reset'    : // NO BREAK HERE
+            case 'submit'   : // NO BREAK HERE
+            case 'string'   : // NO BREAK HERE
+            case 'hidden'   : // NO BREAK HERE
+            case 'button'   : // NO BREAK HERE
+            case 'password' : // NO BREAK HERE
+            case 'checkbox' : // NO BREAK HERE
+            case 'radio'    : // NO BREAK HERE
+            case 'file'     :
+                $this->addFormData("<input type=\"$elementType\" $attrString $xValue />") ;
+                break ;
+            case 'date'     :
+                $this->addFormData("<input type=\"text\" $attrString $xValue />") ;
+                break ;
+            case 'datetime' :
+                $this->addFormData("<input type=\"text\" $attrString $xValue/>") ;
+                break ;
+            case 'textbox'  :
+                $this->addFormData("<textarea $attrString>$rValue</textarea>") ;
+                break ;
+            case 'select'   :
+                $this->addFormData( "<select $attrString>" ) ;
+                foreach ( $value as $val=>$lbl ) {
+                    $xVal = $this->getPropertyValueSetString( 'value', $val ) ;
+                    $this->addFormData( "<option $xVal>$lbl</option>" ) ;
+                }
+                $this->addFormData( "</select>" ) ;
+                break ;
+            default         :
+                throw new Exception( 'addElement: Unknown element type: ' . $elementType ) ;
+        }
     }
 
     /**
@@ -93,7 +198,7 @@ abstract class FormViewBase {
                 break ;
 
             case 'PHONE NUMBER' :
-                $form->addelement( 'text', $fieldName, $fieldLabel, $options ) ;
+                $this->addElemen( 'text', $fieldName, $fieldLabel, $options ) ;
                 break ;
 
             case ( preg_match( '/^VARCHAR\(([1-9][0-9]+)\)$/'
@@ -155,6 +260,26 @@ abstract class FormViewBase {
 
         } // END OF switch ( $dataType )
         return $foundMatch ;
+    }
+
+	/**
+	 * 
+	 * Return HTML string property="value" if the value is not empty or null
+	 * 
+	 * examples:
+	 *   $this->getPropertyValueSetString( 'class', '' ) returns an empty string
+	 *   $this->getPropertyValueSetString( 'class', 'show' ) returns the string: 'class="show"'
+	 * 
+	 * @param string $property
+	 * @param mixed $value may be string or array of string values indexed by $property
+	 * @return string
+	 */
+	public function getPropertyValueSetString( $property, $value = null ) {
+	    $cmpTo = is_array( $value ) ? $value[ $property ] : $value ;
+	    if ( isset( $cmpTo ) && ( $cmpTo !== '' ) ) {
+	        return "$property=\"" . htmlspecialchars($value) . "\"" ;
+	    }
+	    return "" ;
     }
 
 }
