@@ -22,6 +22,8 @@
 -- Allow addition of zero default created timestamp so the DB will know
 -- to make it the current timestamp (funky hack, but works)
 SET @@session.sql_mode = '' ;
+SET @@session.autocommit = 1 ;
+SET @@session.foreign_key_checks = 0 ;
 
 -- -----------------------------------------------------------------------------------
 -- version
@@ -35,7 +37,6 @@ CREATE TABLE version
 -- This is nearly the only DML in this file but it really needs to be here since
 -- it's the version of the data layout.
 INSERT version ( versionValue ) VALUES ( '0.0PA2' ) ;
-COMMIT ;
 
 -- -----------------------------------------------------------------------------------
 -- applicationStatus
@@ -94,10 +95,11 @@ CREATE TABLE company
      , updated               TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
                              ON UPDATE CURRENT_TIMESTAMP
      , PRIMARY KEY pk_companyId ( companyId )
-     , FOREIGN KEY fk_agencyCompanyId ( companyId )
+     , FOREIGN KEY fk_agencyCompanyId ( agencyCompanyId )
         REFERENCES company ( companyId )
                 ON DELETE CASCADE
                 ON UPDATE CASCADE
+     
      ) ENGINE='InnoDB' ;
 
 -- -----------------------------------------------------------------------------------
@@ -120,7 +122,6 @@ CREATE TABLE contact
                 ON DELETE CASCADE
                 ON UPDATE CASCADE
      ) ENGINE='InnoDB' ;
-COMMIT ;
 
 -- -----------------------------------------------------------------------------------
 -- job
@@ -427,4 +428,3 @@ VALUES (  1, 1, 'FOUND'        , 10  )
      , ( 11, 0, 'CLOSED'       , 999 )
      ;
 UPDATE applicationStatus SET created = updated ;
-COMMIT ;

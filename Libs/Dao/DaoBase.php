@@ -79,7 +79,7 @@ abstract class DaoBase {
      * @param $dbStyle Style of database to create
      * @return DDInfo
      */
-    abstract static public function getDDInfo( $tableName, $dbStyle ) ;
+    abstract public function getDDInfo( $tableName, $dbStyle ) ;
 
     /**
      * populateFields creates an array of FieldDescription's.  This function is

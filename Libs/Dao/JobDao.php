@@ -41,7 +41,7 @@ class JobDao extends DaoBase {
      * @param $dbStyle Style of database to create
      * @return DDInfo
      */
-    static public function getDDInfo($tableName, $dbStyle) {
+    public function getDDInfo($tableName, $dbStyle) {
         $info = new DDInfo($tableName, $dbStyle) ;
         $info->addColumn( 'jobId'
                         , 'SERIAL'
