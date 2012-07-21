@@ -25,7 +25,7 @@ abstract class FormViewBase {
 	                           , $id = ''
 	                           , $attributes = null
 	                           ) {
-		$this->_form = array( 'method'     => $post
+		$this->_form = array( 'method'     => $method
 		                    , 'action'     => $action
 		                    , 'target'     => $target
 		                    , 'id'         => $id

@@ -90,6 +90,7 @@ class JobFormView extends FormViewBase {
         $defaults=array();
 
         $jobId = $this->_formValues['jobId'];
+	if ( ! isset( $this->_form ) ) throw new Exception( "foo" ) ;
         $this->_form->addElement('hidden', 'jobId', $jobId);
         $constants['jobId'] = $jobId;
         $jobIdText = isset($jobId) && ('' <> $jobId) ? $jobId : "0";
