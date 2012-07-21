@@ -39,7 +39,7 @@ class PageData {
      * @return void
      */
     public static function styleSheet() {
-        $dirName = dirname($_SERVER{'SCRIPT_NAME'});
+        $dirName = isset( $_SERVER{ 'SCRIPT_NAME' } ) ? dirname( $_SERVER{ 'SCRIPT_NAME' } ) : '.' ;
         echo "                <style type=\"text/css\" media=\"all\">
                   @import url(\"$dirName/styles.css\");
                 </style>
