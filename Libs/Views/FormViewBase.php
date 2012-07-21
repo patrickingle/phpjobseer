@@ -7,7 +7,7 @@ abstract class FormViewBase {
     /**
      * @var mixed
      */
-    private $_form ;
+    protected $_form ;
 
 	/**
 	 * 
