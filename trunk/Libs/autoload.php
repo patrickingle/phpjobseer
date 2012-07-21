@@ -36,19 +36,19 @@ function __autoload( $class_name ) {
 //        echo 'Script timezone and ini-set timezone match.';
     }
     switch (true) {
-        case ( preg_match( '/Controller(Base|)$/', $class_name ) ) :
+        case ( preg_match( '/Controller(Base(Methods|)|)$/', $class_name ) ) :
             $reqFile = 'Libs/Controllers/' . $class_name . '.php' ;
             break ;
-        case ( preg_match( '/Dao(Base|)$/', $class_name ) ) :
+        case ( preg_match( '/Dao(Base(Methods|)|)$/', $class_name ) ) :
             $reqFile = 'Libs/Dao/' . $class_name . '.php' ;
             break ;
-        case ( preg_match( '/View(Base|)$/', $class_name ) ) :
+        case ( preg_match( '/View(Base(Methods|)|)$/', $class_name ) ) :
             $reqFile = 'Libs/Views/' . $class_name . '.php' ;
             break ;
-        case ( preg_match( '/^TL_/', $class_name ) ) :
+        case ( preg_match( '/^TL(Methods|)_/', $class_name ) ) :
         	$reqFile = 'Tests/TestLibs/' . $class_name . '.php' ;
             break ;
-        case ( preg_match( '/^Framework/', $class_name ) ) :
+        case ( preg_match( '/^Framework(Methods|)/', $class_name ) ) :
         	$class_name = str_replace( '_', '/', $class_name . '.php' ) ;
         	$reqFile = 'Tests/' . $class_name ;
             break ;
