@@ -28,14 +28,15 @@ class AddJobView {
     }
 
     function main() {
-        PageData::pageHeader();
-        echo '<div class="pageTitle">PHP Job Seeker</div>';
+        PageData::pageHeader() ;
+        echo '<div class="pageTitle">PHP Job Seeker</div>' ;
         echo '<div class="pageSubtitle">'
            . '<a href="jobList.php?activeOnly=1">Job Listing</a>'
-           . ' &gt;&gt;&gt; Add New Job</div>';
-        PageData::displayNavBar();
-        $oForm = new JobFormView();
-        $oForm->displayForm();
-        PageData::pageFooter();
+           . ' &gt;&gt;&gt; Add New Job</div>'
+           ;
+        PageData::displayNavBar() ;
+        $oForm = new JobFormView() ;
+        $oForm->displayForm() ;
+        PageData::pageFooter() ;
     }
 }
