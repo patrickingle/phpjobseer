@@ -26,18 +26,11 @@ require_once("Libs/autoload.php");
  *
  * DAO Base Class
  *
- * In order to use this base class, you must implement the following methods:
- *
- *     abstract public function getDefaults() ;
- *     abstract static public function getDDInfo( $tableName, $dbStyle ) ;
- *     abstract public function populateFields( $fieldValues ) ;
- *     abstract public function validateRowForInsert( $rowValues ) ;
- *     abstract public function validateRowForUpdate( $rowValues ) ;
- *
+ *     abstract public function getDDInfo( $tableName, $dbStyle ) ;
  * @author kbenton
  *
  */
-abstract class DaoBase {
+abstract class DaoBase implements DaoBaseMethods {
     /**
      * @var Object Database reference pointer
      */
@@ -62,47 +55,6 @@ abstract class DaoBase {
      * @var unknown Session DB handle
      */
     private $_sth = null ;
-
-    /**
-     * getDefaults acts like DaoBase::getRowById returning a hash of fields to
-     * column values to be used by the insertRow routine to compare values with
-     * for default values at row insertion time.
-     *
-     * @return array Default values for new records
-     */
-    abstract public function getDefaults();
-
-    /**
-     * static function that creates a new DDInfo record and returns it set up
-     * for the concrete class.
-     * @param $dbName Name of the table
-     * @param $dbStyle Style of database to create
-     * @return DDInfo
-     */
-    abstract public function getDDInfo( $tableName, $dbStyle ) ;
-
-    /**
-     * populateFields creates an array of FieldDescription's.  This function is
-     * called by getRowById to fulfill data requests.
-     *
-     * @param array $fieldValues A hash of field values by field names.
-     * @return void
-     */
-    abstract public function populateFields($fieldValues);
-
-    /**
-     * validateRowForInsert checks to make sure that data being inserted is valid.
-     *
-     * @return boolean True when validation passes, false otherwise.
-     */
-    abstract public function validateRowForInsert($rowValues);
-
-    /**
-     * validateRowForUpdate checks to make sure that data being updated is valid.
-     *
-     * @return boolean True when validation passes, false otherwise.
-     */
-    abstract public function validateRowForUpdate($rowValues);
 
     /**
      * Class constructor - do not set $reuse except from within this class.
@@ -181,7 +133,7 @@ abstract class DaoBase {
      * corresponding values mapped back to those keys.
      * @return int Last Insert ID on success - throws on failure
      */
-    public function insertRow($rowValues) {
+    public function insertRow( $rowValues ) {
         $insertId = null ;
         if ( $this->validateRowForInsert( $rowValues ) ) {
             $defaults = $this->getDefaults() ;
