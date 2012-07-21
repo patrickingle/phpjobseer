@@ -21,7 +21,7 @@
  * 
  */
 
-require_once('HTML/QuickForm.php');
+require_once( 'HTML/QuickForm.php' );
 
 class JobFormView extends FormViewBase {
 
@@ -53,24 +53,24 @@ class JobFormView extends FormViewBase {
      * @param  int $jobId
      * @return boolean True when values loaded successfully, false otherwise
      */
-    public function loadFormValues($jobId) {
-        $this->_jobId = null;
-    	$oJob = new JobDao();
+    public function loadFormValues( $jobId ) {
+        $this->_jobId = null ;
+    	$oJob = new JobDao() ;
         if ( null === $jobId ) {
-            $this->_jobId = $jobId;
-            $this->_formValues = $oJob->getDefaults();
+            $this->_jobId = $jobId ;
+            $this->_formValues = $oJob->getDefaults() ;
         }
         else {
-            if ( ! $oJob->validateRowId($jobId) ) {
-                echo "<p class=\"error\">Invalid Job ID</p>";
-                return false;
+            if ( ! $oJob->validateRowId( $jobId ) ) {
+                echo "<p class=\"error\">Invalid Job ID</p>" ;
+                return false ;
             }
-            $this->_jobId = $jobId;
-            $this->_formValues = $oJob->getRowById($jobId);
+            $this->_jobId = $jobId ;
+            $this->_formValues = $oJob->getRowById( $jobId ) ;
         }
-        $oJob->populateFields($this->_formValues);
-        $this->_fields = $oJob->getFields();
-        $this->_oJob = $oJob;
+        $oJob->populateFields( $this->_formValues ) ;
+        $this->_fields = $oJob->getFields() ;
+        $this->_oJob = $oJob ;
     }
 
     /**
@@ -79,36 +79,35 @@ class JobFormView extends FormViewBase {
      * @return void
      */
     public function displayForm() {
-        $maxFieldLength = 80;
-        $dateOptions = array( 'language' => 'en', 'format'   => 'YMdHi' );
-        $sortedFields = $this->_fields;
-        if ( !isset($this->_fields)) {
-            return;
+        $maxFieldLength = 80 ;
+        $dateOptions = array( 'language' => 'en', 'format'   => 'YMdHi' ) ;
+        $sortedFields = $this->_fields ;
+        if ( ! isset( $this->_fields ) ) {
+            return ;
         }
-        usort($sortedFields, 'JobFormView::cmpFields');
-        $constants=array();
-        $defaults=array();
+        usort( $sortedFields, 'JobFormView::cmpFields' ) ;
+        $constants = array() ;
+        $defaults = array() ;
 
-        $jobId = $this->_formValues['jobId'];
-	if ( ! isset( $this->_form ) ) throw new Exception( "foo" ) ;
-        $this->_form->addElement('hidden', 'jobId', $jobId);
-        $constants['jobId'] = $jobId;
-        $jobIdText = isset($jobId) && ('' <> $jobId) ? $jobId : "0";
+        $jobId = $this->_formValues[ 'jobId' ] ;
+        $this->_form->addElement( 'hidden', 'jobId', $jobId ) ;
+        $constants[ 'jobId' ] = $jobId ;
+        $jobIdText = isset( $jobId ) && ( '' <> $jobId ) ? $jobId : "0" ;
         
         foreach ( $this->_fields as $field ) {
-            if (! $field->getUserCanSee()) {
-                continue;
+            if ( ! $field->getUserCanSee() ) {
+                continue ;
             }
-            $value = $this->_formValues[$field->getFieldName()];
-            if (! $field->getUserCanChange()) {
+            $value = $this->_formValues[ $field->getFieldName() ] ;
+            if ( ! $field->getUserCanChange() ) {
                 $this->_form->addElement( 'static'
                                         , $field->getFieldName()
                                         , $field->getFieldLabel()
                                         , $value
-                                        );
-                continue;
+                                        ) ;
+                continue ;
             }
-            $dataType = $field->getDataType();
+            $dataType = $field->getDataType() ;
 
             switch ($dataType) {
                 case ( $this->prepFormElement( $dataType
@@ -124,22 +123,22 @@ class JobFormView extends FormViewBase {
                      ? $dataType : ! $dataType ) :
                     // Do nothing here because prepFormElement did it for me.
                     break ;
-                case 'REFERENCE(Contact)':
+                case 'REFERENCE(Contact)' :
                     // @todo AJAX Contacts - have the client load values.
                     // @todo AJAX Display new Z-Window on Add New Contact
-                    $oContact = new ContactDao();
-                    $results = $oContact->findSome("1 = 1 order by contactName");
+                    $oContact = new ContactDao() ;
+                    $results = $oContact->findSome( "1 = 1 order by contactName" ) ;
                     $contacts = array( '0' => ''
-                                     , 'Add new contact'=> 'Add new contact'
-                                     );
+                                     , 'Add new contact' => 'Add new contact'
+                                     ) ;
                     foreach ( $results as $result ) {
                         if ( $result['contactId'] > 0 ) {
-                            $name = $result['contactName'];
-                            $contacts[ $result['contactId'] ] = $name;
-                            if ( $this->_formValues['primaryContactId']
-                                 === $result['contactId']
+                            $name = $result[ 'contactName' ] ;
+                            $contacts[ $result[ 'contactId' ] ] = $name ;
+                            if ( $this->_formValues[ 'primaryContactId' ]
+                                 === $result[ 'contactId' ]
                                ) {
-                                $value = $name;
+                                $value = $name ;
                             }
                         }
                     }
@@ -150,20 +149,20 @@ class JobFormView extends FormViewBase {
                                             , array( 'alt' => $field->getFieldHelp()
                                                    , 'onchange' => "checkForAddNewContact($jobIdText, this.value)"
                                                    )
-                                            );
-                    break;
-                case 'REFERENCE(ApplicationStatus)':
-                    $oApplicationStatus = new ApplicationStatusDao();
-                    $results = $oApplicationStatus->findAll();
-                    $statuses = array();
+                                            ) ;
+                    break ;
+                case 'REFERENCE(ApplicationStatus)' :
+                    $oApplicationStatus = new ApplicationStatusDao() ;
+                    $results = $oApplicationStatus->findAll() ;
+                    $statuses = array() ;
                     foreach ( $results as $result ) {
-                        if ( $result['applicationStatusId'] > 0 ) {
-                            $name = $result['statusValue'];
-                            $statuses[ $result['applicationStatusId'] ] = $name;
-                            if ( $this->_formValues['applicationStatusId']
-                                 === $result['applicationStatusId']
+                        if ( $result[ 'applicationStatusId' ] > 0 ) {
+                            $name = $result[ 'statusValue' ] ;
+                            $statuses[ $result[ 'applicationStatusId' ] ] = $name ;
+                            if ( $this->_formValues[ 'applicationStatusId' ]
+                                 === $result[ 'applicationStatusId' ]
                                ) {
-                                $value = $result['applicationStatusId'];
+                                $value = $result[ 'applicationStatusId' ] ;
                             }
                         }
                     }
@@ -172,24 +171,24 @@ class JobFormView extends FormViewBase {
                                             , $field->getFieldLabel()
                                             , $statuses
                                             , array( 'alt' => $field->getFieldHelp() )
-                                            );
-                    break;
-                case 'REFERENCE(Company)':
+                                            ) ;
+                    break ;
+                case 'REFERENCE(Company)' :
                     // @todo AJAX Companies - have the client load values.
                     // @todo AJAX Display new Z-Window on Add New Company
-                	$oCompany = new CompanyDao();
-                    $results = $oCompany->findSome("1 = 1 order by companyName");
+                	$oCompany = new CompanyDao() ;
+                    $results = $oCompany->findSome( "1 = 1 order by companyName" ) ;
                     $companies = array( '0' => ''
-                                     , 'Add new company'=> 'Add new company'
-                                     );
+                                      , 'Add new company' => 'Add new company'
+                                      ) ;
                     foreach ( $results as $result ) {
-                        if ( $result['companyId'] > 0 ) {
-                            $name = $result['companyName'];
-                            $companies[ $result['companyId'] ] = $name;
-                            if ( $this->_formValues['companyId']
-                                 === $result['companyId']
+                        if ( $result[ 'companyId' ] > 0 ) {
+                            $name = $result[ 'companyName' ] ;
+                            $companies[ $result[ 'companyId' ] ] = $name;
+                            if ( $this->_formValues[ 'companyId' ]
+                                 === $result[ 'companyId' ]
                                ) {
-                                $value = $name;
+                                $value = $name ;
                             }
                         }
                     }
@@ -198,12 +197,12 @@ class JobFormView extends FormViewBase {
                                             , $field->getFieldLabel()
                                             , $companies
                                             , array( 'alt' => $field->getFieldHelp() )
-                                            );
-                    break;
-                case 'REFERENCE(jobKeyword)':
+                                            ) ;
+                    break ;
+                case 'REFERENCE(jobKeyword)' :
                 	// @todo Make this work because R/O keyword is nasty. Does not work after db reset.
-                    $oJobKeyword = new JobKeywordDao();
-                    $value = $oJobKeyword->findKeywordValuesByJobId($jobId);
+                    $oJobKeyword = new JobKeywordDao( );
+                    $value = $oJobKeyword->findKeywordValuesByJobId( $jobId ) ;
                     $this->_form->addElement( 'text'
                                             , $field->getFieldName()
                                             , $field->getFieldLabel()
@@ -212,11 +211,17 @@ class JobFormView extends FormViewBase {
                                                    , 'alt' => $field->getFieldHelp()
                                                    , 'READONLY' => 'READONLY'
                                                    )
-                                            ); 
-                    break;
+                                            ) ; 
+                    break ;
                 default:
-                    echo "<td bgcolor=\"cyan\">" . $field->getFieldValue() . " / " . $field->getDataType() . " / " . $field->getFieldHelp() . "</td>";
-                    break;
+                    echo "<td bgcolor=\"cyan\">"
+                       . $field->getFieldValue()
+                       . " / "
+                       . $field->getDataType()
+                       . " / "
+                       . $field->getFieldHelp()
+                       . "</td>" ;
+                    break ;
             } // END OF switch ($dataType)
 
             if ( 'url' === $field->getFieldName() ) {
@@ -226,14 +231,14 @@ class JobFormView extends FormViewBase {
                                         . '<div id="urlDuplicateStatusBox"></div>'
                                         . '</td>'
                                         . '</tr>'
-                                        );
+                                        ) ;
                 $this->_form->addElement( 'html'
                                         , '<tr>'
                                         . '<td colspan="2" align="right">'
                                         . '<div id="urlDuplicateResultBox"></div>'
                                         . '</td>'
                                         . '</tr>'
-                                        );
+                                        ) ;
             }
             if ( 'contact' === $field->getFieldName() ) {
                 $this->_form->addElement( 'html'
@@ -241,47 +246,46 @@ class JobFormView extends FormViewBase {
                                         . '<div id="ajaxContactFormBox"></div>'
                                         . '</td>'
                                         . '</tr>'
-                                        );
+                                        ) ;
                 $this->_form->addElement( 'html'
                                         , '<tr>'
                                         . '<div id="ajaxContactResultBox"></div>'
                                         . '</td>'
                                         . '</tr>'
-                                        );
+                                        ) ;
             }
 
-            if ($field->getUserCanChange()) {
-                $defaults[$field->getFieldName()]=$value;
+            if ( $field->getUserCanChange() ) {
+                $defaults[ $field->getFieldName() ] = $value ;
             }
             else {
-                $constants[$field->getFieldName()]=$value;
+                $constants[ $field->getFieldName() ] = $value ;
             }
         }
-        $options = array( "rows"=>"5"
-                        , "cols"=>"60"
-                        );
+        $options = array( "rows"=>"5", "cols"=>"60" ) ;
         $this->_form->addElement( 'textarea'
                                 , 'newNote'
                                 , 'Note'
                                 , $options
-                                );
+                                ) ;
 
-        $this->_form->addElement('submit', null, 'Save Changes');
-        $this->_form->setConstants($constants);
-        $this->_form->setDefaults($defaults);
-        $this->_form->display();
+        $this->_form->addElement( 'submit', null, 'Save Changes' ) ;
+        $this->_form->setConstants( $constants ) ;
+        $this->_form->setDefaults( $defaults ) ;
+        $this->_form->display() ;
         if ( null !== $jobId ) {
-            $oNote = new NoteDao();
+            $oNote = new NoteDao() ;
             $results = $oNote->findSome(      "appliesToTable = 'job'"
                                        . " AND appliesToId = $jobId"
                                        . " ORDER BY created DESC"
-                                       );
-            foreach ($results as $result) {
+                                       ) ;
+            foreach ( $results as $result ) {
                 echo "<p /><hr />"
-                   . $result['updated']
+                   . $result[ 'updated' ]
                    . "<br /><pre>"
-                   . $result['note']
-                   . "</pre>";
+                   . $result[ 'note' ]
+                   . "</pre>"
+                   ;
             }
         }
     }
