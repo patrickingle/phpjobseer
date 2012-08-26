@@ -31,7 +31,7 @@ class JobKeywordDao extends DaoBase {
      * @param $dbStyle Style of database to create
      * @return DDInfo
      */
-    static public function getDDInfo($tableName, $dbStyle) {
+    static public function getDDInfo( $tableName, $dbStyle ) {
         $info = new DDInfo( $tableName, $dbStyle ) ;
         $info->addColumn( 'jobId'
                         , 'INT'
@@ -84,13 +84,13 @@ class JobKeywordDao extends DaoBase {
      * a row is valid for insert/update besides whether or not the row ID is
      * present or not.
      */
-    public function validateRowForInsertOrUpdate($rowValues) {
-        return ( isset($rowValues)
-              && isset($rowValues['keywordId'])
-              && isset($rowValues['jobId'])
-              && KeywordDao::validateRowId($rowValues['keywordId'])
-              && JobDao::validateRowId($rowValues['jobId'])
-               );
+    public function validateRowForInsertOrUpdate( $rowValues ) {
+        return ( isset( $rowValues )
+              && isset( $rowValues[ 'keywordId' ] )
+              && isset( $rowValues[ 'jobId' ] )
+              && KeywordDao::validateRowId( $rowValues[ 'keywordId' ] )
+              && JobDao::validateRowId( $rowValues[ 'jobId'] )
+               ) ;
     }
 
     /**
@@ -99,8 +99,8 @@ class JobKeywordDao extends DaoBase {
      * @param array $rowValues Hash of row keys / values to be checked
      * @return boolean True when validation passes, false otherwise.
      */
-    public function validateRowForInsert($rowValues) {
-        return ( self::validateRowForInsertOrUpdate($rowValues) );
+    public function validateRowForInsert( $rowValues ) {
+        return ( self::validateRowForInsertOrUpdate( $rowValues ) ) ;
     }
 
     /**
@@ -109,8 +109,8 @@ class JobKeywordDao extends DaoBase {
      * @param array $rowValues Hash of row keys / values to be checked
      * @return boolean True when validation passes, false otherwise.
      */
-    public function validateRowForUpdate($rowValues) {
-        return ( self::validateRowForInsertOrUpdate($rowValues) );
+    public function validateRowForUpdate( $rowValues ) {
+        return ( self::validateRowForInsertOrUpdate( $rowValues ) ) ;
     }
 
     /**
@@ -118,9 +118,9 @@ class JobKeywordDao extends DaoBase {
      *
      * @return void
      */
-    public function __construct($fieldValues = null) {
-        parent::__construct('jobKeywordMap');
-        $this->populateFields($fieldValues);
+    public function __construct( $fieldValues = null ) {
+        parent::__construct( 'jobKeywordMap' ) ;
+        $this->populateFields( $fieldValues ) ;
     }
 
     /**
@@ -135,7 +135,7 @@ class JobKeywordDao extends DaoBase {
                     , 'keywordId' => ''
                     , 'created' => ''
                     , 'updated' => ''
-                    );
+                    ) ;
     }
 
     /**
@@ -145,11 +145,11 @@ class JobKeywordDao extends DaoBase {
      * @param array $fieldValues A hash of field values by field names.
      * @return void
      */
-    public function populateFields($fieldValues) {
-        $_fieldDescriptions = array();
+    public function populateFields( $fieldValues ) {
+        $_fieldDescriptions = array() ;
 
-        $x = new FieldDescription();
-        $y = isset($fieldValues['keywordId']) ? $fieldValues['keywordId'] : null;
+        $x = new FieldDescription() ;
+        $y = isset( $fieldValues[ 'keywordId' ] ) ? $fieldValues[ 'keywordId' ] : null ;
         $x->setAllFields( 'jobId'               // $fieldName
                         , $y                    // $fieldValue
                         , 'INTEGER UNSIGNED'    // $dataType

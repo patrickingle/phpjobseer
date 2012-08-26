@@ -70,9 +70,9 @@ class KeywordDao extends DaoBase {
      *
      * @return void
      */
-    public function __construct($fieldValues = null) {
-        parent::__construct('keyword');
-        $this->populateFields($fieldValues);
+    public function __construct( $fieldValues = null ) {
+        parent::__construct( 'keyword' ) ;
+        $this->populateFields( $fieldValues ) ;
     }
 
     /**
@@ -82,8 +82,8 @@ class KeywordDao extends DaoBase {
      * @param $dbStyle Style of database to create
      * @return DDInfo
      */
-    static public function getDDInfo($tableName, $dbStyle) {
-        $info = new DDInfo($tableName, $dbStyle) ;
+    static public function getDDInfo( $tableName, $dbStyle ) {
+        $info = new DDInfo( $tableName, $dbStyle ) ;
         $info->addColumn( 'keywordId'
                         , 'SERIAL'
                         , false
@@ -154,7 +154,7 @@ class KeywordDao extends DaoBase {
                     , 'sortKey' => 100
                     , 'created' => ''
                     , 'updated' => ''
-                    );
+                    ) ;
     }
 
     /**

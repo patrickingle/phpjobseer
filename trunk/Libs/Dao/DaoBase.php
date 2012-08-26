@@ -26,7 +26,6 @@ require_once("Libs/autoload.php");
  *
  * DAO Base Class
  *
- *     abstract public function getDDInfo( $tableName, $dbStyle ) ;
  * @author kbenton
  *
  */

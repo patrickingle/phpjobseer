@@ -30,8 +30,8 @@ class CompanyDao extends DaoBase {
      * @return void
      */
     public function __construct() {
-        parent::__construct('company');
-        $this->populateFields(null);
+        parent::__construct( 'company' ) ;
+        $this->populateFields( null ) ;
     }
 
     /**
@@ -41,8 +41,8 @@ class CompanyDao extends DaoBase {
      * @param $dbStyle Style of database to create
      * @return DDInfo
      */
-    static public function getDDInfo($tableName, $dbStyle) {
-        $info = new DDInfo($tableName, $dbStyle) ;
+    static public function getDDInfo( $tableName, $dbStyle ) {
+        $info = new DDInfo( $tableName, $dbStyle ) ;
         $info->addColumn( 'companyId'      , 'SERIAL'      , false    ) ;
         $info->addColumn( 'isAnAgency'     , 'BOOLEAN'     , false, 0 ) ;
         $info->addColumn( 'agencyCompanyId', 'INT'         , true , 1

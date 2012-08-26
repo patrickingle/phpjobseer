@@ -73,8 +73,8 @@ class NoteDao extends DaoBase {
      * @return void
      */
     public function __construct() {
-        parent::__construct('note');
-        $this->populateFields(null);
+        parent::__construct( 'note' ) ;
+        $this->populateFields( null ) ;
     }
 
     /**
@@ -84,8 +84,8 @@ class NoteDao extends DaoBase {
      * @param $dbStyle Style of database to create
      * @return DDInfo
      */
-    static public function getDDInfo($tableName, $dbStyle) {
-        $info = new DDInfo($tableName, $dbStyle) ;
+    static public function getDDInfo( $tableName, $dbStyle ) {
+        $info = new DDInfo( $tableName, $dbStyle ) ;
         $info->addColumn( 'noteId'
                         , 'SERIAL'
                         , false
