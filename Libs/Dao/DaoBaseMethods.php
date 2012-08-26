@@ -8,23 +8,23 @@
 require_once "Libs/autoload.php" ;
 
 interface DaoBaseMethods {
-	/**
-	* getDefaults acts like DaoBase::getRowById returning a hash of fields to
-	* column values to be used by the insertRow routine to compare values with
-	* for default values at row insertion time.
-	*
-	* @return array Default values for new records
-	*/
-	public function getDefaults() ;
+    /**
+    * getDefaults acts like DaoBase::getRowById returning a hash of fields to
+    * column values to be used by the insertRow routine to compare values with
+    * for default values at row insertion time.
+    *
+    * @return array Default values for new records
+    */
+    public function getDefaults() ;
 
-	/**
-	* static function that creates a new DDInfo record and returns it set up
-	* for the concrete class.
-	* @param $dbName Name of the table
-	* @param $dbStyle Style of database to create
-	* @return DDInfo
-	*/
-	static public function getDDInfo( $tableName, $dbStyle ) ;
+    /**
+    * static function that creates a new DDInfo record and returns it set up
+    * for the concrete class.
+    * @param $dbName Name of the table
+    * @param $dbStyle Style of database to create
+    * @return DDInfo
+    */
+    static public function getDDInfo( $tableName, $dbStyle ) ;
 
 
     /**

@@ -30,8 +30,8 @@ class ContactDao extends DaoBase {
      * @return void
      */
     public function __construct() {
-    	parent::__construct('contact');
-        $this->populateFields(null);
+    	parent::__construct( 'contact' ) ;
+        $this->populateFields( null ) ;
     }
 
     /**
@@ -41,8 +41,8 @@ class ContactDao extends DaoBase {
      * @param $dbStyle Style of database to create
      * @return DDInfo
      */
-    static public function getDDInfo($tableName, $dbStyle) {
-        $info = new DDInfo($tableName, $dbStyle) ;
+    static public function getDDInfo( $tableName, $dbStyle ) {
+        $info = new DDInfo( $tableName, $dbStyle ) ;
         $info->addColumn( 'contactId'            , 'SERIAL'      , false       ) ;
         $info->addColumn( 'contactCompanyId'     , 'INT'         , false, 1
                         , array( 'unsigned' => true )
