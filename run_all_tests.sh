@@ -18,9 +18,11 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 # 
 testfile="Tests/AllTests.php"
-verbose=""
+verbose="/bin/false"
+verboseparam=""
 if [ "--verbose" = "$1" ] ; then
-    verbose="$1"
+    verbose="/bin/true"
+    verboseparam="$1"
 fi
 for i in `find . -name \*.php -print`
 do
@@ -28,18 +30,16 @@ do
     if [ ! -z "$err" ] ; then
         echo "Syntax error detected in $i: $err"
         exit 1
+    elif $verbose ; then
+        echo "Syntax tests passed for $i" | strings
     fi
 done
 echo "Code appears to be free from syntax errors."
 
-php index.php 2>&1 | cat > index.out
-if [ -n "`grep -i 'fatal ' index.out`" ] ; then
+if [ -n "`php index.php 2>&1 | grep -i 'fatal '`" ] ; then
     echo "Index produces fatal error(s)"
-    cat index.out
-    rm index.out
     exit 1
 fi
-rm index.out
 
-phpunit $verbose $testfile 2>&1
+phpunit $verboseparam $testfile 2>&1
 exit $?
