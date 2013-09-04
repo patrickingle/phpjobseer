@@ -2,5 +2,8 @@
 .project
 .settings
 .htaccess
+.lastrev
 ci_test.sh
 buildStatus.html
+PJSConfig.xml
+
