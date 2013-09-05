@@ -36,7 +36,7 @@ class EditJobView {
         if ( (!isset($_GET['jobId']))
           || (!$oJob->validateRowId($_GET['jobId']))
            ) {
-        	echo "<div class=\"error\">Invalid Job ID</div>";
+            echo "<div class=\"error\">Invalid Job ID</div>";
             exit;
         }
         $oJobForm = new JobFormView($_GET['jobId']);

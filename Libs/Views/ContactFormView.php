@@ -56,10 +56,10 @@ class ContactFormView extends FormViewBase {
      * @return boolean True when values loaded successfully, false otherwise
      */
     public function loadFormValues( $contactId ) {
-    	$this->_contactId = null ;
-    	$oContact = new ContactDao() ;
+        $this->_contactId = null ;
+        $oContact = new ContactDao() ;
         if ( null === $contactId ) {
-        	$this->_contactId = $contactId ;
+            $this->_contactId = $contactId ;
             $this->_formValues = $oContact->getDefaults() ;
         }
         else {

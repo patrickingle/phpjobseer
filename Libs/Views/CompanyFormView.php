@@ -55,7 +55,7 @@ class CompanyFormView extends FormViewBase {
      */
     public function loadFormValues( $companyId ) {
         $this->_companyId = null ;
-    	$oCompany = new CompanyDao() ;
+        $oCompany = new CompanyDao() ;
         if ( null === $companyId ) {
             $this->_companyId = $companyId ;
             $this->_formValues = $oCompany->getDefaults() ;

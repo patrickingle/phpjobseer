@@ -144,14 +144,14 @@ class DbResetView {
      * @return boolean
      */
     private function matchesDelimiter( $str ) {
-    	if ( preg_match( '/^delimiter\s+(.+)$/i'
+       if ( preg_match( '/^delimiter\s+(.+)$/i'
                        , trim( $str )
                        , $matches
                        ) ) {
             return $matches[1] ;
         }
         else {
-        	return "" ;
+            return "" ;
         }
         
     }
@@ -214,10 +214,10 @@ class DbResetView {
                     $delimLongLine = '' ;
                 }
                 while ( ! Tools::isEol( $fileContents[ $i ] ) ) {
-                	$i++ ;
+                    $i++ ;
                 }
                 while ( Tools::isEol( $fileContents[ $i ] ) ) {
-                	$i++ ;
+                    $i++ ;
                 }
                 $i-- ;
                 continue ;
@@ -226,12 +226,12 @@ class DbResetView {
                 $currentLine .= $char ;
                 if ( ! $ignoreNextChar ) {
                     $delimLongLine .= $char ;
-                	if ( ( strlen( $currentLine ) > $delimLen )
+                    if ( ( strlen( $currentLine ) > $delimLen )
                       && ( $delim === substr( $currentLine, 0 - $delimLen ) )
                       && ( '' === $quote )
                       && ( ! self::matchesDelimiter( $currentLine ) ) 
                        ) {
-                       	$currentLine = trim( $currentLine ) ;
+                        $currentLine = trim( $currentLine ) ;
                         $toPush = substr( $currentLine
                                         , 0
                                         , strlen( $currentLine ) - $delimLen
@@ -277,9 +277,9 @@ class DbResetView {
         foreach ( $sqlToExecute as $query ) {
             $query = trim( $query ) ;
             if ( ! empty( $query ) ) {
-            	if ( 1 === $this->_debugMode ) {
+                if ( 1 === $this->_debugMode ) {
                     print "Executing *" . htmlentities($query) . "*\n" ;
-            	}
+                }
                 $result = $this->_oDbh->query($query);
                 if ( ! $result ) {
                     throw new Exception( "Unable to execute query due to "
@@ -312,7 +312,7 @@ class DbResetView {
             echo '<div>A clean database should be loaded.</div>' ;
         }
         else {
-        	echo "Not authorized. Check config.\n" ;
+            echo "Not authorized. Check config.\n" ;
         }
         PageData::pageFooter() ;
     }

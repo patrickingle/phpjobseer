@@ -1,738 +1,738 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE database SYSTEM "PJSDBDef.dtd">
 <database>
-	<tables>
-		<table name="applicationStatus"
-		       charset="latin1"
-	    	   collation="latin1_swedish_ci"
-	    	   engine="InnoDB">
-			<columns>
-				<column name="applicationStatusId"
-				        type="SMALLSERIAL UNSIGNED"
-				        nullable="FALSE" />
-				<column name="isActive"
-				        type="BOOLEAN"
-				        nullable="FALSE"
-				        default="TRUE" />
-				<column name="sortKey"
-				        type="SMALLINT UNSIGNED"
-				        nullable="FALSE"
-				        default="100" />
-				<column name="statusValue"
-				        type="VARCHAR(50)"
-				        nullable="FALSE" />
-				<column name="style"
-				        type="VARCHAR(4096)"
-				        nullable="FALSE" />
-				<column name="created"
-				        type="TIMESTAMP"
-				        nullable="FALSE"
-				        default="0000-00-00 00:00:00" />
-				<column name="updated"
-				        type="TIMESTAMP"
-				        nullable="FALSE"
-				        default="CURRENT_TIMESTAMP"
-				        extra="ON UPDATE CURRENT_TIMESTAMP" />
-		    </columns>
-			<keys>
-			    <key name="applicationStatusIdIdx" type="PRIMARY">
-			    	<memberColumn name="applicationStatusId" />
-			    </key>
-			</keys>
-			<triggers>
-			</triggers>
-			<rows>
-				<row>
-					<field name="applicationStatusId">1</field>
-					<field name="statusValue">FOUND</field>
-					<field name="isActive">1</field>
-					<field name="sortKey">10</field>
-					<field name="style"></field>
-					<field name="created">2010-10-03 01:03:33</field>
-					<field name="updated">2010-10-03 01:03:33</field>
-				</row>
-				<row>
-					<field name="applicationStatusId">2</field>
-					<field name="statusValue">CONTACTED</field>
-					<field name="isActive">1</field>
-					<field name="sortKey">20</field>
-					<field name="style"></field>
-					<field name="created">2010-10-03 01:03:33</field>
-					<field name="updated">2010-10-03 01:03:33</field>
-				</row>
-				<row>
-					<field name="applicationStatusId">3</field>
-					<field name="statusValue">APPLIED</field>
-					<field name="isActive">1</field>
-					<field name="sortKey">30</field>
-					<field name="style"></field>
-					<field name="created">2010-10-03 01:03:33</field>
-					<field name="updated">2010-10-03 01:03:33</field>
-				</row>
-				<row>
-					<field name="applicationStatusId">4</field>
-					<field name="statusValue">INTERVIEWING</field>
-					<field name="isActive">1</field>
-					<field name="sortKey">40</field>
-					<field name="style"></field>
-					<field name="created">2010-10-03 01:03:33</field>
-					<field name="updated">2010-10-03 01:03:33</field>
-				</row>
-				<row>
-					<field name="applicationStatusId">5</field>
-					<field name="statusValue">FOLLOWUP</field>
-					<field name="isActive">1</field>
-					<field name="sortKey">50</field>
-					<field name="style"></field>
-					<field name="created">2010-10-03 01:03:33</field>
-					<field name="updated">2010-10-03 01:03:33</field>
-				</row>
-				<row>
-					<field name="applicationStatusId">6</field>
-					<field name="statusValue">CHASING</field>
-					<field name="isActive">1</field>
-					<field name="sortKey">60</field>
-					<field name="style"></field>
-					<field name="created">2010-10-03 01:03:33</field>
-					<field name="updated">2010-10-03 01:03:33</field>
-				</row>
-				<row>
-					<field name="applicationStatusId">7</field>
-					<field name="statusValue">NETWORKING</field>
-					<field name="isActive">1</field>
-					<field name="sortKey">70</field>
-					<field name="style"></field>
-					<field name="created">2010-10-03 01:03:33</field>
-					<field name="updated">2010-10-03 01:03:33</field>
-				</row>
-				<row>
-					<field name="applicationStatusId">8</field>
-					<field name="statusValue">UNAVAILABLE</field>
-					<field name="isActive">0</field>
-					<field name="sortKey">999</field>
-					<field name="style"></field>
-					<field name="created">2010-10-03 01:03:33</field>
-					<field name="updated">2010-10-03 01:03:33</field>
-				</row>
-				<row>
-					<field name="applicationStatusId">9</field>
-					<field name="statusValue">INVALID</field>
-					<field name="isActive">0</field>
-					<field name="sortKey">999</field>
-					<field name="style"></field>
-					<field name="created">2010-10-03 01:03:33</field>
-					<field name="updated">2010-10-03 01:03:33</field>
-				</row>
-				<row>
-					<field name="applicationStatusId">10</field>
-					<field name="statusValue">DUPLICATE</field>
-					<field name="isActive">0</field>
-					<field name="sortKey">999</field>
-					<field name="style"></field>
-					<field name="created">2010-10-03 01:03:33</field>
-					<field name="updated">2010-10-03 01:03:33</field>
-				</row>
-				<row>
-					<field name="applicationStatusId">11</field>
-					<field name="statusValue">CLOSED</field>
-					<field name="isActive">0</field>
-					<field name="sortKey">999</field>
-					<field name="style"></field>
-					<field name="created">2010-10-03 01:03:33</field>
-					<field name="updated">2010-10-03 01:03:33</field>
-				</row>
-			</rows>
-		</table>
-		<table name="applicationStatusSummary"
-		       charset="latin1"
-	    	   collation="latin1_swedish_ci"
-	    	   engine="InnoDB">
-			<columns>
-				<column name="applicationStatusId"
-				        type="SMALLINT UNSIGNED"
-				        nullable="FALSE" />
-				<column name="statusCount"
-				        type="SMALLINT UNSIGNED"
-				        nullable="FALSE"
-				        default="0" />
-				<column name="created"
-				        type="TIMESTAMP"
-				        nullable="FALSE"
-				        default="0000-00-00 00:00:00" />
-				<column name="updated"
-				        type="TIMESTAMP"
-				        nullable="FALSE"
-				        default="CURRENT_TIMESTAMP"
-				        extra="ON UPDATE CURRENT_TIMESTAMP" />
-			</columns>
-			<keys>
-				<key name="applicationStatusId" type="PRIMARY">
-					<memberColumn name="applicationStatusId" />
-				</key>
-				<key name="fk_applicationStatus"
-				     type="CONSTRAINT"
-				     onDelete="CASCADE"
-				     onUpdate="CASCADE">
-					<memberColumn name="applicationStatusId" />
-					<reference table="applicationStatus">applicationStatusId</reference>
-				</key>
-			</keys>
-			<triggers>
-			</triggers>
-			<rows>
-				<row>
-					<field name="applicationStatusId">1</field>
-					<field name="statusCount">0</field>
-					<field name="created">2010-10-03 01:03:33</field>
-					<field name="updated">2010-10-03 01:03:33</field>
-				</row>
-				<row>
-					<field name="applicationStatusId">2</field>
-					<field name="statusCount">0</field>
-					<field name="created">2010-10-03 01:03:33</field>
-					<field name="updated">2010-10-03 01:03:33</field>
-				</row>
-				<row>
-					<field name="applicationStatusId">3</field>
-					<field name="statusCount">0</field>
-					<field name="created">2010-10-03 01:03:33</field>
-					<field name="updated">2010-10-03 01:03:33</field>
-				</row>
-				<row>
-					<field name="applicationStatusId">4</field>
-					<field name="statusCount">0</field>
-					<field name="created">2010-10-03 01:03:33</field>
-					<field name="updated">2010-10-03 01:03:33</field>
-				</row>
-				<row>
-					<field name="applicationStatusId">5</field>
-					<field name="statusCount">0</field>
-					<field name="created">2010-10-03 01:03:33</field>
-					<field name="updated">2010-10-03 01:03:33</field>
-				</row>
-				<row>
-					<field name="applicationStatusId">6</field>
-					<field name="statusCount">0</field>
-					<field name="created">2010-10-03 01:03:33</field>
-					<field name="updated">2010-10-03 01:03:33</field>
-				</row>
-				<row>
-					<field name="applicationStatusId">7</field>
-					<field name="statusCount">0</field>
-					<field name="created">2010-10-03 01:03:33</field>
-					<field name="updated">2010-10-03 01:03:33</field>
-				</row>
-				<row>
-					<field name="applicationStatusId">8</field>
-					<field name="statusCount">0</field>
-					<field name="created">2010-10-03 01:03:33</field>
-					<field name="updated">2010-10-03 01:03:33</field>
-				</row>
-				<row>
-					<field name="applicationStatusId">9</field>
-					<field name="statusCount">0</field>
-					<field name="created">2010-10-03 01:03:33</field>
-					<field name="updated">2010-10-03 01:03:33</field>
-				</row>
-				<row>
-					<field name="applicationStatusId">10</field>
-					<field name="statusCount">0</field>
-					<field name="created">2010-10-03 01:03:33</field>
-					<field name="updated">2010-10-03 01:03:33</field>
-				</row>
-				<row>
-					<field name="applicationStatusId">11</field>
-					<field name="statusCount">0</field>
-					<field name="created">2010-10-03 01:03:33</field>
-					<field name="updated">2010-10-03 01:03:33</field>
-				</row>
-			</rows>
-		</table>
-		<table name="company"
-		       charset="latin1"
-	    	   collation="latin1_swedish_ci"
-		       engine="InnoDB">
-			<columns>
-				<column name="companyId"
-				        type="SMALLSERIAL UNSIGNED"
-					    nullable="FALSE"
-					    extra="AUTO_INCREMENT" />
-				<column name="agencyCompanyId"
-				        type="MEDIUMINT UNSIGNED"
-				        nullable="TRUE" />
-				<column name="companyAddress1"
-				        type="VARCHAR(255)"
-				        nullable="FALSE"
-				        default="" />
-				<column name="companyAddress2"
-				        type="VARCHAR(255)"
-				        nullable="FALSE"
-				        default="" />
-				<column name="companyCity"
-				        type="VARCHAR(60)"
-				        nullable="TRUE"
-				        default="" />
-				<column name="companyName"
-				        type="VARCHAR(100)"
-				        nullable="FALSE"
-				        default="" />
-				<column name="companyPhone"
-				        type="INT(10) UNSIGNED"
-				        nullable="TRUE" />
-				<column name="companyState"
-				        type="CHAR(2)"
-				        nullable="FALSE"
-				        default="" />
-				<column name="companyZip"
-				        type="INT(5) UNSIGNED"
-				        nullable="FALSE" />
-				<column name="isAnAgency"
-				        type="BOOLEAN"
-				        nullable="FALSE"
-				        default="0" />
-				<column name="created"
-				        type="TIMESTAMP"
-				        nullable="FALSE"
-				        default="0000-00-00 00:00:00" />
-				<column name="updated"
-				        type="TIMESTAMP"
-				        nullable="FALSE"
-				        default="CURRENT_TIMESTAMP"
-				        extra="ON UPDATE CURRENT_TIMESTAMP" />
-			</columns>
-			<keys>
-				<key name="companyIdx" type="PRIMARY">
-					<memberColumn name="companyId" />
-				</key>
-			</keys>
-			<triggers>
-				<trigger name="trg_deleteCompany"
-				         when="AFTER"
-				         event="DELETE">
-					DELETE
-					  FROM notes
-					 WHERE appliesToTable = 'company'
-					   AND appliesToId = OLD.id
-					     ;
-				</trigger>
-				<trigger name="trg_updateCompany"
-				         when="AFTER"
-				         event="UPDATE">
-					UPDATE notes
-					   SET appliesToId = NEW.id
-					 WHERE appliesToTable = 'company'
-					   AND appliesToId = OLD.id
-					     ;
-				</trigger>
-			</triggers>
-			<rows>
-			</rows>
-		</table>
-		<table name="contact"
-		       charset="latin1"
-	    	   collation="latin1_swedish_ci"
-		       engine="InnoDB">
-			<columns>
-			    <column name="contactId"
-			            type="MEDIUMSERIAL UNSIGNED"
-				        nullable="FALSE"
-				        extra="AUTO_INCREMENT" />
-			    <column name="contactCompanyId"
-			            type="SMALLINT UNSIGNED"
-				        nullable="FALSE" />
-			    <column name="contactName"
-			            type="VARCHAR(255)"
-				        nullable="TRUE" />
-			    <column name="contactEmail"
-			            type="VARCHAR(255)"
-				        nullable="TRUE" />
-			    <column name="contactPhone"
-			            type="INT(10) UNSIGNED"
-				        nullable="FALSE" />
-			    <column name="contactAlternatePhone"
-			            type="INT(10) UNSIGNED"
-				        nullable="TRUE" />
-				<column name="created"
-				        type="TIMESTAMP"
-				        nullable="FALSE"
-				        default="0000-00-00 00:00:00" />
-				<column name="updated"
-				        type="TIMESTAMP"
-				        nullable="FALSE"
-				        default="CURRENT_TIMESTAMP"
-				        extra="ON UPDATE CURRENT_TIMESTAMP" />
-			</columns>
-			<keys>
-				<key name="contact_idx" type="PRIMARY">
-					<memberColumn name="contactId" />
-				</key>
-				<key name="fk_company"
-				     type="CONSTRAINT"
-				     onUpdate="CASCADE"
-				     onDelete="CASCADE">
-					<memberColumn name="companyId" />
-					<reference table="company">companyId</reference>
-				</key>
-			</keys>
-			<triggers>
-				<trigger name="trg_deleteContact"
-				         when="AFTER"
-				         event="DELETE">
-					DELETE
-					  FROM notes
-					 WHERE appliesToTable = 'contact'
-					   AND appliesToId = OLD.id
-					     ;
-				</trigger>
-				<trigger name="trg_updateContact"
-				         when="AFTER"
-				         event="UPDATE">
-					UPDATE notes
-					   SET appliesToId = NEW.id
-					 WHERE appliesToTable = 'contact'
-					   AND appliesToId = OLD.id
-					     ;
-				</trigger>
-			</triggers>
-			<rows>
-			</rows>
-		</table>
-		<table name="job"
-		       charset="latin1"
-	    	   collation="latin1_swedish_ci"
-		       engine="InnoDB">
-			<columns>
-				<column name="jobId"
-				        type="MEDIUMSERIAL UNSIGNED"
-				        nullable="FALSE" />
-				<column name="primaryContactId"
-				        type="MEDIUMINT UNSIGNED"
-				        nullable="TRUE" />
-				<column name="companyId"
-				        type="SMALLINT UNSIGNED"
-				        nullable="TRUE" />
-				<column name="applicationStatusId"
-				        type="TINYINT UNSIGNED"
-				        nullable="FALSE" />
-				<column name="lastStatusChange"
-				        type="DATETIME"
-				        nullable="FALSE"
-				        default="0000-00-00 00:00:00" />
-				<column name="urgency"
-				        type="ENUM('high','medium','low')"
-				        nullable="FALSE"
-				        default="low" />
-				<column name="nextActionDue"
-				        type="DATETIME"
-				        nullable="FALSE"
-				        default="0000-00-00 00:00:00" />
-				<column name="nextAction"
-				        type="VARCHAR(255)"
-				        nullable="FALSE"
-				        default="" />
-				<column name="positionTitle"
-				        type="VARCHAR(255)"
-				        nullable="FALSE"
-				        default="" />
-				<column name="location"
-				        type="VARCHAR(255)"
-				        nullable="FALSE"
-				        default="" />
-				<column name="url"
-				        type="VARCHAR(4096)"
-				        nullable="FALSE"
-				        default="" />
-				<column name="created"
-				        type="TIMESTAMP"
-				        nullable="FALSE"
-				        default="0000-00-00 00:00:00" />
-				<column name="updated"
-				        type="TIMESTAMP"
-				        nullable="FALSE"
-				        default="CURRENT_TIMESTAMP"
-				        extra="ON UPDATE CURRENT_TIMESTAMP" />
-			</columns>
-			<keys>
-				<key name="idx_job" type="PRIMARY">
-					<memberColumn name="jobId" />
-				</key>
-				<key name="fk_primaryContact"
-				     type="CONSTRAINT"
-				     onUpdate="CASCADE"
-				     onDelete="CASCADE">
-					<reference table="contact">contactId</reference>
-					<memberColumn name="contactId" />
-				</key>
-				<key name="fk_company"
-				     type="CONSTRAINT"
-				     onUpdate="CASCADE"
-				     onDelete="CASCADE">
-					<reference table="company">companyId</reference>
-					<memberColumn name="companyId" />
-				</key>
-				<key name="fk_applicationStatus"
-				     type="CONSTRAINT"
-				     onUpdate="CASCADE"
-				     onDelete="CASCADE">
-					<reference table="applicationStatus">applicationStatusId</reference>
-					<memberColumn name="applicationStatusId" />
-				</key>
-			</keys>
-			<triggers>
-				<trigger name="trg_deleteJob"
-				         when="AFTER"
-				         event="DELETE">
-					DELETE
-					  FROM notes
-					 WHERE appliesToTable = 'job'
-					   AND appliesToId = OLD.id
-					     ;
-				</trigger>
-				<trigger name="trg_updateJob"
-				         when="AFTER"
-				         event="UPDATE">
-					UPDATE notes
-					   SET appliesToId = NEW.id
-					 WHERE appliesToTable = 'job'
-					   AND appliesToId = OLD.id
-					     ;
-				</trigger>
-			</triggers>
-			<rows>
-			</rows>
-		</table>
-		<table name="jobKeywordMap"
-		       charset="latin1"
-	    	   collation="latin1_swedish_ci"
-		       engine="InnoDB">
-			<columns>
-				<column name="jobId"
-				        type="MEDIUMINT UNSIGNED"
-				        nullable="FALSE" />
-				<column name="keywordId"
-				        type="MEDIUMINT UNSIGNED"
-				        nullable="FALSE" />
-				<column name="created"
-				        type="TIMESTAMP"
-				        nullable="FALSE"
-				        default="0000-00-00 00:00:00" />
-				<column name="updated"
-				        type="TIMESTAMP"
-				        nullable="FALSE"
-				        default="CURRENT_TIMESTAMP"
-				        extra="ON UPDATE CURRENT_TIMESTAMP" />
-			</columns>
-			<keys>
-			    <key name="idx_jobKeyword" type="PRIMARY">
-			        <memberColumn name="jobId" />
-			        <memberColumn name="keywordId" />
-			    </key>
-			    <key name="fk_job"
-				     type="CONSTRAINT"
-				     onUpdate="CASCADE"
-				     onDelete="CASCADE">
-					<reference table="job">jobId</reference>
-					<memberColumn name="jobId" />
-			    </key>
-			    <key name="fk_keyword"
-				     type="CONSTRAINT"
-				     onUpdate="CASCADE"
-				     onDelete="CASCADE">
-					<reference table="keyword">keywordId</reference>
-					<memberColumn name="keywordId" />
-			    </key>
-			</keys>
-			<triggers>
-			</triggers>
-			<rows>
-			</rows>
-		</table>
-		<table name="keyword"
-		       charset="latin1"
-	    	   collation="latin1_swedish_ci"
-		       engine="InnoDB">
-			<columns>
-				<column name="keywordId"
-				        type="MEDIUMSERIAL UNSIGNED"
-				        nullable="FALSE" />
-				<column name="keywordValue"
-				        type="VARCHAR(255)"
-				        nullable="FALSE" />
-				<column name="sortKey"
-				        type="SMALLINT"
-				        nullable="FALSE" />
-				<column name="created"
-				        type="TIMESTAMP"
-				        nullable="FALSE"
-				        default="0000-00-00 00:00:00" />
-				<column name="updated"
-				        type="TIMESTAMP"
-				        nullable="FALSE"
-				        default="CURRENT_TIMESTAMP"
-				        extra="ON UPDATE CURRENT_TIMESTAMP" />
-			</columns>
-			<keys>
-				<key name="idx_keyword" type="PRIMARY">
-					<memberColumn name="keywordId" />
-				</key>
-				<key name="uniq_keywordValue"
-				     type="UNIQUE">
-					<memberColumn name="keywordValue" />
-				</key>
-			</keys>
-			<triggers>
-				<trigger name="trg_deleteKeyword"
-				         when="AFTER"
-				         event="DELETE">
-					DELETE
-					  FROM notes
-					 WHERE appliesToTable = 'keyword'
-					   AND appliesToId = OLD.id
-					     ;
-				</trigger>
-				<trigger name="trg_updateKeyword"
-				         when="AFTER"
-				         event="UPDATE">
-					UPDATE notes
-					   SET appliesToId = NEW.id
-					 WHERE appliesToTable = 'keyword'
-					   AND appliesToId = OLD.id
-					     ;
-				</trigger>
-			</triggers>
-			<rows>
-			</rows>
-		</table>
-		<table name="note"
-		       charset="latin1"
-	    	   collation="latin1_swedish_ci"
-		       engine="InnoDB">
-			<columns>
-				<column name="noteId"
-				        type="SERIAL UNSIGNED"
-				        nullable="FALSE" />
-				<column name="appliesToTable"
-				        type="ENUM('job','company','contact','keyword','search')"
-				        nullable="FALSE" />
-				<column name="appliesToId"
-				        type="MEDIUMINT UNSIGNED"
-				        nullable="FALSE" />
-				<column name="note"
-				        type="TEXT"
-				        nullable="FALSE" />
-				<column name="created"
-				        type="TIMESTAMP"
-				        nullable="FALSE"
-				        default="0000-00-00 00:00:00" />
-				<column name="updated"
-				        type="TIMESTAMP"
-				        nullable="FALSE"
-				        default="CURRENT_TIMESTAMP"
-				        extra="ON UPDATE CURRENT_TIMESTAMP" />
-			</columns>
-			<keys>
-				<key name="idx_note" type="PRIMARY">
-					<memberColumn name="noteId" />
-				</key>
-				<key name="idx_appliesTo"
-				     type="INDEX">
-					<memberColumn name="appliesToTable" />
-					<memberColumn name="appliesToId" />
-					<memberColumn name="created" />
-				</key>
-			</keys>
-			<triggers>
-			</triggers>
-			<rows>
-			</rows>
-		</table>
-		<table name="search"
-		       charset="latin1"
-	    	   collation="latin1_swedish_ci"
-		       engine="InnoDB">
-			<columns>
-				<column name="searchId"
-				        type="MEDIUMSERIAL UNSIGNED"
-				        nullable="FALSE" />
-				<column name="engineName"
-				        type="VARCHAR(255)"
-				        nullable="FALSE"
-				        default="" />
-				<column name="searchName"
-				        type="VARCHAR(255)"
-				        nullable="FALSE"
-				        default="" />
-				<column name="url"
-				        type="VARCHAR(4096)"
-				        nullable="FALSE"
-				        default="" />
-				<column name="created"
-				        type="TIMESTAMP"
-				        nullable="FALSE"
-				        default="0000-00-00 00:00:00" />
-				<column name="updated"
-				        type="TIMESTAMP"
-				        nullable="FALSE"
-				        default="CURRENT_TIMESTAMP"
-				        extra="ON UPDATE CURRENT_TIMESTAMP" />
-			</columns>
-			<keys>
-				<key name="idx_search" type="PRIMARY">
-					<memberColumn name="searchId" />
-				</key>
-			</keys>
-			<triggers>
-				<trigger name="trg_deleteSearch"
-				         when="AFTER"
-				         event="DELETE">
-					DELETE
-					  FROM notes
-					 WHERE appliesToTable = 'search'
-					   AND appliesToId = OLD.id
-					     ;
-				</trigger>
-				<trigger name="trg_updateSearch"
-				         when="AFTER"
-				         event="UPDATE">
-					UPDATE notes
-					   SET appliesToId = NEW.id
-					 WHERE appliesToTable = 'search'
-					   AND appliesToId = OLD.id
-					     ;
-				</trigger>
-			</triggers>
-			<rows>
-			</rows>
-		</table>
-		<table name="version"
-		       charset="latin1"
-	    	   collation="latin1_swedish_ci"
-		       engine="InnoDB">
-			<columns>
-				<column name="versionValue"
-				        type="VARCHAR(255)"
-				        nullable="FALSE"
-				        default="" />
-				<column name="updated"
-				        type="TIMESTAMP"
-				        nullable="FALSE"
-				        default="CURRENT_TIMESTAMP"
-				        extra="ON UPDATE CURRENT_TIMESTAMP" />
-			</columns>
-			<keys>
-			</keys>
-			<triggers>
-			</triggers>
-			<rows>
-				<row>
-					<field name="versionValue">0.0PA2</field>
-					<field name="updated">2010-10-03 01:03:32</field>
-				</row>
-			</rows>
-		</table>
-	</tables>
-	<procedures>
-	</procedures>
-	<functions>
-	</functions>
+    <tables>
+        <table name="applicationStatus"
+               charset="latin1"
+               collation="latin1_swedish_ci"
+               engine="InnoDB">
+            <columns>
+                <column name="applicationStatusId"
+                        type="SMALLSERIAL UNSIGNED"
+                        nullable="FALSE" />
+                <column name="isActive"
+                        type="BOOLEAN"
+                        nullable="FALSE"
+                        default="TRUE" />
+                <column name="sortKey"
+                        type="SMALLINT UNSIGNED"
+                        nullable="FALSE"
+                        default="100" />
+                <column name="statusValue"
+                        type="VARCHAR(50)"
+                        nullable="FALSE" />
+                <column name="style"
+                        type="VARCHAR(4096)"
+                        nullable="FALSE" />
+                <column name="created"
+                        type="TIMESTAMP"
+                        nullable="FALSE"
+                        default="0000-00-00 00:00:00" />
+                <column name="updated"
+                        type="TIMESTAMP"
+                        nullable="FALSE"
+                        default="CURRENT_TIMESTAMP"
+                        extra="ON UPDATE CURRENT_TIMESTAMP" />
+            </columns>
+            <keys>
+                <key name="applicationStatusIdIdx" type="PRIMARY">
+                    <memberColumn name="applicationStatusId" />
+                </key>
+            </keys>
+            <triggers>
+            </triggers>
+            <rows>
+                <row>
+                    <field name="applicationStatusId">1</field>
+                    <field name="statusValue">FOUND</field>
+                    <field name="isActive">1</field>
+                    <field name="sortKey">10</field>
+                    <field name="style"></field>
+                    <field name="created">2010-10-03 01:03:33</field>
+                    <field name="updated">2010-10-03 01:03:33</field>
+                </row>
+                <row>
+                    <field name="applicationStatusId">2</field>
+                    <field name="statusValue">CONTACTED</field>
+                    <field name="isActive">1</field>
+                    <field name="sortKey">20</field>
+                    <field name="style"></field>
+                    <field name="created">2010-10-03 01:03:33</field>
+                    <field name="updated">2010-10-03 01:03:33</field>
+                </row>
+                <row>
+                    <field name="applicationStatusId">3</field>
+                    <field name="statusValue">APPLIED</field>
+                    <field name="isActive">1</field>
+                    <field name="sortKey">30</field>
+                    <field name="style"></field>
+                    <field name="created">2010-10-03 01:03:33</field>
+                    <field name="updated">2010-10-03 01:03:33</field>
+                </row>
+                <row>
+                    <field name="applicationStatusId">4</field>
+                    <field name="statusValue">INTERVIEWING</field>
+                    <field name="isActive">1</field>
+                    <field name="sortKey">40</field>
+                    <field name="style"></field>
+                    <field name="created">2010-10-03 01:03:33</field>
+                    <field name="updated">2010-10-03 01:03:33</field>
+                </row>
+                <row>
+                    <field name="applicationStatusId">5</field>
+                    <field name="statusValue">FOLLOWUP</field>
+                    <field name="isActive">1</field>
+                    <field name="sortKey">50</field>
+                    <field name="style"></field>
+                    <field name="created">2010-10-03 01:03:33</field>
+                    <field name="updated">2010-10-03 01:03:33</field>
+                </row>
+                <row>
+                    <field name="applicationStatusId">6</field>
+                    <field name="statusValue">CHASING</field>
+                    <field name="isActive">1</field>
+                    <field name="sortKey">60</field>
+                    <field name="style"></field>
+                    <field name="created">2010-10-03 01:03:33</field>
+                    <field name="updated">2010-10-03 01:03:33</field>
+                </row>
+                <row>
+                    <field name="applicationStatusId">7</field>
+                    <field name="statusValue">NETWORKING</field>
+                    <field name="isActive">1</field>
+                    <field name="sortKey">70</field>
+                    <field name="style"></field>
+                    <field name="created">2010-10-03 01:03:33</field>
+                    <field name="updated">2010-10-03 01:03:33</field>
+                </row>
+                <row>
+                    <field name="applicationStatusId">8</field>
+                    <field name="statusValue">UNAVAILABLE</field>
+                    <field name="isActive">0</field>
+                    <field name="sortKey">999</field>
+                    <field name="style"></field>
+                    <field name="created">2010-10-03 01:03:33</field>
+                    <field name="updated">2010-10-03 01:03:33</field>
+                </row>
+                <row>
+                    <field name="applicationStatusId">9</field>
+                    <field name="statusValue">INVALID</field>
+                    <field name="isActive">0</field>
+                    <field name="sortKey">999</field>
+                    <field name="style"></field>
+                    <field name="created">2010-10-03 01:03:33</field>
+                    <field name="updated">2010-10-03 01:03:33</field>
+                </row>
+                <row>
+                    <field name="applicationStatusId">10</field>
+                    <field name="statusValue">DUPLICATE</field>
+                    <field name="isActive">0</field>
+                    <field name="sortKey">999</field>
+                    <field name="style"></field>
+                    <field name="created">2010-10-03 01:03:33</field>
+                    <field name="updated">2010-10-03 01:03:33</field>
+                </row>
+                <row>
+                    <field name="applicationStatusId">11</field>
+                    <field name="statusValue">CLOSED</field>
+                    <field name="isActive">0</field>
+                    <field name="sortKey">999</field>
+                    <field name="style"></field>
+                    <field name="created">2010-10-03 01:03:33</field>
+                    <field name="updated">2010-10-03 01:03:33</field>
+                </row>
+            </rows>
+        </table>
+        <table name="applicationStatusSummary"
+               charset="latin1"
+               collation="latin1_swedish_ci"
+               engine="InnoDB">
+            <columns>
+                <column name="applicationStatusId"
+                        type="SMALLINT UNSIGNED"
+                        nullable="FALSE" />
+                <column name="statusCount"
+                        type="SMALLINT UNSIGNED"
+                        nullable="FALSE"
+                        default="0" />
+                <column name="created"
+                        type="TIMESTAMP"
+                        nullable="FALSE"
+                        default="0000-00-00 00:00:00" />
+                <column name="updated"
+                        type="TIMESTAMP"
+                        nullable="FALSE"
+                        default="CURRENT_TIMESTAMP"
+                        extra="ON UPDATE CURRENT_TIMESTAMP" />
+            </columns>
+            <keys>
+                <key name="applicationStatusId" type="PRIMARY">
+                    <memberColumn name="applicationStatusId" />
+                </key>
+                <key name="fk_applicationStatus"
+                     type="CONSTRAINT"
+                     onDelete="CASCADE"
+                     onUpdate="CASCADE">
+                    <memberColumn name="applicationStatusId" />
+                    <reference table="applicationStatus">applicationStatusId</reference>
+                </key>
+            </keys>
+            <triggers>
+            </triggers>
+            <rows>
+                <row>
+                    <field name="applicationStatusId">1</field>
+                    <field name="statusCount">0</field>
+                    <field name="created">2010-10-03 01:03:33</field>
+                    <field name="updated">2010-10-03 01:03:33</field>
+                </row>
+                <row>
+                    <field name="applicationStatusId">2</field>
+                    <field name="statusCount">0</field>
+                    <field name="created">2010-10-03 01:03:33</field>
+                    <field name="updated">2010-10-03 01:03:33</field>
+                </row>
+                <row>
+                    <field name="applicationStatusId">3</field>
+                    <field name="statusCount">0</field>
+                    <field name="created">2010-10-03 01:03:33</field>
+                    <field name="updated">2010-10-03 01:03:33</field>
+                </row>
+                <row>
+                    <field name="applicationStatusId">4</field>
+                    <field name="statusCount">0</field>
+                    <field name="created">2010-10-03 01:03:33</field>
+                    <field name="updated">2010-10-03 01:03:33</field>
+                </row>
+                <row>
+                    <field name="applicationStatusId">5</field>
+                    <field name="statusCount">0</field>
+                    <field name="created">2010-10-03 01:03:33</field>
+                    <field name="updated">2010-10-03 01:03:33</field>
+                </row>
+                <row>
+                    <field name="applicationStatusId">6</field>
+                    <field name="statusCount">0</field>
+                    <field name="created">2010-10-03 01:03:33</field>
+                    <field name="updated">2010-10-03 01:03:33</field>
+                </row>
+                <row>
+                    <field name="applicationStatusId">7</field>
+                    <field name="statusCount">0</field>
+                    <field name="created">2010-10-03 01:03:33</field>
+                    <field name="updated">2010-10-03 01:03:33</field>
+                </row>
+                <row>
+                    <field name="applicationStatusId">8</field>
+                    <field name="statusCount">0</field>
+                    <field name="created">2010-10-03 01:03:33</field>
+                    <field name="updated">2010-10-03 01:03:33</field>
+                </row>
+                <row>
+                    <field name="applicationStatusId">9</field>
+                    <field name="statusCount">0</field>
+                    <field name="created">2010-10-03 01:03:33</field>
+                    <field name="updated">2010-10-03 01:03:33</field>
+                </row>
+                <row>
+                    <field name="applicationStatusId">10</field>
+                    <field name="statusCount">0</field>
+                    <field name="created">2010-10-03 01:03:33</field>
+                    <field name="updated">2010-10-03 01:03:33</field>
+                </row>
+                <row>
+                    <field name="applicationStatusId">11</field>
+                    <field name="statusCount">0</field>
+                    <field name="created">2010-10-03 01:03:33</field>
+                    <field name="updated">2010-10-03 01:03:33</field>
+                </row>
+            </rows>
+        </table>
+        <table name="company"
+               charset="latin1"
+               collation="latin1_swedish_ci"
+               engine="InnoDB">
+            <columns>
+                <column name="companyId"
+                        type="SMALLSERIAL UNSIGNED"
+                        nullable="FALSE"
+                        extra="AUTO_INCREMENT" />
+                <column name="agencyCompanyId"
+                        type="MEDIUMINT UNSIGNED"
+                        nullable="TRUE" />
+                <column name="companyAddress1"
+                        type="VARCHAR(255)"
+                        nullable="FALSE"
+                        default="" />
+                <column name="companyAddress2"
+                        type="VARCHAR(255)"
+                        nullable="FALSE"
+                        default="" />
+                <column name="companyCity"
+                        type="VARCHAR(60)"
+                        nullable="TRUE"
+                        default="" />
+                <column name="companyName"
+                        type="VARCHAR(100)"
+                        nullable="FALSE"
+                        default="" />
+                <column name="companyPhone"
+                        type="INT(10) UNSIGNED"
+                        nullable="TRUE" />
+                <column name="companyState"
+                        type="CHAR(2)"
+                        nullable="FALSE"
+                        default="" />
+                <column name="companyZip"
+                        type="INT(5) UNSIGNED"
+                        nullable="FALSE" />
+                <column name="isAnAgency"
+                        type="BOOLEAN"
+                        nullable="FALSE"
+                        default="0" />
+                <column name="created"
+                        type="TIMESTAMP"
+                        nullable="FALSE"
+                        default="0000-00-00 00:00:00" />
+                <column name="updated"
+                        type="TIMESTAMP"
+                        nullable="FALSE"
+                        default="CURRENT_TIMESTAMP"
+                        extra="ON UPDATE CURRENT_TIMESTAMP" />
+            </columns>
+            <keys>
+                <key name="companyIdx" type="PRIMARY">
+                    <memberColumn name="companyId" />
+                </key>
+            </keys>
+            <triggers>
+                <trigger name="trg_deleteCompany"
+                         when="AFTER"
+                         event="DELETE">
+                    DELETE
+                      FROM notes
+                     WHERE appliesToTable = 'company'
+                       AND appliesToId = OLD.id
+                         ;
+                </trigger>
+                <trigger name="trg_updateCompany"
+                         when="AFTER"
+                         event="UPDATE">
+                    UPDATE notes
+                       SET appliesToId = NEW.id
+                     WHERE appliesToTable = 'company'
+                       AND appliesToId = OLD.id
+                         ;
+                </trigger>
+            </triggers>
+            <rows>
+            </rows>
+        </table>
+        <table name="contact"
+               charset="latin1"
+               collation="latin1_swedish_ci"
+               engine="InnoDB">
+            <columns>
+                <column name="contactId"
+                        type="MEDIUMSERIAL UNSIGNED"
+                        nullable="FALSE"
+                        extra="AUTO_INCREMENT" />
+                <column name="contactCompanyId"
+                        type="SMALLINT UNSIGNED"
+                        nullable="FALSE" />
+                <column name="contactName"
+                        type="VARCHAR(255)"
+                        nullable="TRUE" />
+                <column name="contactEmail"
+                        type="VARCHAR(255)"
+                        nullable="TRUE" />
+                <column name="contactPhone"
+                        type="INT(10) UNSIGNED"
+                        nullable="FALSE" />
+                <column name="contactAlternatePhone"
+                        type="INT(10) UNSIGNED"
+                        nullable="TRUE" />
+                <column name="created"
+                        type="TIMESTAMP"
+                        nullable="FALSE"
+                        default="0000-00-00 00:00:00" />
+                <column name="updated"
+                        type="TIMESTAMP"
+                        nullable="FALSE"
+                        default="CURRENT_TIMESTAMP"
+                        extra="ON UPDATE CURRENT_TIMESTAMP" />
+            </columns>
+            <keys>
+                <key name="contact_idx" type="PRIMARY">
+                    <memberColumn name="contactId" />
+                </key>
+                <key name="fk_company"
+                     type="CONSTRAINT"
+                     onUpdate="CASCADE"
+                     onDelete="CASCADE">
+                    <memberColumn name="companyId" />
+                    <reference table="company">companyId</reference>
+                </key>
+            </keys>
+            <triggers>
+                <trigger name="trg_deleteContact"
+                         when="AFTER"
+                         event="DELETE">
+                    DELETE
+                      FROM notes
+                     WHERE appliesToTable = 'contact'
+                       AND appliesToId = OLD.id
+                         ;
+                </trigger>
+                <trigger name="trg_updateContact"
+                         when="AFTER"
+                         event="UPDATE">
+                    UPDATE notes
+                       SET appliesToId = NEW.id
+                     WHERE appliesToTable = 'contact'
+                       AND appliesToId = OLD.id
+                         ;
+                </trigger>
+            </triggers>
+            <rows>
+            </rows>
+        </table>
+        <table name="job"
+               charset="latin1"
+               collation="latin1_swedish_ci"
+               engine="InnoDB">
+            <columns>
+                <column name="jobId"
+                        type="MEDIUMSERIAL UNSIGNED"
+                        nullable="FALSE" />
+                <column name="primaryContactId"
+                        type="MEDIUMINT UNSIGNED"
+                        nullable="TRUE" />
+                <column name="companyId"
+                        type="SMALLINT UNSIGNED"
+                        nullable="TRUE" />
+                <column name="applicationStatusId"
+                        type="TINYINT UNSIGNED"
+                        nullable="FALSE" />
+                <column name="lastStatusChange"
+                        type="DATETIME"
+                        nullable="FALSE"
+                        default="0000-00-00 00:00:00" />
+                <column name="urgency"
+                        type="ENUM('high','medium','low')"
+                        nullable="FALSE"
+                        default="low" />
+                <column name="nextActionDue"
+                        type="DATETIME"
+                        nullable="FALSE"
+                        default="0000-00-00 00:00:00" />
+                <column name="nextAction"
+                        type="VARCHAR(255)"
+                        nullable="FALSE"
+                        default="" />
+                <column name="positionTitle"
+                        type="VARCHAR(255)"
+                        nullable="FALSE"
+                        default="" />
+                <column name="location"
+                        type="VARCHAR(255)"
+                        nullable="FALSE"
+                        default="" />
+                <column name="url"
+                        type="VARCHAR(4096)"
+                        nullable="FALSE"
+                        default="" />
+                <column name="created"
+                        type="TIMESTAMP"
+                        nullable="FALSE"
+                        default="0000-00-00 00:00:00" />
+                <column name="updated"
+                        type="TIMESTAMP"
+                        nullable="FALSE"
+                        default="CURRENT_TIMESTAMP"
+                        extra="ON UPDATE CURRENT_TIMESTAMP" />
+            </columns>
+            <keys>
+                <key name="idx_job" type="PRIMARY">
+                    <memberColumn name="jobId" />
+                </key>
+                <key name="fk_primaryContact"
+                     type="CONSTRAINT"
+                     onUpdate="CASCADE"
+                     onDelete="CASCADE">
+                    <reference table="contact">contactId</reference>
+                    <memberColumn name="contactId" />
+                </key>
+                <key name="fk_company"
+                     type="CONSTRAINT"
+                     onUpdate="CASCADE"
+                     onDelete="CASCADE">
+                    <reference table="company">companyId</reference>
+                    <memberColumn name="companyId" />
+                </key>
+                <key name="fk_applicationStatus"
+                     type="CONSTRAINT"
+                     onUpdate="CASCADE"
+                     onDelete="CASCADE">
+                    <reference table="applicationStatus">applicationStatusId</reference>
+                    <memberColumn name="applicationStatusId" />
+                </key>
+            </keys>
+            <triggers>
+                <trigger name="trg_deleteJob"
+                         when="AFTER"
+                         event="DELETE">
+                    DELETE
+                      FROM notes
+                     WHERE appliesToTable = 'job'
+                       AND appliesToId = OLD.id
+                         ;
+                </trigger>
+                <trigger name="trg_updateJob"
+                         when="AFTER"
+                         event="UPDATE">
+                    UPDATE notes
+                       SET appliesToId = NEW.id
+                     WHERE appliesToTable = 'job'
+                       AND appliesToId = OLD.id
+                         ;
+                </trigger>
+            </triggers>
+            <rows>
+            </rows>
+        </table>
+        <table name="jobKeywordMap"
+               charset="latin1"
+               collation="latin1_swedish_ci"
+               engine="InnoDB">
+            <columns>
+                <column name="jobId"
+                        type="MEDIUMINT UNSIGNED"
+                        nullable="FALSE" />
+                <column name="keywordId"
+                        type="MEDIUMINT UNSIGNED"
+                        nullable="FALSE" />
+                <column name="created"
+                        type="TIMESTAMP"
+                        nullable="FALSE"
+                        default="0000-00-00 00:00:00" />
+                <column name="updated"
+                        type="TIMESTAMP"
+                        nullable="FALSE"
+                        default="CURRENT_TIMESTAMP"
+                        extra="ON UPDATE CURRENT_TIMESTAMP" />
+            </columns>
+            <keys>
+                <key name="idx_jobKeyword" type="PRIMARY">
+                    <memberColumn name="jobId" />
+                    <memberColumn name="keywordId" />
+                </key>
+                <key name="fk_job"
+                     type="CONSTRAINT"
+                     onUpdate="CASCADE"
+                     onDelete="CASCADE">
+                    <reference table="job">jobId</reference>
+                    <memberColumn name="jobId" />
+                </key>
+                <key name="fk_keyword"
+                     type="CONSTRAINT"
+                     onUpdate="CASCADE"
+                     onDelete="CASCADE">
+                    <reference table="keyword">keywordId</reference>
+                    <memberColumn name="keywordId" />
+                </key>
+            </keys>
+            <triggers>
+            </triggers>
+            <rows>
+            </rows>
+        </table>
+        <table name="keyword"
+               charset="latin1"
+               collation="latin1_swedish_ci"
+               engine="InnoDB">
+            <columns>
+                <column name="keywordId"
+                        type="MEDIUMSERIAL UNSIGNED"
+                        nullable="FALSE" />
+                <column name="keywordValue"
+                        type="VARCHAR(255)"
+                        nullable="FALSE" />
+                <column name="sortKey"
+                        type="SMALLINT"
+                        nullable="FALSE" />
+                <column name="created"
+                        type="TIMESTAMP"
+                        nullable="FALSE"
+                        default="0000-00-00 00:00:00" />
+                <column name="updated"
+                        type="TIMESTAMP"
+                        nullable="FALSE"
+                        default="CURRENT_TIMESTAMP"
+                        extra="ON UPDATE CURRENT_TIMESTAMP" />
+            </columns>
+            <keys>
+                <key name="idx_keyword" type="PRIMARY">
+                    <memberColumn name="keywordId" />
+                </key>
+                <key name="uniq_keywordValue"
+                     type="UNIQUE">
+                    <memberColumn name="keywordValue" />
+                </key>
+            </keys>
+            <triggers>
+                <trigger name="trg_deleteKeyword"
+                         when="AFTER"
+                         event="DELETE">
+                    DELETE
+                      FROM notes
+                     WHERE appliesToTable = 'keyword'
+                       AND appliesToId = OLD.id
+                         ;
+                </trigger>
+                <trigger name="trg_updateKeyword"
+                         when="AFTER"
+                         event="UPDATE">
+                    UPDATE notes
+                       SET appliesToId = NEW.id
+                     WHERE appliesToTable = 'keyword'
+                       AND appliesToId = OLD.id
+                         ;
+                </trigger>
+            </triggers>
+            <rows>
+            </rows>
+        </table>
+        <table name="note"
+               charset="latin1"
+               collation="latin1_swedish_ci"
+               engine="InnoDB">
+            <columns>
+                <column name="noteId"
+                        type="SERIAL UNSIGNED"
+                        nullable="FALSE" />
+                <column name="appliesToTable"
+                        type="ENUM('job','company','contact','keyword','search')"
+                        nullable="FALSE" />
+                <column name="appliesToId"
+                        type="MEDIUMINT UNSIGNED"
+                        nullable="FALSE" />
+                <column name="note"
+                        type="TEXT"
+                        nullable="FALSE" />
+                <column name="created"
+                        type="TIMESTAMP"
+                        nullable="FALSE"
+                        default="0000-00-00 00:00:00" />
+                <column name="updated"
+                        type="TIMESTAMP"
+                        nullable="FALSE"
+                        default="CURRENT_TIMESTAMP"
+                        extra="ON UPDATE CURRENT_TIMESTAMP" />
+            </columns>
+            <keys>
+                <key name="idx_note" type="PRIMARY">
+                    <memberColumn name="noteId" />
+                </key>
+                <key name="idx_appliesTo"
+                     type="INDEX">
+                    <memberColumn name="appliesToTable" />
+                    <memberColumn name="appliesToId" />
+                    <memberColumn name="created" />
+                </key>
+            </keys>
+            <triggers>
+            </triggers>
+            <rows>
+            </rows>
+        </table>
+        <table name="search"
+               charset="latin1"
+               collation="latin1_swedish_ci"
+               engine="InnoDB">
+            <columns>
+                <column name="searchId"
+                        type="MEDIUMSERIAL UNSIGNED"
+                        nullable="FALSE" />
+                <column name="engineName"
+                        type="VARCHAR(255)"
+                        nullable="FALSE"
+                        default="" />
+                <column name="searchName"
+                        type="VARCHAR(255)"
+                        nullable="FALSE"
+                        default="" />
+                <column name="url"
+                        type="VARCHAR(4096)"
+                        nullable="FALSE"
+                        default="" />
+                <column name="created"
+                        type="TIMESTAMP"
+                        nullable="FALSE"
+                        default="0000-00-00 00:00:00" />
+                <column name="updated"
+                        type="TIMESTAMP"
+                        nullable="FALSE"
+                        default="CURRENT_TIMESTAMP"
+                        extra="ON UPDATE CURRENT_TIMESTAMP" />
+            </columns>
+            <keys>
+                <key name="idx_search" type="PRIMARY">
+                    <memberColumn name="searchId" />
+                </key>
+            </keys>
+            <triggers>
+                <trigger name="trg_deleteSearch"
+                         when="AFTER"
+                         event="DELETE">
+                    DELETE
+                      FROM notes
+                     WHERE appliesToTable = 'search'
+                       AND appliesToId = OLD.id
+                         ;
+                </trigger>
+                <trigger name="trg_updateSearch"
+                         when="AFTER"
+                         event="UPDATE">
+                    UPDATE notes
+                       SET appliesToId = NEW.id
+                     WHERE appliesToTable = 'search'
+                       AND appliesToId = OLD.id
+                         ;
+                </trigger>
+            </triggers>
+            <rows>
+            </rows>
+        </table>
+        <table name="version"
+               charset="latin1"
+               collation="latin1_swedish_ci"
+               engine="InnoDB">
+            <columns>
+                <column name="versionValue"
+                        type="VARCHAR(255)"
+                        nullable="FALSE"
+                        default="" />
+                <column name="updated"
+                        type="TIMESTAMP"
+                        nullable="FALSE"
+                        default="CURRENT_TIMESTAMP"
+                        extra="ON UPDATE CURRENT_TIMESTAMP" />
+            </columns>
+            <keys>
+            </keys>
+            <triggers>
+            </triggers>
+            <rows>
+                <row>
+                    <field name="versionValue">0.0PA2</field>
+                    <field name="updated">2010-10-03 01:03:32</field>
+                </row>
+            </rows>
+        </table>
+    </tables>
+    <procedures>
+    </procedures>
+    <functions>
+    </functions>
 </database>
