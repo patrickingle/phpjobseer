@@ -36,7 +36,7 @@ class EditCompanyView {
         if ( (!isset($_GET['companyId']))
           || (!$oCompany->validateRowId($_GET['companyId']))
            ) {
-        	echo "<div class=\"error\">Invalid Company ID</div>";
+            echo "<div class=\"error\">Invalid Company ID</div>";
             exit;
         }
         $oCompanyForm = new CompanyFormView($_GET['companyId']);

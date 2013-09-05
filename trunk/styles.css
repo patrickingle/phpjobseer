@@ -20,7 +20,7 @@
  */
 
 body {
-	background-color: rgb(0,192,255);
+    background-color: rgb(0,192,255);
 }
 
 .pageTitle {
@@ -41,8 +41,8 @@ body {
 }
 
 .applicationStatusFOUND {
-	color: black;
-	background-color: cyan;
+    color: black;
+    background-color: cyan;
 }
 
 .applicationStatusCONTACTED {
@@ -71,13 +71,13 @@ body {
 }
 
 .applicationStatusNETWORKING {
-	color: black;
-	background-color: lime;
+    color: black;
+    background-color: lime;
 }
 
 .nextActionDueFUTURE {
-	color: black;
-	background-color: lime;
+    color: black;
+    background-color: lime;
 }
 
 .nextActionDueSOON {
@@ -106,17 +106,17 @@ body {
 }
 
 .IHEADER {
-	text-align: center;
+    text-align: center;
 }
 
 .JobListHeader {
-	background-color: gray;
+    background-color: gray;
 }
 
 .pageFooter {
-	text-align: center;
-	color: blue;
-	background-color: white;
+    text-align: center;
+    color: blue;
+    background-color: white;
 }
 
 .error {
@@ -138,11 +138,11 @@ body {
 }
 
 .activeJobLink {
-	font: normal;
+    font: normal;
 }
 
 .inactiveJobLink {
-	font: strikethrough;
+    font: strikethrough;
 }
 
 table.navBar {

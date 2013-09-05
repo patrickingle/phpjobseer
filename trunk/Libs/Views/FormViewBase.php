@@ -9,47 +9,47 @@ abstract class FormViewBase {
      */
     protected $_form ;
 
-	/**
-	 * 
-	 * Class constructor
-	 * @param String $formname
-	 * @param String $method
-	 * @param String $action
-	 * @param String $target
-	 * @param mixed $attributes
-	 */
-	public function __construct( $formname
-	                           , $method = 'post'
-	                           , $action = ''
-	                           , $target = ''
-	                           , $id = ''
-	                           , $attributes = null
-	                           ) {
-		$this->_form = array( 'method'     => $method
-		                    , 'action'     => $action
-		                    , 'target'     => $target
-		                    , 'id'         => $id
-		                    , 'attributes' => null
-		                    , 'pageData'   => ''
-		                    ) ;
-	}
+    /**
+     * 
+     * Class constructor
+     * @param String $formname
+     * @param String $method
+     * @param String $action
+     * @param String $target
+     * @param mixed $attributes
+     */
+    public function __construct( $formname
+                               , $method = 'post'
+                               , $action = ''
+                               , $target = ''
+                               , $id = ''
+                               , $attributes = null
+                               ) {
+        $this->_form = array( 'method'     => $method
+                            , 'action'     => $action
+                            , 'target'     => $target
+                            , 'id'         => $id
+                            , 'attributes' => null
+                            , 'pageData'   => ''
+                            ) ;
+    }
 
-	/**
-	 * 
-	 * Render the form to a string
-	 * @return string
-	 */
-	public function renderForm() {
-	    $method   = $this->getPropertyValueSetString('method', $this->_form[ 'method' ] ) ;
-	    $action   = $this->getPropertyValueSetString('action', $this->_form[ 'action' ] ) ;
-	    $target   = $this->getPropertyValueSetString('target', $this->_form[ 'target' ] ) ;
-	    $id       = $this->getPropertyValueSetString('id', $this->_form[ 'id' ] ) ;
-	    $pageData = $this->_form[ 'pageData' ] ;
-	    foreach ( $this->_form[ 'attributes' ] as $key => $value ) {
-	        $attributes .= " $key=\"$value\"" ;
-	    }
-	    return "<form $id $method $action $target>$pageData</form>" ;
-	}
+    /**
+     * 
+     * Render the form to a string
+     * @return string
+     */
+    public function renderForm() {
+        $method   = $this->getPropertyValueSetString('method', $this->_form[ 'method' ] ) ;
+        $action   = $this->getPropertyValueSetString('action', $this->_form[ 'action' ] ) ;
+        $target   = $this->getPropertyValueSetString('target', $this->_form[ 'target' ] ) ;
+        $id       = $this->getPropertyValueSetString('id', $this->_form[ 'id' ] ) ;
+        $pageData = $this->_form[ 'pageData' ] ;
+        foreach ( $this->_form[ 'attributes' ] as $key => $value ) {
+            $attributes .= " $key=\"$value\"" ;
+        }
+        return "<form $id $method $action $target>$pageData</form>" ;
+    }
 
     /**
      * Compare fields function for sorting purposes
@@ -262,24 +262,24 @@ abstract class FormViewBase {
         return $foundMatch ;
     }
 
-	/**
-	 * 
-	 * Return HTML string property="value" if the value is not empty or null
-	 * 
-	 * examples:
-	 *   $this->getPropertyValueSetString( 'class', '' ) returns an empty string
-	 *   $this->getPropertyValueSetString( 'class', 'show' ) returns the string: 'class="show"'
-	 * 
-	 * @param string $property
-	 * @param mixed $value may be string or array of string values indexed by $property
-	 * @return string
-	 */
-	public function getPropertyValueSetString( $property, $value = null ) {
-	    $cmpTo = is_array( $value ) ? $value[ $property ] : $value ;
-	    if ( isset( $cmpTo ) && ( $cmpTo !== '' ) ) {
-	        return "$property=\"" . htmlspecialchars($value) . "\"" ;
-	    }
-	    return "" ;
+    /**
+     * 
+     * Return HTML string property="value" if the value is not empty or null
+     * 
+     * examples:
+     *   $this->getPropertyValueSetString( 'class', '' ) returns an empty string
+     *   $this->getPropertyValueSetString( 'class', 'show' ) returns the string: 'class="show"'
+     * 
+     * @param string $property
+     * @param mixed $value may be string or array of string values indexed by $property
+     * @return string
+     */
+    public function getPropertyValueSetString( $property, $value = null ) {
+        $cmpTo = is_array( $value ) ? $value[ $property ] : $value ;
+        if ( isset( $cmpTo ) && ( $cmpTo !== '' ) ) {
+            return "$property=\"" . htmlspecialchars($value) . "\"" ;
+        }
+        return "" ;
     }
 
 }

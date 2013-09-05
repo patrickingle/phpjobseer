@@ -32,7 +32,7 @@ class JobFormView extends FormViewBase {
      * Constructor
      */
     public function __construct( $jobId = null ) {
-    	parent::__construct( 'JobChangeForm'
+        parent::__construct( 'JobChangeForm'
                            , 'post'
                            , 'saveJobChanges.php'
                            ) ;
@@ -55,7 +55,7 @@ class JobFormView extends FormViewBase {
      */
     public function loadFormValues( $jobId ) {
         $this->_jobId = null ;
-    	$oJob = new JobDao() ;
+        $oJob = new JobDao() ;
         if ( null === $jobId ) {
             $this->_jobId = $jobId ;
             $this->_formValues = $oJob->getDefaults() ;
@@ -177,7 +177,7 @@ class JobFormView extends FormViewBase {
                 case 'REFERENCE(Company)' :
                     // @todo AJAX Companies - have the client load values.
                     // @todo AJAX Display new Z-Window on Add New Company
-                	$oCompany = new CompanyDao() ;
+                    $oCompany = new CompanyDao() ;
                     $results = $oCompany->findSome( "1 = 1 order by companyName" ) ;
                     $companies = array( '0' => ''
                                       , 'Add new company' => 'Add new company'
@@ -201,7 +201,7 @@ class JobFormView extends FormViewBase {
                                             ) ;
                     break ;
                 case 'REFERENCE(jobKeyword)' :
-                	// @todo Make this work because R/O keyword is nasty. Does not work after db reset.
+                    // @todo Make this work because R/O keyword is nasty. Does not work after db reset.
                     $oJobKeyword = new JobKeywordDao( );
                     $value = $oJobKeyword->findKeywordValuesByJobId( $jobId ) ;
                     $this->_form->addElement( 'text'
